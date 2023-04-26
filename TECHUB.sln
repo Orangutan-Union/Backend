@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TECHUB", "TECHUB\TECHUB.csproj", "{0F994749-867B-42BC-B36A-9EDE91DCF3F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TECHUB.API", "TECHUB\TECHUB.API.csproj", "{0F994749-867B-42BC-B36A-9EDE91DCF3F0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TECHUB.Repository", "TECHUB.Repository\TECHUB.Repository.csproj", "{1E051625-E4F2-4CA2-A974-8BA2430AE91A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TECHUB.Service", "TECHUB.Service\TECHUB.Service.csproj", "{14D06D9F-16D8-4AAC-AABD-8437903FEF85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TECHUB.Test", "TECHUB.Test\TECHUB.Test.csproj", "{75D49E03-A696-4DA4-869D-C3225F9EF789}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{0F994749-867B-42BC-B36A-9EDE91DCF3F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0F994749-867B-42BC-B36A-9EDE91DCF3F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0F994749-867B-42BC-B36A-9EDE91DCF3F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E051625-E4F2-4CA2-A974-8BA2430AE91A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E051625-E4F2-4CA2-A974-8BA2430AE91A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E051625-E4F2-4CA2-A974-8BA2430AE91A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E051625-E4F2-4CA2-A974-8BA2430AE91A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14D06D9F-16D8-4AAC-AABD-8437903FEF85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14D06D9F-16D8-4AAC-AABD-8437903FEF85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14D06D9F-16D8-4AAC-AABD-8437903FEF85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14D06D9F-16D8-4AAC-AABD-8437903FEF85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75D49E03-A696-4DA4-869D-C3225F9EF789}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75D49E03-A696-4DA4-869D-C3225F9EF789}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75D49E03-A696-4DA4-869D-C3225F9EF789}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75D49E03-A696-4DA4-869D-C3225F9EF789}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
