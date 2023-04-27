@@ -36,16 +36,112 @@ namespace TECHUB.Repository.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<FriendFollower>()
-                .HasKey(x => new { x.UserId, x.OtherUserId });
             //modelBuilder.Entity<FriendFollower>()
-            //    .HasOne
+            //    .HasKey(x => new { x.UserId, x.OtherUserId });
+            //modelBuilder.Entity<FriendFollower>()
+            //    .HasOne(x => x.User)
+            //    .WithMany(x => x.FriendFollowers)
+            //    .HasForeignKey(x => x.UserId)
+            //    .OnDelete(DeleteBehavior.ClientSetNull);
+
+            //modelBuilder.Entity<FriendFollower>()
+            //    .HasOne(x => x.OtherUser)
+            //    .WithMany(x => x.FriendFollowers)
+            //    .HasForeignKey(x => x.OtherUserId)
+            //    .OnDelete(DeleteBehavior.ClientSetNull);
+
+
+            modelBuilder.Entity<PostComment>(entity =>
+            {
+                entity.HasKey(x => new { x.PostId, x.CommentId });
+
+                entity.HasOne(x => x.Post)
+                .WithMany(x => x.Comments)
+                .HasForeignKey(x => x.PostId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(x => x.Comment)
+                .WithMany(x => x.Posts)
+                .HasForeignKey(x => x.CommentId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<FriendFollower>(entity =>
+            {
+                entity.HasKey(x => new { x.UserId, x.OtherUserId });
+
+                entity.HasOne(x => x.User)
+                .WithMany(u => u.UserFriendFollowers)
+                .HasForeignKey(u => u.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(x => x.OtherUser)
+                .WithMany(ou => ou.OtherUserFriendFollowers)
+                .HasForeignKey(ou => ou.OtherUserId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<FriendRequest>(entity =>
+            {
+                entity.HasKey(x => new { x.SenderId, x.ReceiverId });
+
+                entity.HasOne(x => x.Sender)
+                .WithMany(x => x.SentFriendRequests)
+                .HasForeignKey(x => x.SenderId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(x => x.Receiver)
+                .WithMany(x => x.ReceivedFriendRequests)
+                .HasForeignKey(x => x.ReceiverId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<Picture>(entity =>
+            {
+                entity.HasKey(x => x.PictureId);
+
+                entity.HasOne(x => x.User)
+                .WithMany(u => u.Pictures)
+                //.HasForeignKey(u => u.UserId) //WE HAVE REMOVED THE USERID FROM PICTURE MODEL
+                .OnDelete(DeleteBehavior.ClientSetNull);
+            });
 
             modelBuilder.Entity<FriendRequest>()
                 .HasKey(x => new { x.SenderId, x.ReceiverId });
 
             modelBuilder.Entity<GroupUser>()
                 .HasKey(x => new { x.UserId, x.GroupId });
+
+            modelBuilder.Entity<Like>(entity =>
+            {
+                entity.HasKey(x => new { x.UserId, x.PostId });
+
+                entity.HasOne(x => x.User)
+                .WithMany(x => x.Likes)
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(x => x.Post)
+                .WithMany(x => x.Likes)
+                .HasForeignKey(x => x.PostId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<PicturePost>(entity =>
+            {
+                entity.HasKey(x => new { x.PictureId, x.PostId });
+
+                entity.HasOne(x => x.Picture)
+                .WithMany(x => x.PicturePosts)
+                .HasForeignKey(x => x.PictureId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+                entity.HasOne(x => x.Post)
+                .WithMany(x => x.PicturePosts)
+                .HasForeignKey(x => x.PostId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
         }
     }
 }
