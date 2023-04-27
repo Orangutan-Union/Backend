@@ -9,5 +9,6 @@
 
         public virtual Picture? Picture { get; set; }
         public virtual List<Post> Posts { get; set; } = new List<Post>();
+        public virtual List<GroupUser> GroupUsers { get; set; } = new List<GroupUser>();
     }
 }

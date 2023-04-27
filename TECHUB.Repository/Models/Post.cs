@@ -11,7 +11,7 @@
         public double Latitude { get; set; }
         public double Longitude { get; set; }
 
-        public List<Post> Comments { get; set; } = new List<Post>();
+        public virtual List<Post> Comments { get; set; } = new List<Post>();
 
         public virtual User? User { get; set; }
         public virtual Group? Group { get; set; }
