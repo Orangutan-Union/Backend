@@ -35,13 +35,25 @@ namespace TECHUB.Repository.Repositories
         {
             return await context.Groups
                 .Include(g => g.Picture)
+
                 .Include(g => g.GroupUsers)
+
                 .Include(g => g.Posts)
                 .ThenInclude(p => p.Likes)
+
+                .Include(g => g.Posts)
+                .ThenInclude(p => p.User)
+                .ThenInclude(u => u.Picture)
+
+                .Include(g => g.Posts)
+                .ThenInclude(p => p.PicturePosts)
+                .ThenInclude(pp => pp.Picture)
+
                 .Include(g => g.Posts)
                 .ThenInclude(p => p.Comments)
                 .ThenInclude(pc => pc.Comment)
                 .ThenInclude(c => c.Comments)
+
                 .SingleOrDefaultAsync(g => g.GroupId == id);
         }
 
