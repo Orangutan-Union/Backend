@@ -23,6 +23,7 @@ namespace TECHUB.Repository.Repositories
             var chat = await context.Chats.FindAsync(id);
             context.Chats.Remove(chat);
             await context.SaveChangesAsync();
+
             return chat;
         }
 
