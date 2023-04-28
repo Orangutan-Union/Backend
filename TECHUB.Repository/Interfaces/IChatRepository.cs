@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TECHUB.Repository.Models;
 
 namespace TECHUB.Repository.Interfaces
 {
-    internal interface IChatRepository
+    public interface IChatRepository
     {
+        Task<Chat> GetChat(int id);
+        Task<List<Chat>> GetChats();
+        Task<Chat> AddChat(Chat chat);
+        Task<Chat> UpdateChat(Chat chat);
+        Task<Chat> LeaveChat(int chatId, int userId);
+        Task<Chat> DeleteChat(int id);
+        
     }
 }
