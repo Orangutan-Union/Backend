@@ -6,7 +6,7 @@ namespace TECHUB.Repository.Interfaces
     {
         Task<List<User>> GetUsers();
         Task<User> GetUserById(int id);
-        Task<User> GetUserByName(string name);
+        Task<User> GetUserByUsername(string username);
         Task<User> AddUser(User user);
         Task<User> UpdateUser(User user);
         Task<User> DeleteUser(int id);
