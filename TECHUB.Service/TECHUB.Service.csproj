@@ -11,4 +11,10 @@
     <ProjectReference Include="..\TECHUB.Repository\TECHUB.Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+    <Folder Include="ViewModels\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>

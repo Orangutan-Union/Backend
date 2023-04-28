@@ -36,21 +36,6 @@ namespace TECHUB.Repository.Context
         {
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.Entity<FriendFollower>()
-            //    .HasKey(x => new { x.UserId, x.OtherUserId });
-            //modelBuilder.Entity<FriendFollower>()
-            //    .HasOne(x => x.User)
-            //    .WithMany(x => x.FriendFollowers)
-            //    .HasForeignKey(x => x.UserId)
-            //    .OnDelete(DeleteBehavior.ClientSetNull);
-
-            //modelBuilder.Entity<FriendFollower>()
-            //    .HasOne(x => x.OtherUser)
-            //    .WithMany(x => x.FriendFollowers)
-            //    .HasForeignKey(x => x.OtherUserId)
-            //    .OnDelete(DeleteBehavior.ClientSetNull);
-
-
             modelBuilder.Entity<PostComment>(entity =>
             {
                 entity.HasKey(x => new { x.PostId, x.CommentId });
@@ -102,7 +87,6 @@ namespace TECHUB.Repository.Context
 
                 entity.HasOne(x => x.User)
                 .WithMany(u => u.Pictures)
-                //.HasForeignKey(u => u.UserId) //WE HAVE REMOVED THE USERID FROM PICTURE MODEL
                 .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
