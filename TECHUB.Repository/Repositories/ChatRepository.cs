@@ -21,20 +21,29 @@ namespace TECHUB.Repository.Repositories
         public async Task<Chat> DeleteChat(int id)
         {
             var chat = await context.Chats.FindAsync(id);
-            context.Chats.Remove(chat);
-            await context.SaveChangesAsync();
+
+            if (chat != null)
+            {
+                context.Chats.Remove(chat);
+                await context.SaveChangesAsync();
+            }
 
             return chat;
         }
 
-        public async Task<Chat> GetChat(int id)
+        public async Task<Chat> GetChatById(int id)
         {
-            return await context.Chats.Include(c => c.Messages).FirstOrDefaultAsync(c => c.ChatId == id);
+            return await context.Chats
+                .Include(c => c.Messages)
+                .ThenInclude(m => m.User)
+                .ThenInclude(u => u.Picture)
+                .FirstOrDefaultAsync(c => c.ChatId == id);
         }
 
-        public async Task<List<Chat>> GetChats()
+        public async Task<List<Chat>> GetUserChats(int id)
         {
-            return await context.Chats.Include(c => c.Messages).ToListAsync();
+            var user = await context.Users.Include(u => u.Chats).FirstOrDefaultAsync(u => u.UserId == id);
+            return user.Chats;
         }
 
         public async Task<Chat> LeaveChat(int chatId, int userId)

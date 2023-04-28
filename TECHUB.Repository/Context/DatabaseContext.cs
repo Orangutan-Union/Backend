@@ -18,7 +18,7 @@ namespace TECHUB.Repository.Context
         public DbSet<FriendFollower> FriendFollowers { get; set; }
         public DbSet<FriendRequest> friendRequests { get; set; }
         public DbSet<Group> Groups { get; set; }
-        public DbSet<GroupUser> groupUsers { get; set; }
+        public DbSet<GroupUser> GroupUsers { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Picture> Pictures { get; set; }
