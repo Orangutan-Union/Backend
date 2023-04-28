@@ -7,7 +7,8 @@ namespace TECHUB.Service.Interfaces
     {
         Task<List<User>> GetUsers();
         Task<User> GetUserById(int id);
-        Task<User> GetUserByName(string name);
+        Task<User> GetUserByUsername(string username);
+        Task<List<User>> GetUsersBySearch(string search);
         Task<User> AddUser(AddUserViewModel userRequest);
         Task<User> DeleteUser(int id);
         Task<LoginViewModel> Login(LoginViewModel loginRequest);

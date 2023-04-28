@@ -24,9 +24,9 @@ namespace TECHUB.Repository.Repositories
             return await context.Users.FirstOrDefaultAsync(x => x.UserId == id);
         }
 
-        public async Task<User> GetUserByName(string name)
+        public async Task<User> GetUserByUsername(string username)
         {
-            return await context.Users.FirstOrDefaultAsync(x => x.Username == name);
+            return await context.Users.FirstOrDefaultAsync(x => x.Username == username);
         }
 
         public async Task<User> AddUser(User user)

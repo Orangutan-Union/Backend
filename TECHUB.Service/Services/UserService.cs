@@ -1,11 +1,12 @@
 ﻿using System.Security.Cryptography;
 using TECHUB.Repository.Interfaces;
 using TECHUB.Repository.Models;
+using TECHUB.Service.Interfaces;
 using TECHUB.Service.ViewModels;
 
 namespace TECHUB.Service.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly IUserRepository repo;
 
@@ -24,9 +25,18 @@ namespace TECHUB.Service.Services
             return await repo.GetUserById(id);
         }
 
-        public async Task<User> GetUserByName(string name)
+        public async Task<User> GetUserByUsername(string username)
         {
-            return await repo.GetUserByName(name);
+            return await repo.GetUserByUsername(username);
+        }
+
+        public async Task<List<User>> GetUsersBySearch(string search)
+        {
+            var users = await repo.GetUsers();
+
+            users = users.Where(x => x.DisplayName.ToLower().Contains(search.ToLower())).ToList();
+
+            return users;
         }
 
         public async Task<User> AddUser(AddUserViewModel userRequest)
@@ -53,7 +63,7 @@ namespace TECHUB.Service.Services
 
         public async Task<LoginViewModel> Login(LoginViewModel loginRequest)
         {
-            var user = await repo.GetUserByName(loginRequest.Username);
+            var user = await repo.GetUserByUsername(loginRequest.Username);
 
             if (user is null)
             {
@@ -66,7 +76,9 @@ namespace TECHUB.Service.Services
                 return null;
             }
 
-            loginRequest.Password = string.Empty;
+            loginRequest.UserId = user.UserId;
+            loginRequest.Username = user.Username;
+            loginRequest.Password = string.Empty;           
 
             return loginRequest;
         }

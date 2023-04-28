@@ -1,4 +1,9 @@
+using System.Text.Json.Serialization;
 using TECHUB.Repository.Context;
+using TECHUB.Repository.Interfaces;
+using TECHUB.Repository.Repositories;
+using TECHUB.Service.Interfaces;
+using TECHUB.Service.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +14,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<DatabaseContext>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 var app = builder.Build();
 
@@ -20,6 +28,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
 app.UseAuthorization();
 

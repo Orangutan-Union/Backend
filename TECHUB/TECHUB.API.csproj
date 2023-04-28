@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\TECHUB.Repository\TECHUB.Repository.csproj" />
     <ProjectReference Include="..\TECHUB.Service\TECHUB.Service.csproj" />
   </ItemGroup>
