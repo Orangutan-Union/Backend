@@ -12,7 +12,7 @@ using TECHUB.Repository.Context;
 namespace TECHUB.Repository.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230427103350_initial")]
+    [Migration("20230502114848_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -140,7 +140,7 @@ namespace TECHUB.Repository.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("groupUsers");
+                    b.ToTable("GroupUsers");
                 });
 
             modelBuilder.Entity("TECHUB.Repository.Models.Like", b =>
@@ -252,7 +252,7 @@ namespace TECHUB.Repository.Migrations
                     b.Property<bool>("FriendOnly")
                         .HasColumnType("bit");
 
-                    b.Property<int>("GroupId")
+                    b.Property<int?>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<double>("Latitude")
@@ -477,9 +477,7 @@ namespace TECHUB.Repository.Migrations
                 {
                     b.HasOne("TECHUB.Repository.Models.Group", "Group")
                         .WithMany("Posts")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GroupId");
 
                     b.HasOne("TECHUB.Repository.Models.User", "User")
                         .WithMany("Posts")
