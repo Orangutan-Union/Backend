@@ -1,6 +1,7 @@
 ﻿using TECHUB.Repository.Interfaces;
 using TECHUB.Repository.Models;
 using TECHUB.Service.Interfaces;
+using TECHUB.Service.ViewModels;
 
 namespace TECHUB.Service.Services
 {
@@ -9,7 +10,7 @@ namespace TECHUB.Service.Services
         private readonly IPostRepository repo;
         public PostService(IPostRepository repo) { this.repo = repo; }
 
-        public async Task<Post> AddPost(Post post)
+        public async Task<Post> AddPost(AddPostViewModel post)
         {
             Post newPost = new Post();
             newPost.UserId = post.UserId;
