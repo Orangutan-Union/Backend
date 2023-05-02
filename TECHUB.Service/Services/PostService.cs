@@ -11,8 +11,20 @@ namespace TECHUB.Service.Services
 
         public async Task<Post> AddPost(Post post)
         {
-            post.TimeStamp = DateTime.Now;
+            Post newPost = new Post();
+            newPost.UserId = post.UserId;
+            newPost.GroupId = post.GroupId;
+            newPost.TimeStamp = DateTime.Now;
+            newPost.Content = post.Content;
+            newPost.FriendOnly = post.FriendOnly;
+            newPost.Latitude = post.Latitude;
+            newPost.Longitude = post.Longitude;
 
+            return await repo.AddPost(newPost);
+        }
+
+        public async Task<Post> AddCommen(Post post)
+        {
             return await repo.AddPost(post);
         }
 
@@ -36,7 +48,7 @@ namespace TECHUB.Service.Services
             return await repo.GetUserFollowerFeed(id);
         }
 
-        public async Task<List<Post>> GetUserFreindFeed(int id)
+        public async Task<List<Post>> GetUserFriendFeed(int id)
         {
             return await repo.GetUserFriendFeed(id);
         }
