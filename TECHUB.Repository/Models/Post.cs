@@ -17,6 +17,5 @@
         public virtual Group? Group { get; set; }
         public virtual List<PicturePost> PicturePosts { get; set; } = new List<PicturePost>();
         public virtual List<Like> Likes { get; set; } = new List<Like>();
-
     }
 }

@@ -11,6 +11,8 @@ namespace TECHUB.Service.Services
 
         public async Task<Post> AddPost(Post post)
         {
+            post.TimeStamp = DateTime.Now;
+
             return await repo.AddPost(post);
         }
 
@@ -19,21 +21,19 @@ namespace TECHUB.Service.Services
             return await repo.DeletePost(id);
         }
 
-        public Task<Post> GetPostById(int id)
+        public async Task<Post> GetPostById(int id)
         {
-            return repo.GetPostById(id);
+            return await repo.GetPostById(id);
         }
 
-        public Task<List<Post>> GetUserFeed(int id)
+        public async Task<List<Post>> GetUserFeed(int id)
         {
-            return repo.GetUserFeed(id);
+            return await repo.GetUserFeed(id);
         }
 
-        public Task<List<Post>> GetUserFollowerFeed(int id)
+        public async Task<List<Post>> GetUserFollowerFeed(int id)
         {
-            var userFeed = repo.GetUserFeed(id);
-
-            return userFeed;
+            return await repo.Get
         }
 
         public Task<List<Post>> GetUserFreindFeed(int id)
