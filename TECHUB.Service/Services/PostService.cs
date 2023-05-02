@@ -33,12 +33,12 @@ namespace TECHUB.Service.Services
 
         public async Task<List<Post>> GetUserFollowerFeed(int id)
         {
-            return await repo.Get
+            return await repo.GetUserFollowerFeed(id);
         }
 
-        public Task<List<Post>> GetUserFreindFeed(int id)
+        public async Task<List<Post>> GetUserFreindFeed(int id)
         {
-            throw new NotImplementedException();
+            return await repo.GetUserFriendFeed(id);
         }
 
         public Task<List<Post>> GetUserPosts(int id)
