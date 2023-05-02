@@ -105,7 +105,7 @@ namespace TECHUB.Repository.Repositories
             return list;
         }
 
-        public async Task<List<Post>> GetUserFolliwerFeed(int id)
+        public async Task<List<Post>> GetUserFollowerFeed(int id)
         {
             var friendFollowers = await context.FriendFollowers
                 .Include(ff => ff.User)
