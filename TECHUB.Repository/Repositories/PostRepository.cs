@@ -105,54 +105,6 @@ namespace TECHUB.Repository.Repositories
             return list;
         }
 
-        public async Task<List<Post>> GetUserFriendFeed(int id)
-        {
-            var friendFollowers = await context.FriendFollowers
-                .Include(ff => ff.User)
-                .ThenInclude(u => u.Picture)
-                .Include(ff => ff.User)
-                .ThenInclude(u => u.Posts)
-                .ThenInclude(p => p.Likes)
-                .Include(ff => ff.User)
-                .ThenInclude(u => u.Posts)
-                .ThenInclude(p => p.PicturePosts)
-                .ThenInclude(pp => pp.Picture)
-                .Include(ff => ff.User)
-                .ThenInclude(u => u.Posts)
-                .ThenInclude(p => p.Comments)
-                .ThenInclude(pc => pc.Comment)
-                .ThenInclude(c => c.Comments)
-                .Include(ff => ff.OtherUser)
-                .ThenInclude(u => u.Picture)
-                .Include(ff => ff.OtherUser)
-                .ThenInclude(u => u.Posts)
-                .ThenInclude(p => p.Likes)
-                .Include(ff => ff.OtherUser)
-                .ThenInclude(u => u.Posts)
-                .ThenInclude(p => p.PicturePosts)
-                .ThenInclude(pp => pp.Picture)
-                .Include(ff => ff.OtherUser)
-                .ThenInclude(u => u.Posts)
-                .ThenInclude(p => p.Comments)
-                .ThenInclude(pc => pc.Comment)
-                .ThenInclude(c => c.Comments)
-                .Where(ff => ff.Type == 1 && ff.UserId == id || ff.Type == 1 && ff.OtherUserId == id).ToListAsync();
-
-            var list = new List<Post>();
-            foreach (var item in friendFollowers)
-            {
-                if (item.User.UserId != id)
-                {
-                    foreach (var post in item.User.Posts)
-                    {
-                        list.Add(post);
-                    }
-                }
-            }
-
-            return list;
-        }
-
         public async Task<List<Post>> GetUserFollowerFeed(int id)
         {
             var friendFollowers = await context.FriendFollowers
@@ -185,6 +137,54 @@ namespace TECHUB.Repository.Repositories
                 .ThenInclude(pc => pc.Comment)
                 .ThenInclude(c => c.Comments)
                 .Where(ff => ff.Type == 2 && ff.UserId == id || ff.Type == 2 && ff.OtherUserId == id).ToListAsync();
+
+            var list = new List<Post>();
+            foreach (var item in friendFollowers)
+            {
+                if (item.User.UserId != id)
+                {
+                    foreach (var post in item.User.Posts)
+                    {
+                        list.Add(post);
+                    }
+                }
+            }
+
+            return list;
+        }
+
+        public async Task<List<Post>> GetUserFriendFeed(int id)
+        {
+            var friendFollowers = await context.FriendFollowers
+                .Include(ff => ff.User)
+                .ThenInclude(u => u.Picture)
+                .Include(ff => ff.User)
+                .ThenInclude(u => u.Posts)
+                .ThenInclude(p => p.Likes)
+                .Include(ff => ff.User)
+                .ThenInclude(u => u.Posts)
+                .ThenInclude(p => p.PicturePosts)
+                .ThenInclude(pp => pp.Picture)
+                .Include(ff => ff.User)
+                .ThenInclude(u => u.Posts)
+                .ThenInclude(p => p.Comments)
+                .ThenInclude(pc => pc.Comment)
+                .ThenInclude(c => c.Comments)
+                .Include(ff => ff.OtherUser)
+                .ThenInclude(u => u.Picture)
+                .Include(ff => ff.OtherUser)
+                .ThenInclude(u => u.Posts)
+                .ThenInclude(p => p.Likes)
+                .Include(ff => ff.OtherUser)
+                .ThenInclude(u => u.Posts)
+                .ThenInclude(p => p.PicturePosts)
+                .ThenInclude(pp => pp.Picture)
+                .Include(ff => ff.OtherUser)
+                .ThenInclude(u => u.Posts)
+                .ThenInclude(p => p.Comments)
+                .ThenInclude(pc => pc.Comment)
+                .ThenInclude(c => c.Comments)
+                .Where(ff => ff.Type == 1 && ff.UserId == id || ff.Type == 1 && ff.OtherUserId == id).ToListAsync();
 
             var list = new List<Post>();
             foreach (var item in friendFollowers)
