@@ -216,7 +216,7 @@ namespace TECHUB.Repository.Repositories
                 .ThenInclude(p => p.Comments)
                 .ThenInclude(pc => pc.Comment)
                 .ThenInclude(c => c.Comments)
-                .FirstOrDefaultAsync(u => u.UserId == id);
+                .FirstOrDefaultAsync(u => u.UserId == id && u.Posts == null);
 
             return user.Posts;
         }
