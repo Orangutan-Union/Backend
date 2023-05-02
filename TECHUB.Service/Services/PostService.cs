@@ -23,7 +23,7 @@ namespace TECHUB.Service.Services
             return await repo.AddPost(newPost);
         }
 
-        public async Task<Post> AddCommen(Post post)
+        public async Task<Post> AddComment(Post post)
         {
             return await repo.AddPost(post);
         }
