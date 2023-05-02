@@ -1,8 +1,8 @@
 ﻿using TECHUB.Repository.Models;
 
-namespace TECHUB.Repository.Interfaces
+namespace TECHUB.Service.Interfaces
 {
-    public interface IPostRepository
+    public interface IPostService
     {
         public Task<Post> GetPostById(int id);
         public Task<List<Post>> GetUserPosts(int id);
@@ -10,6 +10,7 @@ namespace TECHUB.Repository.Interfaces
         public Task<List<Post>> GetUserFollowerFeed(int id);
         public Task<List<Post>> GetUserFriendFeed(int id);
         public Task<Post> AddPost(Post post);
+        public Task<Post> AddComment(Post post);
         public Task<Post> UpdatePost(Post post);
         public Task<Post> DeletePost(int id);
     }
