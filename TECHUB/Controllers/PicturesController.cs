@@ -31,13 +31,32 @@ namespace TECHUB.API.Controllers
         }
 
 
-        //[HttpPost]
-        //public async Task<IActionResult> Create(Picture picture)
-        //{
-        //    context.Pictures.Add(picture);
-        //    await context.SaveChangesAsync();
+        [HttpPost]
+        public async Task<IActionResult> AddPicture()
+        {
+            var file = Request.Form.Files[0];
 
-        //    return Ok(picture);
-        //}
+            if (file is null)
+            {
+                return BadRequest("Something done gone wrong, I tell you hwat");
+            }
+            var pic = new Picture();
+            using (var ms = new MemoryStream())
+            {
+                await file.CopyToAsync(ms);
+
+                if (ms.Length < 2097152)
+                {
+                    pic.ImageData = ms.ToArray();
+                    pic.ImageName = file.FileName;
+                }
+                else
+                {
+                    return BadRequest("This picture is too dang big, make sure it's under 2MB in size");
+                }
+            }
+            await service.AddPicture(pic);
+            return Ok(pic);
+        }
     }
 }
