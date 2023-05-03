@@ -253,7 +253,7 @@ namespace TECHUB.Repository.Migrations
                     b.Property<bool>("FriendOnly")
                         .HasColumnType("bit");
 
-                    b.Property<int>("GroupId")
+                    b.Property<int?>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<double>("Latitude")
@@ -478,9 +478,7 @@ namespace TECHUB.Repository.Migrations
                 {
                     b.HasOne("TECHUB.Repository.Models.Group", "Group")
                         .WithMany("Posts")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GroupId");
 
                     b.HasOne("TECHUB.Repository.Models.User", "User")
                         .WithMany("Posts")

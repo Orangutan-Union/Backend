@@ -12,8 +12,13 @@ using TECHUB.Repository.Context;
 namespace TECHUB.Repository.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
+<<<<<<<< HEAD:TECHUB.Repository/Migrations/20230502122649_jimmytest.Designer.cs
     [Migration("20230502122649_jimmytest")]
     partial class jimmytest
+========
+    [Migration("20230502114848_initial")]
+    partial class initial
+>>>>>>>> master:TECHUB.Repository/Migrations/20230502114848_initial.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -256,7 +261,7 @@ namespace TECHUB.Repository.Migrations
                     b.Property<bool>("FriendOnly")
                         .HasColumnType("bit");
 
-                    b.Property<int>("GroupId")
+                    b.Property<int?>("GroupId")
                         .HasColumnType("int");
 
                     b.Property<double>("Latitude")
@@ -481,9 +486,7 @@ namespace TECHUB.Repository.Migrations
                 {
                     b.HasOne("TECHUB.Repository.Models.Group", "Group")
                         .WithMany("Posts")
-                        .HasForeignKey("GroupId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GroupId");
 
                     b.HasOne("TECHUB.Repository.Models.User", "User")
                         .WithMany("Posts")

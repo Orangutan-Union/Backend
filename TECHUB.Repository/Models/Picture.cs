@@ -6,7 +6,6 @@ namespace TECHUB.Repository.Models
     public class Picture
     {
         public int PictureId { get; set; }
-        //public int ProfilePictureId { get; set; }
         //public int UserId { get; set; }
         public string ImageName { get; set; } = string.Empty;
         public byte[] ImageData { get; set; }

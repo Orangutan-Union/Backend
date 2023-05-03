@@ -86,8 +86,15 @@ namespace TECHUB.Repository.Context
 
                 entity.HasOne(x => x.User)
                 .WithMany(u => u.Pictures)
+                //.HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
             });
+
+            //modelBuilder.Entity<User>()
+            //.HasOne(u => u.Picture)
+            //.WithOne()
+            //.HasForeignKey<User>(u => u.ProfilePictureId)
+            //.OnDelete(DeleteBehavior.ClientSetNull);
 
             modelBuilder.Entity<FriendRequest>()
                 .HasKey(x => new { x.SenderId, x.ReceiverId });
@@ -124,7 +131,6 @@ namespace TECHUB.Repository.Context
                 .HasForeignKey(x => x.PostId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
             });
-
         }
     }
 }
