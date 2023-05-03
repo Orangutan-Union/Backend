@@ -18,5 +18,13 @@ namespace TECHUB.Repository.Repositories
         {
             return await context.Pictures.FirstOrDefaultAsync(x => x.PictureId == id);
         }
+
+        public async Task<Picture> Add(Picture picture)
+        {
+            context.Pictures.Add(picture);
+            await context.SaveChangesAsync();
+            return picture;
+
+        }
     }
 }

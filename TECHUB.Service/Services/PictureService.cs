@@ -17,5 +17,11 @@ namespace TECHUB.Service.Services
         {
             return await repo.GetPictureById(id);
         }
+
+        public async Task<Picture> AddPicture(Picture picture)
+        {
+            var pic = await repo.Add(picture);
+            return pic;
+        }
     }
 }

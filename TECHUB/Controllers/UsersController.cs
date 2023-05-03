@@ -118,6 +118,10 @@ namespace TECHUB.API.Controllers
 
                     await context.SaveChangesAsync();
                 }
+                else
+                {
+                    return BadRequest("This picture is too dang big, make sure it's under 2MB in size");
+                }
             }
                 return NoContent();
         }
