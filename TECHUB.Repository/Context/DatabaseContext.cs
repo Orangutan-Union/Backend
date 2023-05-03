@@ -28,7 +28,7 @@ namespace TECHUB.Repository.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Data Source=192.168.20.33,1433; Initial Catalog=TECHub; TrustServerCertificate=True; User ID=sa; Password=Passw0rd;");
+            optionsBuilder.UseSqlServer("Data Source=192.168.20.33,1433; Initial Catalog=JimmyTest; TrustServerCertificate=True; User ID=sa; Password=Passw0rd;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

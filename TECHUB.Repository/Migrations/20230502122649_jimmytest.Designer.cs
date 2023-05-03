@@ -12,8 +12,8 @@ using TECHUB.Repository.Context;
 namespace TECHUB.Repository.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230427103350_initial")]
-    partial class initial
+    [Migration("20230502122649_jimmytest")]
+    partial class jimmytest
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -96,7 +96,7 @@ namespace TECHUB.Repository.Migrations
 
                     b.HasIndex("ReceiverId");
 
-                    b.ToTable("friendRequests");
+                    b.ToTable("FriendRequests");
                 });
 
             modelBuilder.Entity("TECHUB.Repository.Models.Group", b =>
@@ -140,7 +140,7 @@ namespace TECHUB.Repository.Migrations
 
                     b.HasIndex("GroupId");
 
-                    b.ToTable("groupUsers");
+                    b.ToTable("GroupUsers");
                 });
 
             modelBuilder.Entity("TECHUB.Repository.Models.Like", b =>
@@ -208,7 +208,11 @@ namespace TECHUB.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PictureId"));
 
-                    b.Property<string>("Path")
+                    b.Property<byte[]>("ImageData")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ImageName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

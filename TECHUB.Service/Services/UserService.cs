@@ -9,10 +9,12 @@ namespace TECHUB.Service.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository repo;
+        private readonly IPictureRepository pictureRepository;
 
-        public UserService(IUserRepository repo)
+        public UserService(IUserRepository repo, IPictureRepository pictureRepository)
         {
             this.repo = repo;
+            this.pictureRepository = pictureRepository;
         }
 
         public async Task<List<User>> GetUsers()
@@ -22,7 +24,13 @@ namespace TECHUB.Service.Services
 
         public async Task<User> GetUserById(int id)
         {
-            return await repo.GetUserById(id);
+            var user = await repo.GetUserById(id);
+            if (user is null)
+            {
+                return null;
+            }
+
+            return user;
         }
 
         public async Task<User> GetUserByUsername(string username)
@@ -50,7 +58,10 @@ namespace TECHUB.Service.Services
             newUser.PasswordSalt = passwordSalt;
             newUser.Email = userRequest.Email;
             newUser.DisplayName = userRequest.DisplayName;
-            //TODO - Jimmy: Set a default picture once Picture repo/service/controller has been made.
+
+            // Get Default pic from DB and set it as profile pic.
+            var pic = await pictureRepository.GetPictureById(1);
+            newUser.Picture = pic;
 
 
             return await repo.AddUser(newUser);
