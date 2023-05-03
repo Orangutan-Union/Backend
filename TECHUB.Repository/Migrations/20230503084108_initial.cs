@@ -58,7 +58,7 @@ namespace TECHUB.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "friendRequests",
+                name: "FriendRequests",
                 columns: table => new
                 {
                     SenderId = table.Column<int>(type: "int", nullable: false),
@@ -67,7 +67,7 @@ namespace TECHUB.Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_friendRequests", x => new { x.SenderId, x.ReceiverId });
+                    table.PrimaryKey("PK_FriendRequests", x => new { x.SenderId, x.ReceiverId });
                 });
 
             migrationBuilder.CreateTable(
@@ -86,7 +86,7 @@ namespace TECHUB.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "groupUsers",
+                name: "GroupUsers",
                 columns: table => new
                 {
                     UserId = table.Column<int>(type: "int", nullable: false),
@@ -95,9 +95,9 @@ namespace TECHUB.Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_groupUsers", x => new { x.UserId, x.GroupId });
+                    table.PrimaryKey("PK_GroupUsers", x => new { x.UserId, x.GroupId });
                     table.ForeignKey(
-                        name: "FK_groupUsers_Groups_GroupId",
+                        name: "FK_GroupUsers_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
                         principalColumn: "GroupId",
@@ -160,7 +160,8 @@ namespace TECHUB.Repository.Migrations
                 {
                     PictureId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -199,7 +200,7 @@ namespace TECHUB.Repository.Migrations
                     PostId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    GroupId = table.Column<int>(type: "int", nullable: false),
+                    GroupId = table.Column<int>(type: "int", nullable: true),
                     TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FriendOnly = table.Column<bool>(type: "bit", nullable: false),
@@ -213,8 +214,7 @@ namespace TECHUB.Repository.Migrations
                         name: "FK_Posts_Groups_GroupId",
                         column: x => x.GroupId,
                         principalTable: "Groups",
-                        principalColumn: "GroupId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "GroupId");
                     table.ForeignKey(
                         name: "FK_Posts_Users_UserId",
                         column: x => x.UserId,
@@ -256,8 +256,8 @@ namespace TECHUB.Repository.Migrations
                 column: "OtherUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_friendRequests_ReceiverId",
-                table: "friendRequests",
+                name: "IX_FriendRequests_ReceiverId",
+                table: "FriendRequests",
                 column: "ReceiverId");
 
             migrationBuilder.CreateIndex(
@@ -267,8 +267,8 @@ namespace TECHUB.Repository.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_groupUsers_GroupId",
-                table: "groupUsers",
+                name: "IX_GroupUsers_GroupId",
+                table: "GroupUsers",
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
@@ -339,15 +339,15 @@ namespace TECHUB.Repository.Migrations
                 principalColumn: "UserId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_friendRequests_Users_ReceiverId",
-                table: "friendRequests",
+                name: "FK_FriendRequests_Users_ReceiverId",
+                table: "FriendRequests",
                 column: "ReceiverId",
                 principalTable: "Users",
                 principalColumn: "UserId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_friendRequests_Users_SenderId",
-                table: "friendRequests",
+                name: "FK_FriendRequests_Users_SenderId",
+                table: "FriendRequests",
                 column: "SenderId",
                 principalTable: "Users",
                 principalColumn: "UserId");
@@ -361,8 +361,8 @@ namespace TECHUB.Repository.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_groupUsers_Users_UserId",
-                table: "groupUsers",
+                name: "FK_GroupUsers_Users_UserId",
+                table: "GroupUsers",
                 column: "UserId",
                 principalTable: "Users",
                 principalColumn: "UserId",
@@ -426,10 +426,10 @@ namespace TECHUB.Repository.Migrations
                 name: "FriendFollowers");
 
             migrationBuilder.DropTable(
-                name: "friendRequests");
+                name: "FriendRequests");
 
             migrationBuilder.DropTable(
-                name: "groupUsers");
+                name: "GroupUsers");
 
             migrationBuilder.DropTable(
                 name: "Likes");

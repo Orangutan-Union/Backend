@@ -3,9 +3,8 @@
     public class Picture
     {
         public int PictureId { get; set; }
-        //public int ProfilePictureId { get; set; }
-        //public int UserId { get; set; }
-        public string Path { get; set; } = string.Empty;
+        public string ImageName { get; set; } = string.Empty;
+        public byte[] ImageData { get; set; }
 
         public virtual User? User { get; set; }
         public virtual Group? Group { get; set; }

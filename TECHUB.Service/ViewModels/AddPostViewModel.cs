@@ -3,7 +3,7 @@
     public class AddPostViewModel
     {
         public int UserId { get; set; }
-        public int GroupId { get; set; }
+        public int? GroupId { get; set; }
         public DateTime TimeStamp { get; set; }
         public string Content { get; set; }
         public bool FriendOnly { get; set; }
