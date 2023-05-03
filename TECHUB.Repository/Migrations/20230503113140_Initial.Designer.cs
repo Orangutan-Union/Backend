@@ -12,8 +12,8 @@ using TECHUB.Repository.Context;
 namespace TECHUB.Repository.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230503084108_initial")]
-    partial class initial
+    [Migration("20230503113140_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,6 +40,21 @@ namespace TECHUB.Repository.Migrations
                     b.ToTable("ChatUser");
                 });
 
+            modelBuilder.Entity("PicturePost", b =>
+                {
+                    b.Property<int>("PicturePostsPictureId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PicturePostsPostId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PicturePostsPictureId", "PicturePostsPostId");
+
+                    b.HasIndex("PicturePostsPostId");
+
+                    b.ToTable("PicturePost");
+                });
+
             modelBuilder.Entity("TECHUB.Repository.Models.Chat", b =>
                 {
                     b.Property<int>("ChatId")
@@ -58,6 +73,36 @@ namespace TECHUB.Repository.Migrations
                     b.HasKey("ChatId");
 
                     b.ToTable("Chats");
+                });
+
+            modelBuilder.Entity("TECHUB.Repository.Models.Comment", b =>
+                {
+                    b.Property<int>("CommentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentId"));
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("TimeStamp")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CommentId");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Comment");
                 });
 
             modelBuilder.Entity("TECHUB.Repository.Models.FriendFollower", b =>
@@ -148,7 +193,7 @@ namespace TECHUB.Repository.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PostId")
+                    b.Property<int?>("CommentId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsDisliked")
@@ -157,7 +202,12 @@ namespace TECHUB.Repository.Migrations
                     b.Property<bool>("IsLiked")
                         .HasColumnType("bit");
 
-                    b.HasKey("UserId", "PostId");
+                    b.Property<int?>("PostId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId");
+
+                    b.HasIndex("CommentId");
 
                     b.HasIndex("PostId");
 
@@ -226,21 +276,6 @@ namespace TECHUB.Repository.Migrations
                     b.ToTable("Pictures");
                 });
 
-            modelBuilder.Entity("TECHUB.Repository.Models.PicturePost", b =>
-                {
-                    b.Property<int>("PictureId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PictureId", "PostId");
-
-                    b.HasIndex("PostId");
-
-                    b.ToTable("PicturePost");
-                });
-
             modelBuilder.Entity("TECHUB.Repository.Models.Post", b =>
                 {
                     b.Property<int>("PostId")
@@ -280,21 +315,6 @@ namespace TECHUB.Repository.Migrations
                     b.ToTable("Posts");
                 });
 
-            modelBuilder.Entity("TECHUB.Repository.Models.PostComment", b =>
-                {
-                    b.Property<int>("PostId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CommentId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PostId", "CommentId");
-
-                    b.HasIndex("CommentId");
-
-                    b.ToTable("PostComment");
-                });
-
             modelBuilder.Entity("TECHUB.Repository.Models.User", b =>
                 {
                     b.Property<int>("UserId")
@@ -319,9 +339,6 @@ namespace TECHUB.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int?>("PictureId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ProfilePictureId")
                         .HasColumnType("int");
 
@@ -331,7 +348,8 @@ namespace TECHUB.Repository.Migrations
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("PictureId");
+                    b.HasIndex("ProfilePictureId")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
@@ -349,6 +367,38 @@ namespace TECHUB.Repository.Migrations
                         .HasForeignKey("UsersUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PicturePost", b =>
+                {
+                    b.HasOne("TECHUB.Repository.Models.Picture", null)
+                        .WithMany()
+                        .HasForeignKey("PicturePostsPictureId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TECHUB.Repository.Models.Post", null)
+                        .WithMany()
+                        .HasForeignKey("PicturePostsPostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TECHUB.Repository.Models.Comment", b =>
+                {
+                    b.HasOne("TECHUB.Repository.Models.Post", "Post")
+                        .WithMany("Posts")
+                        .HasForeignKey("PostId");
+
+                    b.HasOne("TECHUB.Repository.Models.User", "User")
+                        .WithMany("Comments")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TECHUB.Repository.Models.FriendFollower", b =>
@@ -417,15 +467,20 @@ namespace TECHUB.Repository.Migrations
 
             modelBuilder.Entity("TECHUB.Repository.Models.Like", b =>
                 {
+                    b.HasOne("TECHUB.Repository.Models.Comment", "Comment")
+                        .WithMany("Likes")
+                        .HasForeignKey("CommentId");
+
                     b.HasOne("TECHUB.Repository.Models.Post", "Post")
                         .WithMany("Likes")
-                        .HasForeignKey("PostId")
-                        .IsRequired();
+                        .HasForeignKey("PostId");
 
                     b.HasOne("TECHUB.Repository.Models.User", "User")
                         .WithMany("Likes")
                         .HasForeignKey("UserId")
                         .IsRequired();
+
+                    b.Navigation("Comment");
 
                     b.Navigation("Post");
 
@@ -460,23 +515,6 @@ namespace TECHUB.Repository.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TECHUB.Repository.Models.PicturePost", b =>
-                {
-                    b.HasOne("TECHUB.Repository.Models.Picture", "Picture")
-                        .WithMany("PicturePosts")
-                        .HasForeignKey("PictureId")
-                        .IsRequired();
-
-                    b.HasOne("TECHUB.Repository.Models.Post", "Post")
-                        .WithMany("PicturePosts")
-                        .HasForeignKey("PostId")
-                        .IsRequired();
-
-                    b.Navigation("Picture");
-
-                    b.Navigation("Post");
-                });
-
             modelBuilder.Entity("TECHUB.Repository.Models.Post", b =>
                 {
                     b.HasOne("TECHUB.Repository.Models.Group", "Group")
@@ -494,28 +532,12 @@ namespace TECHUB.Repository.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TECHUB.Repository.Models.PostComment", b =>
-                {
-                    b.HasOne("TECHUB.Repository.Models.Post", "Comment")
-                        .WithMany("Posts")
-                        .HasForeignKey("CommentId")
-                        .IsRequired();
-
-                    b.HasOne("TECHUB.Repository.Models.Post", "Post")
-                        .WithMany("Comments")
-                        .HasForeignKey("PostId")
-                        .IsRequired();
-
-                    b.Navigation("Comment");
-
-                    b.Navigation("Post");
-                });
-
             modelBuilder.Entity("TECHUB.Repository.Models.User", b =>
                 {
                     b.HasOne("TECHUB.Repository.Models.Picture", "Picture")
-                        .WithMany()
-                        .HasForeignKey("PictureId");
+                        .WithOne()
+                        .HasForeignKey("TECHUB.Repository.Models.User", "ProfilePictureId")
+                        .IsRequired();
 
                     b.Navigation("Picture");
                 });
@@ -523,6 +545,11 @@ namespace TECHUB.Repository.Migrations
             modelBuilder.Entity("TECHUB.Repository.Models.Chat", b =>
                 {
                     b.Navigation("Messages");
+                });
+
+            modelBuilder.Entity("TECHUB.Repository.Models.Comment", b =>
+                {
+                    b.Navigation("Likes");
                 });
 
             modelBuilder.Entity("TECHUB.Repository.Models.Group", b =>
@@ -535,23 +562,19 @@ namespace TECHUB.Repository.Migrations
             modelBuilder.Entity("TECHUB.Repository.Models.Picture", b =>
                 {
                     b.Navigation("Group");
-
-                    b.Navigation("PicturePosts");
                 });
 
             modelBuilder.Entity("TECHUB.Repository.Models.Post", b =>
                 {
-                    b.Navigation("Comments");
-
                     b.Navigation("Likes");
-
-                    b.Navigation("PicturePosts");
 
                     b.Navigation("Posts");
                 });
 
             modelBuilder.Entity("TECHUB.Repository.Models.User", b =>
                 {
+                    b.Navigation("Comments");
+
                     b.Navigation("GroupUsers");
 
                     b.Navigation("Likes");
