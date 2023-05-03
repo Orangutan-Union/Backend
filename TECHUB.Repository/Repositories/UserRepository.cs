@@ -21,7 +21,7 @@ namespace TECHUB.Repository.Repositories
 
         public async Task<User> GetUserById(int id)
         {
-            return await context.Users.FirstOrDefaultAsync(x => x.UserId == id);
+            return await context.Users.Include(x => x.Picture).FirstOrDefaultAsync(x => x.UserId == id);
         }
 
         public async Task<User> GetUserByUsername(string username)

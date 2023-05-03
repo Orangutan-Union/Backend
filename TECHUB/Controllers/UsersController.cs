@@ -1,5 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
+using TECHUB.Repository.Context;
+using TECHUB.Repository.Models;
 using TECHUB.Service.Interfaces;
 using TECHUB.Service.ViewModels;
 
@@ -11,9 +15,13 @@ namespace TECHUB.API.Controllers
     {
         private readonly IUserService service;
 
-        public UsersController(IUserService service)
+        //Remove DatabaseContext field when UploadImage method has been split up to service and repo layers.
+        private readonly DatabaseContext context;
+
+        public UsersController(IUserService service, DatabaseContext context)
         {
             this.service = service;
+            this.context = context;
         }
 
         [HttpGet]
@@ -82,7 +90,36 @@ namespace TECHUB.API.Controllers
             return Ok(user);
         }
 
+        [HttpPut("{id:int}/uploadimage")]
+        public async Task<IActionResult> UploadImage(int id)
+        {
+            var file = Request.Form.Files[0];
+            var user = await context.Users.FirstOrDefaultAsync(x => x.UserId == id);
 
+            if (user is null)
+            {
+                return BadRequest($"Could not find user with ID = {id}");
+            }
 
+            //TODO: Jimmy - move this to service layer and add an update method for the repo at a later point.
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+
+                if (memoryStream.Length < 2097152)
+                {
+                    var pic = new Picture()
+                    {
+                        ImageData = memoryStream.ToArray(),
+                        ImageName = file.FileName,
+                        
+                    };
+                    user.Picture = pic;
+
+                    await context.SaveChangesAsync();
+                }
+            }
+                return NoContent();
+        }
     }
 }

@@ -93,7 +93,7 @@ namespace TECHUB.Repository.Migrations
 
                     b.HasIndex("ReceiverId");
 
-                    b.ToTable("friendRequests");
+                    b.ToTable("FriendRequests");
                 });
 
             modelBuilder.Entity("TECHUB.Repository.Models.Group", b =>
@@ -205,7 +205,11 @@ namespace TECHUB.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PictureId"));
 
-                    b.Property<string>("Path")
+                    b.Property<byte[]>("ImageData")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ImageName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

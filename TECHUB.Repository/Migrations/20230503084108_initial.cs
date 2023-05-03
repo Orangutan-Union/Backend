@@ -58,7 +58,7 @@ namespace TECHUB.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "friendRequests",
+                name: "FriendRequests",
                 columns: table => new
                 {
                     SenderId = table.Column<int>(type: "int", nullable: false),
@@ -67,7 +67,7 @@ namespace TECHUB.Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_friendRequests", x => new { x.SenderId, x.ReceiverId });
+                    table.PrimaryKey("PK_FriendRequests", x => new { x.SenderId, x.ReceiverId });
                 });
 
             migrationBuilder.CreateTable(
@@ -160,7 +160,8 @@ namespace TECHUB.Repository.Migrations
                 {
                     PictureId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -255,8 +256,8 @@ namespace TECHUB.Repository.Migrations
                 column: "OtherUserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_friendRequests_ReceiverId",
-                table: "friendRequests",
+                name: "IX_FriendRequests_ReceiverId",
+                table: "FriendRequests",
                 column: "ReceiverId");
 
             migrationBuilder.CreateIndex(
@@ -338,15 +339,15 @@ namespace TECHUB.Repository.Migrations
                 principalColumn: "UserId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_friendRequests_Users_ReceiverId",
-                table: "friendRequests",
+                name: "FK_FriendRequests_Users_ReceiverId",
+                table: "FriendRequests",
                 column: "ReceiverId",
                 principalTable: "Users",
                 principalColumn: "UserId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_friendRequests_Users_SenderId",
-                table: "friendRequests",
+                name: "FK_FriendRequests_Users_SenderId",
+                table: "FriendRequests",
                 column: "SenderId",
                 principalTable: "Users",
                 principalColumn: "UserId");
@@ -425,7 +426,7 @@ namespace TECHUB.Repository.Migrations
                 name: "FriendFollowers");
 
             migrationBuilder.DropTable(
-                name: "friendRequests");
+                name: "FriendRequests");
 
             migrationBuilder.DropTable(
                 name: "GroupUsers");
