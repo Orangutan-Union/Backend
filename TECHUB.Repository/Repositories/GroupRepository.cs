@@ -46,13 +46,13 @@ namespace TECHUB.Repository.Repositories
                 .ThenInclude(u => u.Picture)
 
                 .Include(g => g.Posts)
-                .ThenInclude(p => p.PicturePosts)
-                .ThenInclude(pp => pp.Picture)
+                //.ThenInclude(p => p.PicturePosts)
+                //.ThenInclude(pp => pp.Picture)
 
                 .Include(g => g.Posts)
-                .ThenInclude(p => p.Comments)
-                .ThenInclude(pc => pc.Comment)
-                .ThenInclude(c => c.Comments)
+                ////.ThenInclude(p => p.Comments)
+                //.ThenInclude(pc => pc.Comment)
+                //.ThenInclude(c => c.Comments)
 
                 .SingleOrDefaultAsync(g => g.GroupId == id);
         }

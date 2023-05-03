@@ -13,6 +13,7 @@
 
         public virtual Picture? Picture { get; set; }
         public virtual List<Post> Posts { get; set; } = new List<Post>();
+        public virtual List<Comment> Comments { get; set; } = new List<Comment>();
         public virtual List<Like> Likes { get; set; } = new List<Like>();
         public virtual List<Picture> Pictures { get; set; } = new List<Picture>();
         public virtual List<FriendRequest> SentFriendRequests { get; set; } = new List<FriendRequest>();

@@ -11,11 +11,10 @@
         public double Latitude { get; set; }
         public double Longitude { get; set; }
 
-        public virtual List<PostComment> Posts { get; set; } = new List<PostComment>();
-        public virtual List<PostComment> Comments { get; set; } = new List<PostComment>();
+        public virtual List<Comment> Posts { get; set; } = new List<Comment>();
         public virtual User? User { get; set; }
         public virtual Group? Group { get; set; }
-        public virtual List<PicturePost> PicturePosts { get; set; } = new List<PicturePost>();
+        public virtual List<Picture> PicturePosts { get; set; } = new List<Picture>();
         public virtual List<Like> Likes { get; set; } = new List<Like>();
     }
 }

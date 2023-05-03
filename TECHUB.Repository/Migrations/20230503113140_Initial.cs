@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TECHUB.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -41,6 +41,22 @@ namespace TECHUB.Repository.Migrations
                         principalTable: "Chats",
                         principalColumn: "ChatId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Comment",
+                columns: table => new
+                {
+                    CommentId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PostId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Comment", x => x.CommentId);
                 });
 
             migrationBuilder.CreateTable(
@@ -109,13 +125,19 @@ namespace TECHUB.Repository.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    PostId = table.Column<int>(type: "int", nullable: false),
+                    PostId = table.Column<int>(type: "int", nullable: true),
+                    CommentId = table.Column<int>(type: "int", nullable: true),
                     IsLiked = table.Column<bool>(type: "bit", nullable: false),
                     IsDisliked = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Likes", x => new { x.UserId, x.PostId });
+                    table.PrimaryKey("PK_Likes", x => x.UserId);
+                    table.ForeignKey(
+                        name: "FK_Likes_Comment_CommentId",
+                        column: x => x.CommentId,
+                        principalTable: "Comment",
+                        principalColumn: "CommentId");
                 });
 
             migrationBuilder.CreateTable(
@@ -146,12 +168,12 @@ namespace TECHUB.Repository.Migrations
                 name: "PicturePost",
                 columns: table => new
                 {
-                    PictureId = table.Column<int>(type: "int", nullable: false),
-                    PostId = table.Column<int>(type: "int", nullable: false)
+                    PicturePostsPictureId = table.Column<int>(type: "int", nullable: false),
+                    PicturePostsPostId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PicturePost", x => new { x.PictureId, x.PostId });
+                    table.PrimaryKey("PK_PicturePost", x => new { x.PicturePostsPictureId, x.PicturePostsPostId });
                 });
 
             migrationBuilder.CreateTable(
@@ -180,15 +202,14 @@ namespace TECHUB.Repository.Migrations
                     PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PictureId = table.Column<int>(type: "int", nullable: true)
+                    DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserId);
                     table.ForeignKey(
-                        name: "FK_Users_Pictures_PictureId",
-                        column: x => x.PictureId,
+                        name: "FK_Users_Pictures_ProfilePictureId",
+                        column: x => x.ProfilePictureId,
                         principalTable: "Pictures",
                         principalColumn: "PictureId");
                 });
@@ -223,32 +244,20 @@ namespace TECHUB.Repository.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "PostComment",
-                columns: table => new
-                {
-                    PostId = table.Column<int>(type: "int", nullable: false),
-                    CommentId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PostComment", x => new { x.PostId, x.CommentId });
-                    table.ForeignKey(
-                        name: "FK_PostComment_Posts_CommentId",
-                        column: x => x.CommentId,
-                        principalTable: "Posts",
-                        principalColumn: "PostId");
-                    table.ForeignKey(
-                        name: "FK_PostComment_Posts_PostId",
-                        column: x => x.PostId,
-                        principalTable: "Posts",
-                        principalColumn: "PostId");
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_ChatUser_UsersUserId",
                 table: "ChatUser",
                 column: "UsersUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comment_PostId",
+                table: "Comment",
+                column: "PostId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comment_UserId",
+                table: "Comment",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FriendFollowers_OtherUserId",
@@ -272,6 +281,11 @@ namespace TECHUB.Repository.Migrations
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Likes_CommentId",
+                table: "Likes",
+                column: "CommentId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Likes_PostId",
                 table: "Likes",
                 column: "PostId");
@@ -287,19 +301,14 @@ namespace TECHUB.Repository.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PicturePost_PostId",
+                name: "IX_PicturePost_PicturePostsPostId",
                 table: "PicturePost",
-                column: "PostId");
+                column: "PicturePostsPostId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pictures_UserId",
                 table: "Pictures",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PostComment_CommentId",
-                table: "PostComment",
-                column: "CommentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_GroupId",
@@ -312,14 +321,30 @@ namespace TECHUB.Repository.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_PictureId",
+                name: "IX_Users_ProfilePictureId",
                 table: "Users",
-                column: "PictureId");
+                column: "ProfilePictureId",
+                unique: true);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_ChatUser_Users_UsersUserId",
                 table: "ChatUser",
                 column: "UsersUserId",
+                principalTable: "Users",
+                principalColumn: "UserId",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Comment_Posts_PostId",
+                table: "Comment",
+                column: "PostId",
+                principalTable: "Posts",
+                principalColumn: "PostId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Comment_Users_UserId",
+                table: "Comment",
+                column: "UserId",
                 principalTable: "Users",
                 principalColumn: "UserId",
                 onDelete: ReferentialAction.Cascade);
@@ -391,18 +416,20 @@ namespace TECHUB.Repository.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_PicturePost_Pictures_PictureId",
+                name: "FK_PicturePost_Pictures_PicturePostsPictureId",
                 table: "PicturePost",
-                column: "PictureId",
+                column: "PicturePostsPictureId",
                 principalTable: "Pictures",
-                principalColumn: "PictureId");
+                principalColumn: "PictureId",
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_PicturePost_Posts_PostId",
+                name: "FK_PicturePost_Posts_PicturePostsPostId",
                 table: "PicturePost",
-                column: "PostId",
+                column: "PicturePostsPostId",
                 principalTable: "Posts",
-                principalColumn: "PostId");
+                principalColumn: "PostId",
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Pictures_Users_UserId",
@@ -441,7 +468,7 @@ namespace TECHUB.Repository.Migrations
                 name: "PicturePost");
 
             migrationBuilder.DropTable(
-                name: "PostComment");
+                name: "Comment");
 
             migrationBuilder.DropTable(
                 name: "Chats");
