@@ -94,6 +94,21 @@ namespace TECHUB.Service.Services
             return loginRequest;
         }
 
+        public async Task<User> UpdateUser(User userReq)
+        {
+            var user = await repo.GetUserById(userReq.UserId);
+
+            if (user is null)
+            {
+                return null;
+            }
+
+            user.DisplayName = userReq.DisplayName;
+            user.Email = userReq.Email;
+
+            return await repo.UpdateUser(user);
+        }
+
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
