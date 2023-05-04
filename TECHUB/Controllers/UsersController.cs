@@ -138,5 +138,18 @@ namespace TECHUB.API.Controllers
             }
                 return NoContent();
         }
+
+        [HttpPut("changepassword")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel viewModel)
+        {
+            var success = await service.ChangePassword(viewModel);
+
+            if (!success)
+            {
+                return BadRequest("Change Password failed.");
+            }
+
+            return Ok(success);
+        }
     }
 }
