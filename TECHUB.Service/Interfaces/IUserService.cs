@@ -12,5 +12,6 @@ namespace TECHUB.Service.Interfaces
         Task<User> AddUser(AddUserViewModel userRequest);
         Task<User> DeleteUser(int id);
         Task<LoginViewModel> Login(LoginViewModel loginRequest);
+        Task<User> UpdateUser(User userReq);
     }
 }

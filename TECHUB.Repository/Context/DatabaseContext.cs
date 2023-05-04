@@ -65,20 +65,20 @@ namespace TECHUB.Repository.Context
                 .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
-            modelBuilder.Entity<Picture>(entity =>
-            {
-                entity.HasKey(x => x.PictureId);
+            //modelBuilder.Entity<Picture>(entity =>
+            //{
+            //    entity.HasKey(x => x.PictureId);
 
-                entity.HasOne(x => x.User)
-                .WithMany(u => u.Pictures)
-                //.HasForeignKey(p => p.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-            });
+            //    entity.HasMany(x => x.User)
+            //    .WithMany(u => u.Pictures);
+            //    //.HasForeignKey(p => p.UserId)
+            //    //.OnDelete(DeleteBehavior.ClientSetNull);
+            //});
 
             modelBuilder.Entity<User>()
             .HasOne(u => u.Picture)
-            .WithOne()
-            .HasForeignKey<User>(u => u.ProfilePictureId)
+            .WithMany(p => p.User)
+            .HasForeignKey(u => u.ProfilePictureId)
             .OnDelete(DeleteBehavior.ClientSetNull);
 
             modelBuilder.Entity<FriendRequest>()

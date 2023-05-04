@@ -90,6 +90,19 @@ namespace TECHUB.API.Controllers
             return Ok(user);
         }
 
+        [HttpPut("update/{id:int}")]
+        public async Task<IActionResult> UpdateUser(User userReq)
+        {
+            var user = await service.UpdateUser(userReq);
+
+            if (user is null)
+            {
+                return NotFound($"Unable to find user with ID = {userReq.UserId}");
+            }
+
+            return Ok(user);
+        }
+
         [HttpPut("{id:int}/uploadimage")]
         public async Task<IActionResult> UploadImage(int id)
         {
