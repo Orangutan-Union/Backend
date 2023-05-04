@@ -263,12 +263,7 @@ namespace TECHUB.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("PictureId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Pictures");
                 });
@@ -345,8 +340,7 @@ namespace TECHUB.Repository.Migrations
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("ProfilePictureId")
-                        .IsUnique();
+                    b.HasIndex("ProfilePictureId");
 
                     b.ToTable("Users");
                 });
@@ -503,15 +497,6 @@ namespace TECHUB.Repository.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TECHUB.Repository.Models.Picture", b =>
-                {
-                    b.HasOne("TECHUB.Repository.Models.User", "User")
-                        .WithMany("Pictures")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("TECHUB.Repository.Models.Post", b =>
                 {
                     b.HasOne("TECHUB.Repository.Models.Group", "Group")
@@ -532,8 +517,8 @@ namespace TECHUB.Repository.Migrations
             modelBuilder.Entity("TECHUB.Repository.Models.User", b =>
                 {
                     b.HasOne("TECHUB.Repository.Models.Picture", "Picture")
-                        .WithOne()
-                        .HasForeignKey("TECHUB.Repository.Models.User", "ProfilePictureId")
+                        .WithMany("User")
+                        .HasForeignKey("ProfilePictureId")
                         .IsRequired();
 
                     b.Navigation("Picture");
@@ -559,6 +544,8 @@ namespace TECHUB.Repository.Migrations
             modelBuilder.Entity("TECHUB.Repository.Models.Picture", b =>
                 {
                     b.Navigation("Group");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TECHUB.Repository.Models.Post", b =>
@@ -579,8 +566,6 @@ namespace TECHUB.Repository.Migrations
                     b.Navigation("Messages");
 
                     b.Navigation("OtherUserFriendFollowers");
-
-                    b.Navigation("Pictures");
 
                     b.Navigation("Posts");
 

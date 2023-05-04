@@ -15,7 +15,7 @@
         public virtual List<Post> Posts { get; set; } = new List<Post>();
         public virtual List<Comment> Comments { get; set; } = new List<Comment>();
         public virtual List<Like> Likes { get; set; } = new List<Like>();
-        public virtual List<Picture> Pictures { get; set; } = new List<Picture>();
+        //public virtual List<Picture> Pictures { get; set; } = new List<Picture>();
         public virtual List<FriendRequest> SentFriendRequests { get; set; } = new List<FriendRequest>();
         public virtual List<FriendRequest> ReceivedFriendRequests { get; set; } = new List<FriendRequest>();
         public virtual List<FriendFollower> UserFriendFollowers { get; set; } = new List<FriendFollower>();
