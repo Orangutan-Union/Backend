@@ -109,6 +109,33 @@ namespace TECHUB.Service.Services
             return await repo.UpdateUser(user);
         }
 
+        public async Task<bool> ChangePassword(ChangePasswordViewModel viewModel)
+        {
+            var user = await repo.GetUserById(viewModel.UserId);
+
+            if (user is null)
+            {
+                return false;
+            }
+
+            //Verify that the old password is correct
+            if (VerifyPasswordHash(viewModel.OldPassword, user.PasswordHash, user.PasswordSalt))
+            {
+                //Create new passwordHash and passwordSalt for the new password
+                CreatePasswordHash(viewModel.NewPassword, out byte[] passwordHash, out byte[] passwordSalt);
+
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
+            }
+            else
+            {
+                return false;
+            }
+
+            await repo.UpdateUser(user);
+            return true;
+        }
+
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
