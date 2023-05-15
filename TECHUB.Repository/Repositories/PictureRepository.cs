@@ -24,7 +24,19 @@ namespace TECHUB.Repository.Repositories
             context.Pictures.Add(picture);
             await context.SaveChangesAsync();
             return picture;
+        }
 
+        public async Task<Picture> DeletePicture(int id)
+        {
+            var pic = await context.Pictures.FindAsync(id);
+
+            if (pic is not null)
+            {
+                context.Pictures.Remove(pic);
+                await context.SaveChangesAsync();
+            }
+
+            return pic;
         }
     }
 }
