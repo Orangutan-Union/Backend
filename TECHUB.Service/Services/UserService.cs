@@ -113,6 +113,7 @@ namespace TECHUB.Service.Services
         public async Task<User> UploadProfileImage(IFormFile file, int id)
         {
             var user = await repo.GetUserById(id);
+            var pictureId = user.Picture.PictureId;
 
             if (user is null)
             {
@@ -130,9 +131,15 @@ namespace TECHUB.Service.Services
                         ImageData = memoryStream.ToArray(),
                         ImageName = file.FileName,
                     };
-                    user.Picture = pic;
+                    
 
-                    return await repo.UpdateUser(user);
+                    // Set the uploaded picture and save it
+                    user.Picture = pic;
+                    await repo.UpdateUser(user);
+
+                    // Delete the old picture from DB
+                    await pictureRepository.DeletePicture(pictureId);
+                    return user;
                 }
                 else
                 {
