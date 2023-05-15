@@ -1,7 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using TECHUB.Repository.Context;
 using TECHUB.Repository.Models;
 using TECHUB.Service.Interfaces;
@@ -13,11 +18,13 @@ namespace TECHUB.API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly IConfiguration configuration;
         private readonly IUserService service;
 
-        public UsersController(IUserService service)
+        public UsersController(IUserService service, IConfiguration configuration)
         {
             this.service = service;
+            this.configuration = configuration;
         }
 
         [HttpGet]
@@ -26,7 +33,7 @@ namespace TECHUB.API.Controllers
             return Ok(await service.GetUsers());
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:int}"), Authorize]
         public async Task<IActionResult> GetUserById(int id)
         {
             var user = await service.GetUserById(id);
@@ -80,9 +87,11 @@ namespace TECHUB.API.Controllers
 
             if (user is null)
             {
-                return BadRequest("Bad login");
+                return Unauthorized("Bad login");
             }
 
+            string tokenString = CreateToken();
+            user.Token = tokenString;
             return Ok(user);
         }
 
@@ -113,7 +122,7 @@ namespace TECHUB.API.Controllers
             return Ok();
         }
 
-        [HttpPut("changepassword")]
+        [HttpPut("changepassword"), Authorize]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel viewModel)
         {
             var success = await service.ChangePassword(viewModel);
@@ -124,6 +133,19 @@ namespace TECHUB.API.Controllers
             }
 
             return Ok(success);
+        }
+
+        private string CreateToken()
+        {
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings:Token").Value));
+            var signInCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+            var tokeOptions = new JwtSecurityToken(
+                claims: new List<Claim>(),
+                expires: DateTime.Now.AddSeconds(10),
+                signingCredentials: signInCredentials
+                );
+
+            return new JwtSecurityTokenHandler().WriteToken(tokeOptions);
         }
     }
 }
