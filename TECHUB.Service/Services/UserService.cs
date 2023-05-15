@@ -113,11 +113,14 @@ namespace TECHUB.Service.Services
         public async Task<User> UploadProfileImage(IFormFile file, int id)
         {
             var user = await repo.GetUserById(id);
-            var pictureId = user.Picture.PictureId;
-
+            int pictureId = 0;
             if (user is null)
             {
                 return null;
+            }
+            else if (user.Picture is not null)
+            {
+                pictureId = user.Picture.PictureId;
             }
 
             using (var memoryStream = new MemoryStream())
