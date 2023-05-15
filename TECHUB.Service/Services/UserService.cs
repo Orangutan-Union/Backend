@@ -129,7 +129,6 @@ namespace TECHUB.Service.Services
                     {
                         ImageData = memoryStream.ToArray(),
                         ImageName = file.FileName,
-
                     };
                     user.Picture = pic;
 
