@@ -15,13 +15,9 @@ namespace TECHUB.API.Controllers
     {
         private readonly IUserService service;
 
-        //Remove DatabaseContext field when UploadImage method has been split up to service and repo layers.
-        private readonly DatabaseContext context;
-
-        public UsersController(IUserService service, DatabaseContext context)
+        public UsersController(IUserService service)
         {
             this.service = service;
-            this.context = context;
         }
 
         [HttpGet]
