@@ -104,39 +104,17 @@ namespace TECHUB.API.Controllers
         }
 
         [HttpPut("{id:int}/uploadimage")]
-        public async Task<IActionResult> UploadImage(int id)
+        public async Task<IActionResult> UploadProfileImage(int id)
         {
             var file = Request.Form.Files[0];
-            var user = await context.Users.FirstOrDefaultAsync(x => x.UserId == id);
+            var user = await service.UploadProfileImage(file, id);
 
             if (user is null)
             {
                 return BadRequest($"Could not find user with ID = {id}");
             }
 
-            //TODO: Jimmy - move this to service layer and add an update method for the repo at a later point.
-            using (var memoryStream = new MemoryStream())
-            {
-                await file.CopyToAsync(memoryStream);
-
-                if (memoryStream.Length < 2097152)
-                {
-                    var pic = new Picture()
-                    {
-                        ImageData = memoryStream.ToArray(),
-                        ImageName = file.FileName,
-                        
-                    };
-                    user.Picture = pic;
-
-                    await context.SaveChangesAsync();
-                }
-                else
-                {
-                    return BadRequest("This picture is too dang big, make sure it's under 2MB in size");
-                }
-            }
-                return NoContent();
+            return Ok();
         }
 
         [HttpPut("changepassword")]

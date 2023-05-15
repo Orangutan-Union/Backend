@@ -1,4 +1,5 @@
-﻿using TECHUB.Repository.Models;
+﻿using Microsoft.AspNetCore.Http;
+using TECHUB.Repository.Models;
 using TECHUB.Service.ViewModels;
 
 namespace TECHUB.Service.Interfaces
@@ -14,5 +15,6 @@ namespace TECHUB.Service.Interfaces
         Task<LoginViewModel> Login(LoginViewModel loginRequest);
         Task<User> UpdateUser(User userReq);
         Task<bool> ChangePassword(ChangePasswordViewModel viewModel);
+        Task<User> UploadProfileImage(IFormFile file, int id);
     }
 }
