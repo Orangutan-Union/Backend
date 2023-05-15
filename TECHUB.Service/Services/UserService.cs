@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using Microsoft.AspNetCore.Http;
+using System.Security.Cryptography;
 using TECHUB.Repository.Interfaces;
 using TECHUB.Repository.Models;
 using TECHUB.Service.Interfaces;
@@ -107,6 +108,38 @@ namespace TECHUB.Service.Services
             user.Email = userReq.Email;
 
             return await repo.UpdateUser(user);
+        }
+
+        public async Task<User> UploadProfileImage(IFormFile file, int id)
+        {
+            var user = await repo.GetUserById(id);
+
+            if (user is null)
+            {
+                return null;
+            }
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+
+                if (memoryStream.Length < 2097152)
+                {
+                    var pic = new Picture()
+                    {
+                        ImageData = memoryStream.ToArray(),
+                        ImageName = file.FileName,
+
+                    };
+                    user.Picture = pic;
+
+                    return await repo.UpdateUser(user);
+                }
+                else
+                {
+                    return null;
+                }
+            }
         }
 
         public async Task<bool> ChangePassword(ChangePasswordViewModel viewModel)
