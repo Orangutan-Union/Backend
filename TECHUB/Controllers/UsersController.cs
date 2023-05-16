@@ -27,7 +27,7 @@ namespace TECHUB.API.Controllers
             this.configuration = configuration;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public async Task<IActionResult> GetUsers()
         {
             return Ok(await service.GetUsers());
@@ -46,7 +46,7 @@ namespace TECHUB.API.Controllers
             return Ok(user);
         }
 
-        [HttpGet("search")]
+        [HttpGet("search"), Authorize]
         public async Task<IActionResult> GetUsersBySearch(string search)
         {
             var users = await service.GetUsersBySearch(search);
@@ -67,7 +67,7 @@ namespace TECHUB.API.Controllers
             return Ok(user);
         }
 
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id:int}"), Authorize]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var user = await service.DeleteUser(id);
@@ -95,7 +95,7 @@ namespace TECHUB.API.Controllers
             return Ok(user);
         }
 
-        [HttpPut("update/{id:int}")]
+        [HttpPut("update/{id:int}"), Authorize]
         public async Task<IActionResult> UpdateUser(User userReq)
         {
             var user = await service.UpdateUser(userReq);
@@ -108,7 +108,7 @@ namespace TECHUB.API.Controllers
             return Ok(user);
         }
 
-        [HttpPut("{id:int}/uploadimage")]
+        [HttpPut("{id:int}/uploadimage"), Authorize]
         public async Task<IActionResult> UploadProfileImage(int id)
         {
             var file = Request.Form.Files[0];
@@ -141,7 +141,7 @@ namespace TECHUB.API.Controllers
             var signInCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
             var tokeOptions = new JwtSecurityToken(
                 claims: new List<Claim>(),
-                expires: DateTime.Now.AddSeconds(10),
+                expires: DateTime.Now.AddSeconds(30),
                 signingCredentials: signInCredentials
                 );
 
