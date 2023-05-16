@@ -73,7 +73,7 @@ namespace TECHUB.Service.Services
             return await repo.DeleteUser(id);
         }
 
-        public async Task<LoginViewModel> Login(LoginViewModel loginRequest)
+        public async Task<AuthenticatedResponse> Login(LoginViewModel loginRequest)
         {
             var user = await repo.GetUserByUsername(loginRequest.Username);
 
@@ -88,11 +88,13 @@ namespace TECHUB.Service.Services
                 return null;
             }
 
-            loginRequest.UserId = user.UserId;
-            loginRequest.Username = user.Username;
-            loginRequest.Password = string.Empty;           
+            AuthenticatedResponse auth = new AuthenticatedResponse()
+            {
+                UserId = user.UserId,
+                Username = loginRequest.Username,
+            };
 
-            return loginRequest;
+            return auth;
         }
 
         public async Task<User> UpdateUser(User userReq)
