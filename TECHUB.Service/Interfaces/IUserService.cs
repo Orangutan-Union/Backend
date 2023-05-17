@@ -16,5 +16,7 @@ namespace TECHUB.Service.Interfaces
         Task<User> UpdateUser(User userReq);
         Task<bool> ChangePassword(ChangePasswordViewModel viewModel);
         Task<User> UploadProfileImage(IFormFile file, int id);
+        string CreateJwtToken();
+        string CreateRefreshToken();
     }
 }

@@ -12,7 +12,7 @@ using TECHUB.Repository.Context;
 namespace TECHUB.Repository.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230504063154_initial")]
+    [Migration("20230517054459_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -336,6 +336,12 @@ namespace TECHUB.Repository.Migrations
 
                     b.Property<int>("ProfilePictureId")
                         .HasColumnType("int");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RefreshTokenExpiryTime")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Username")
                         .IsRequired()
