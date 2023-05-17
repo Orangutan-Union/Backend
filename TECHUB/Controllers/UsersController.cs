@@ -140,7 +140,6 @@ namespace TECHUB.API.Controllers
                 return BadRequest("Invalid client Request");
             }
 
-            //string accessToken = authResponse.AccessToken;
             string refreshToken = authResponse.RefreshToken;
 
             var user = await service.GetUserById(authResponse.UserId);
