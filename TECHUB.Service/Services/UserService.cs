@@ -1,5 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Text;
+using TECHUB.Repository.Context;
 using TECHUB.Repository.Interfaces;
 using TECHUB.Repository.Models;
 using TECHUB.Service.Interfaces;
@@ -11,11 +17,15 @@ namespace TECHUB.Service.Services
     {
         private readonly IUserRepository repo;
         private readonly IPictureRepository pictureRepository;
+        private readonly IConfiguration configuration;
+        private readonly DatabaseContext context;
 
-        public UserService(IUserRepository repo, IPictureRepository pictureRepository)
+        public UserService(IUserRepository repo, IPictureRepository pictureRepository, IConfiguration configuration, DatabaseContext context)
         {
             this.repo = repo;
             this.pictureRepository = pictureRepository;
+            this.configuration = configuration;
+            this.context = context;
         }
 
         public async Task<List<User>> GetUsers()
@@ -88,10 +98,18 @@ namespace TECHUB.Service.Services
                 return null;
             }
 
+            string newAccessToken = CreateJwtToken();
+            string newRefreshToken = CreateRefreshToken();
+            user.RefreshToken = newRefreshToken;
+            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(1);
+            await repo.UpdateUser(user);
+
             AuthenticatedResponse auth = new AuthenticatedResponse()
             {
                 UserId = user.UserId,
                 Username = loginRequest.Username,
+                AccessToken = newAccessToken,
+                RefreshToken = newRefreshToken,
             };
 
             return auth;
@@ -185,7 +203,7 @@ namespace TECHUB.Service.Services
             using (var hmac = new HMACSHA512())
             {
                 passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
             }
         }
 
@@ -196,6 +214,34 @@ namespace TECHUB.Service.Services
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 return computedHash.SequenceEqual(passwordHash);
             }
+        }
+
+        public string CreateJwtToken()
+        {
+            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings:Token").Value));
+            var signInCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
+            var tokeOptions = new JwtSecurityToken(
+                claims: new List<Claim>(),
+                expires: DateTime.Now.AddSeconds(10),
+                signingCredentials: signInCredentials
+                );
+
+            return new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+        }
+
+        public string CreateRefreshToken()
+        {
+            var tokenBytes = RandomNumberGenerator.GetBytes(64);
+            var refreshToken = Convert.ToBase64String(tokenBytes);
+
+            // Check if token exists in the Database already.
+            var tokenInUser = context.Users.Any(u => u.RefreshToken == refreshToken);
+            if (tokenInUser)
+            {
+                // If token already exists then run the method again.
+                return CreateRefreshToken();
+            }
+            return refreshToken;
         }
     }
 }

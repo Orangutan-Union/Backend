@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using TECHUB.Repository.Context;
 using TECHUB.Repository.Models;
@@ -18,13 +19,11 @@ namespace TECHUB.API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IConfiguration configuration;
         private readonly IUserService service;
 
-        public UsersController(IUserService service, IConfiguration configuration)
+        public UsersController(IUserService service)
         {
             this.service = service;
-            this.configuration = configuration;
         }
 
         [HttpGet, Authorize]
@@ -83,16 +82,14 @@ namespace TECHUB.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginViewModel request)
         {
-            var user = await service.Login(request);
+            var auth = await service.Login(request);
 
-            if (user is null)
+            if (auth is null)
             {
                 return Unauthorized("Bad login");
             }
 
-            string tokenString = CreateToken();
-            user.Token = tokenString;
-            return Ok(user);
+            return Ok(auth);
         }
 
         [HttpPut("update/{id:int}"), Authorize]
@@ -135,17 +132,31 @@ namespace TECHUB.API.Controllers
             return Ok(success);
         }
 
-        private string CreateToken()
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshToken(AuthenticatedResponse authResponse)
         {
-            var secretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings:Token").Value));
-            var signInCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
-            var tokeOptions = new JwtSecurityToken(
-                claims: new List<Claim>(),
-                expires: DateTime.Now.AddHours(1),
-                signingCredentials: signInCredentials
-                );
+            if (authResponse is null)
+            {
+                return BadRequest("Invalid client Request");
+            }
 
-            return new JwtSecurityTokenHandler().WriteToken(tokeOptions);
+            string refreshToken = authResponse.RefreshToken;
+
+            var user = await service.GetUserById(authResponse.UserId);
+            if (user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+            {
+                return BadRequest("Invalid Request");
+            }
+
+            var newAccessToken = service.CreateJwtToken();
+            var newRefreshToken = service.CreateRefreshToken();
+
+            user.RefreshToken = newRefreshToken;
+            await service.UpdateUser(user);
+
+            authResponse.AccessToken = newAccessToken;
+            authResponse.RefreshToken = newRefreshToken;
+            return Ok(authResponse);
         }
     }
 }
