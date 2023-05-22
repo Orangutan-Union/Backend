@@ -222,7 +222,7 @@ namespace TECHUB.Service.Services
             var signInCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
             var tokeOptions = new JwtSecurityToken(
                 claims: new List<Claim>(),
-                expires: DateTime.Now.AddSeconds(10),
+                expires: DateTime.Now.AddMinutes(10),
                 signingCredentials: signInCredentials
                 );
 
