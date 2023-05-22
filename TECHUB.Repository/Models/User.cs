@@ -9,6 +9,9 @@
         public byte[] PasswordSalt { get; set; } = new byte[32];
         public string Email { get; set; } = string.Empty;
         public string DisplayName { get; set; } = string.Empty;
+        public string? RefreshToken { get; set; }
+        public DateTime RefreshTokenExpiryTime { get; set; }
+
 
         public virtual Picture? Picture { get; set; }
         public virtual List<Post> Posts { get; set; } = new List<Post>();

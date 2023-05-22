@@ -1,7 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json.Linq;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using TECHUB.Repository.Context;
 using TECHUB.Repository.Models;
 using TECHUB.Service.Interfaces;
@@ -15,22 +21,18 @@ namespace TECHUB.API.Controllers
     {
         private readonly IUserService service;
 
-        //Remove DatabaseContext field when UploadImage method has been split up to service and repo layers.
-        private readonly DatabaseContext context;
-
-        public UsersController(IUserService service, DatabaseContext context)
+        public UsersController(IUserService service)
         {
             this.service = service;
-            this.context = context;
         }
 
-        [HttpGet]
+        [HttpGet, Authorize]
         public async Task<IActionResult> GetUsers()
         {
             return Ok(await service.GetUsers());
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:int}"), Authorize]
         public async Task<IActionResult> GetUserById(int id)
         {
             var user = await service.GetUserById(id);
@@ -43,7 +45,7 @@ namespace TECHUB.API.Controllers
             return Ok(user);
         }
 
-        [HttpGet("search")]
+        [HttpGet("search"), Authorize]
         public async Task<IActionResult> GetUsersBySearch(string search)
         {
             var users = await service.GetUsersBySearch(search);
@@ -64,7 +66,7 @@ namespace TECHUB.API.Controllers
             return Ok(user);
         }
 
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id:int}"), Authorize]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var user = await service.DeleteUser(id);
@@ -80,17 +82,17 @@ namespace TECHUB.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginViewModel request)
         {
-            var user = await service.Login(request);
+            var auth = await service.Login(request);
 
-            if (user is null)
+            if (auth is null)
             {
-                return BadRequest("Bad login");
+                return Unauthorized("Bad login");
             }
 
-            return Ok(user);
+            return Ok(auth);
         }
 
-        [HttpPut("update/{id:int}")]
+        [HttpPut("update/{id:int}"), Authorize]
         public async Task<IActionResult> UpdateUser(User userReq)
         {
             var user = await service.UpdateUser(userReq);
@@ -103,40 +105,58 @@ namespace TECHUB.API.Controllers
             return Ok(user);
         }
 
-        [HttpPut("{id:int}/uploadimage")]
-        public async Task<IActionResult> UploadImage(int id)
+        [HttpPut("{id:int}/uploadimage"), Authorize]
+        public async Task<IActionResult> UploadProfileImage(int id)
         {
             var file = Request.Form.Files[0];
-            var user = await context.Users.FirstOrDefaultAsync(x => x.UserId == id);
+            var user = await service.UploadProfileImage(file, id);
 
             if (user is null)
             {
                 return BadRequest($"Could not find user with ID = {id}");
             }
 
-            //TODO: Jimmy - move this to service layer and add an update method for the repo at a later point.
-            using (var memoryStream = new MemoryStream())
+            return Ok();
+        }
+
+        [HttpPut("changepassword"), Authorize]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel viewModel)
+        {
+            var success = await service.ChangePassword(viewModel);
+
+            if (!success)
             {
-                await file.CopyToAsync(memoryStream);
-
-                if (memoryStream.Length < 2097152)
-                {
-                    var pic = new Picture()
-                    {
-                        ImageData = memoryStream.ToArray(),
-                        ImageName = file.FileName,
-                        
-                    };
-                    user.Picture = pic;
-
-                    await context.SaveChangesAsync();
-                }
-                else
-                {
-                    return BadRequest("This picture is too dang big, make sure it's under 2MB in size");
-                }
+                return BadRequest("Change Password failed.");
             }
-                return NoContent();
+
+            return Ok(success);
+        }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> RefreshToken(AuthenticatedResponse authResponse)
+        {
+            if (authResponse is null)
+            {
+                return BadRequest("Invalid client Request");
+            }
+
+            string refreshToken = authResponse.RefreshToken;
+
+            var user = await service.GetUserById(authResponse.UserId);
+            if (user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+            {
+                return BadRequest("Invalid Request");
+            }
+
+            var newAccessToken = service.CreateJwtToken();
+            var newRefreshToken = service.CreateRefreshToken();
+
+            user.RefreshToken = newRefreshToken;
+            await service.UpdateUser(user);
+
+            authResponse.AccessToken = newAccessToken;
+            authResponse.RefreshToken = newRefreshToken;
+            return Ok(authResponse);
         }
     }
 }

@@ -23,5 +23,12 @@ namespace TECHUB.Service.Services
             var pic = await repo.Add(picture);
             return pic;
         }
+
+        public async Task<Picture> DeletePicture(int id)
+        {
+            var pic = await repo.DeletePicture(id);
+
+            return pic;
+        }
     }
 }
