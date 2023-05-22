@@ -101,7 +101,7 @@ namespace TECHUB.Service.Services
             string newAccessToken = CreateJwtToken();
             string newRefreshToken = CreateRefreshToken();
             user.RefreshToken = newRefreshToken;
-            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(1);
+            user.RefreshTokenExpiryTime = DateTime.Now.AddSeconds(30);
             await repo.UpdateUser(user);
 
             AuthenticatedResponse auth = new AuthenticatedResponse()
