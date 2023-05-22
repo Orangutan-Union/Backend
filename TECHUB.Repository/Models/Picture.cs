@@ -8,6 +8,6 @@
 
         public virtual List<User> User { get; set; } = new List<User>();
         public virtual Group? Group { get; set; }
-        public virtual List<Post> PicturePosts { get; set; } = new List<Post>();
+        public virtual List<Post> Posts { get; set; } = new List<Post>();
     }
 }

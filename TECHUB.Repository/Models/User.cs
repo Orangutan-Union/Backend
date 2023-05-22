@@ -4,7 +4,6 @@
     {
         public int UserId { get; set; }
         public int ProfilePictureId { get; set; }
-        //public int PictureId { get; set; }
         public string Username { get; set; } = string.Empty;
         public byte[] PasswordHash { get; set; } = new byte[32];
         public byte[] PasswordSalt { get; set; } = new byte[32];
@@ -23,6 +22,5 @@
         public virtual List<GroupUser> GroupUsers { get; set; } = new List<GroupUser>();
         public virtual List<Chat> Chats { get; set; } = new List<Chat>();
         public virtual List<Message> Messages { get; set; } = new List<Message>();
-
     }
 }

@@ -270,21 +270,21 @@ namespace TECHUB.Repository.Migrations
                 name: "PicturePost",
                 columns: table => new
                 {
-                    PicturePostsPictureId = table.Column<int>(type: "int", nullable: false),
-                    PicturePostsPostId = table.Column<int>(type: "int", nullable: false)
+                    PicturesPictureId = table.Column<int>(type: "int", nullable: false),
+                    PostsPostId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PicturePost", x => new { x.PicturePostsPictureId, x.PicturePostsPostId });
+                    table.PrimaryKey("PK_PicturePost", x => new { x.PicturesPictureId, x.PostsPostId });
                     table.ForeignKey(
-                        name: "FK_PicturePost_Pictures_PicturePostsPictureId",
-                        column: x => x.PicturePostsPictureId,
+                        name: "FK_PicturePost_Pictures_PicturesPictureId",
+                        column: x => x.PicturesPictureId,
                         principalTable: "Pictures",
                         principalColumn: "PictureId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_PicturePost_Posts_PicturePostsPostId",
-                        column: x => x.PicturePostsPostId,
+                        name: "FK_PicturePost_Posts_PostsPostId",
+                        column: x => x.PostsPostId,
                         principalTable: "Posts",
                         principalColumn: "PostId",
                         onDelete: ReferentialAction.Cascade);
@@ -294,6 +294,8 @@ namespace TECHUB.Repository.Migrations
                 name: "Likes",
                 columns: table => new
                 {
+                    LikeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     PostId = table.Column<int>(type: "int", nullable: true),
                     CommentId = table.Column<int>(type: "int", nullable: true),
@@ -302,7 +304,7 @@ namespace TECHUB.Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Likes", x => x.UserId);
+                    table.PrimaryKey("PK_Likes", x => x.LikeId);
                     table.ForeignKey(
                         name: "FK_Likes_Comment_CommentId",
                         column: x => x.CommentId,
@@ -367,6 +369,11 @@ namespace TECHUB.Repository.Migrations
                 column: "PostId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Likes_UserId",
+                table: "Likes",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Messages_ChatId",
                 table: "Messages",
                 column: "ChatId");
@@ -377,9 +384,9 @@ namespace TECHUB.Repository.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PicturePost_PicturePostsPostId",
+                name: "IX_PicturePost_PostsPostId",
                 table: "PicturePost",
-                column: "PicturePostsPostId");
+                column: "PostsPostId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Posts_GroupId",
