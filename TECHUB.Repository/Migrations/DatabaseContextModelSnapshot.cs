@@ -39,15 +39,15 @@ namespace TECHUB.Repository.Migrations
 
             modelBuilder.Entity("PicturePost", b =>
                 {
-                    b.Property<int>("PicturePostsPictureId")
+                    b.Property<int>("PicturesPictureId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PicturePostsPostId")
+                    b.Property<int>("PostsPostId")
                         .HasColumnType("int");
 
-                    b.HasKey("PicturePostsPictureId", "PicturePostsPostId");
+                    b.HasKey("PicturesPictureId", "PostsPostId");
 
-                    b.HasIndex("PicturePostsPostId");
+                    b.HasIndex("PostsPostId");
 
                     b.ToTable("PicturePost");
                 });
@@ -187,8 +187,11 @@ namespace TECHUB.Repository.Migrations
 
             modelBuilder.Entity("TECHUB.Repository.Models.Like", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("LikeId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LikeId"));
 
                     b.Property<int?>("CommentId")
                         .HasColumnType("int");
@@ -202,11 +205,16 @@ namespace TECHUB.Repository.Migrations
                     b.Property<int?>("PostId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LikeId");
 
                     b.HasIndex("CommentId");
 
                     b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Likes");
                 });
@@ -370,13 +378,13 @@ namespace TECHUB.Repository.Migrations
                 {
                     b.HasOne("TECHUB.Repository.Models.Picture", null)
                         .WithMany()
-                        .HasForeignKey("PicturePostsPictureId")
+                        .HasForeignKey("PicturesPictureId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TECHUB.Repository.Models.Post", null)
                         .WithMany()
-                        .HasForeignKey("PicturePostsPostId")
+                        .HasForeignKey("PostsPostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -384,7 +392,7 @@ namespace TECHUB.Repository.Migrations
             modelBuilder.Entity("TECHUB.Repository.Models.Comment", b =>
                 {
                     b.HasOne("TECHUB.Repository.Models.Post", "Post")
-                        .WithMany("Posts")
+                        .WithMany("Comments")
                         .HasForeignKey("PostId");
 
                     b.HasOne("TECHUB.Repository.Models.User", "User")
@@ -556,9 +564,9 @@ namespace TECHUB.Repository.Migrations
 
             modelBuilder.Entity("TECHUB.Repository.Models.Post", b =>
                 {
-                    b.Navigation("Likes");
+                    b.Navigation("Comments");
 
-                    b.Navigation("Posts");
+                    b.Navigation("Likes");
                 });
 
             modelBuilder.Entity("TECHUB.Repository.Models.User", b =>

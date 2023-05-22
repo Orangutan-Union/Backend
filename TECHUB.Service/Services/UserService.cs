@@ -133,7 +133,7 @@ namespace TECHUB.Service.Services
         public async Task<User> UploadProfileImage(IFormFile file, int id)
         {
             var user = await repo.GetUserById(id);
-            int pictureId = 0;
+            int? pictureId = 0;
             if (user is null)
             {
                 return null;
@@ -162,7 +162,7 @@ namespace TECHUB.Service.Services
                     // Delete the old picture from DB
                     if (pictureId != 1)
                     {
-                        await pictureRepository.DeletePicture(pictureId);
+                        await pictureRepository.DeletePicture((int)pictureId);
                     }
 
                     return user;
@@ -225,7 +225,7 @@ namespace TECHUB.Service.Services
             var signInCredentials = new SigningCredentials(secretKey, SecurityAlgorithms.HmacSha256);
             var tokeOptions = new JwtSecurityToken(
                 claims: new List<Claim>(),
-                expires: DateTime.Now.AddSeconds(10),
+                expires: DateTime.Now.AddMinutes(10),
                 signingCredentials: signInCredentials
                 );
 

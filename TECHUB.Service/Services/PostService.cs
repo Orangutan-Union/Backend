@@ -39,26 +39,6 @@ namespace TECHUB.Service.Services
             return await repo.GetPostById(id);
         }
 
-        public async Task<List<Post>> GetUserFeed(int id)
-        {
-            return await repo.GetUserFeed(id);
-        }
-
-        public async Task<List<Post>> GetUserFollowerFeed(int id)
-        {
-            return await repo.GetUserFollowerFeed(id);
-        }
-
-        public async Task<List<Post>> GetUserFriendFeed(int id)
-        {
-            return await repo.GetUserFriendFeed(id);
-        }
-
-        public Task<List<Post>> GetUserPosts(int id)
-        {
-            return repo.GetUserPosts(id);
-        }
-
         public async Task<Post> UpdatePost(Post post)
         {
             return await repo.UpdatePost(post);

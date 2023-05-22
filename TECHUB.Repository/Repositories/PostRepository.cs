@@ -32,193 +32,81 @@ namespace TECHUB.Repository.Repositories
 
         public async Task<Post> GetPostById(int id)
         {
-            return await context.Posts
-                .Include(p => p.Likes)
-                .Include(p => p.User)
-                .ThenInclude(u => u.Picture)
-                //.Include(p => p.Comments)
-                //.ThenInclude(pc => pc.Comment)
-                //.ThenInclude(c => c.Likes)
-                //.Include(p => p.Comments)
-                //.ThenInclude(pc => pc.Comment)
-                //.ThenInclude(c => c.User)
-                //.ThenInclude(cu => cu.Picture)
-                //.Include(p => p.Comments)
-                //.ThenInclude(pc => pc.Comment)
-                //.ThenInclude(c => c.Comments)
-                //.ThenInclude(cpc => cpc.Comment)
-                //.ThenInclude(cc => cc.Likes)
-                //.Include(p => p.Comments)
-                //.ThenInclude(pc => pc.Comment)
-                //.ThenInclude(c => c.Comments)
-                //.ThenInclude(cpc => cpc.Comment)
-                .ThenInclude(cc => cc.User)
-                .ThenInclude(ccu => ccu.Picture)
-                .FirstOrDefaultAsync(p => p.PostId == id);
-        }
-
-        public async Task<List<Post>> GetUserFeed(int id)
-        {
-            var friendFollowers = await context.FriendFollowers
-                .Include(ff => ff.User)
-                .ThenInclude(u => u.Picture)
-                .Include(ff => ff.User)
-                .ThenInclude(u => u.Posts)
-                .ThenInclude(p => p.Likes)
-                .Include(ff => ff.User)
-                .ThenInclude(u => u.Posts)
-                //.ThenInclude(p => p.PicturePosts)
-                //.ThenInclude(pp => pp.Picture)
-                .Include(ff => ff.User)
-                .ThenInclude(u => u.Posts)
-                //.ThenInclude(p => p.Comments)
-                //.ThenInclude(pc => pc.Comment)
-                //.ThenInclude(c => c.Comments)
-                .Include(ff => ff.OtherUser)
-                .ThenInclude(u => u.Picture)
-                .Include(ff => ff.OtherUser)
-                .ThenInclude(u => u.Posts)
-                .ThenInclude(p => p.Likes)
-                .Include(ff => ff.OtherUser)
-                .ThenInclude(u => u.Posts)
-                //.ThenInclude(p => p.PicturePosts)
-                //.ThenInclude(pp => pp.Picture)
-                //.Include(ff => ff.OtherUser)
-                //.ThenInclude(u => u.Posts)
-                //.ThenInclude(p => p.Comments)
-                //.ThenInclude(pc => pc.Comment)
-                //.ThenInclude(c => c.Comments)
-                .Where(ff => ff.Type != 3 && ff.UserId == id || ff.Type != 3 && ff.OtherUserId == id).ToListAsync();
-
-            var list = new List<Post>();
-            foreach (var item in friendFollowers)
-            {
-                if (item.User.UserId != id)
+            var post = await context.Posts
+                .Select(p => new Post
                 {
-                    foreach (var post in item.User.Posts)
+                    PostId = p.PostId,
+                    UserId = p.UserId,
+                    GroupId = p.GroupId,
+                    TimeStamp = p.TimeStamp,
+                    Content = p.Content,
+                    FriendOnly = p.FriendOnly,
+                    Latitude = p.Latitude,
+                    Longitude = p.Longitude,
+                    User = new User
                     {
-                        list.Add(post);
-                    }
-                }
-            }
-
-            return list;
-        }
-
-        public async Task<List<Post>> GetUserFollowerFeed(int id)
-        {
-            var friendFollowers = await context.FriendFollowers
-                .Include(ff => ff.User)
-                .ThenInclude(u => u.Picture)
-                .Include(ff => ff.User)
-                .ThenInclude(u => u.Posts)
-                .ThenInclude(p => p.Likes)
-                .Include(ff => ff.User)
-                .ThenInclude(u => u.Posts)
-                //.ThenInclude(p => p.PicturePosts)
-                //.ThenInclude(pp => pp.Picture)
-                //.Include(ff => ff.User)
-                //.ThenInclude(u => u.Posts)
-                //.ThenInclude(p => p.Comments)
-                //.ThenInclude(pc => pc.Comment)
-                //.ThenInclude(c => c.Comments)
-                .Include(ff => ff.OtherUser)
-                .ThenInclude(u => u.Picture)
-                .Include(ff => ff.OtherUser)
-                .ThenInclude(u => u.Posts)
-                .ThenInclude(p => p.Likes)
-                .Include(ff => ff.OtherUser)
-                .ThenInclude(u => u.Posts)
-                //.ThenInclude(p => p.PicturePosts)
-                //.ThenInclude(pp => pp.Picture)
-                //.Include(ff => ff.OtherUser)
-                //.ThenInclude(u => u.Posts)
-                //.ThenInclude(p => p.Comments)
-                //.ThenInclude(pc => pc.Comment)
-                //.ThenInclude(c => c.Comments)
-                .Where(ff => ff.Type == 2 && ff.UserId == id || ff.Type == 2 && ff.OtherUserId == id).ToListAsync();
-
-            var list = new List<Post>();
-            foreach (var item in friendFollowers)
-            {
-                if (item.User.UserId != id)
-                {
-                    foreach (var post in item.User.Posts)
+                        UserId = p.User.UserId,
+                        Username = p.User.Username,
+                        DisplayName = p.User.DisplayName,
+                        Picture = new Picture
+                        {
+                            PictureId = p.User.Picture.PictureId,
+                            ImageName = p.User.Picture.ImageName,
+                            ImageData = p.User.Picture.ImageData,
+                        }
+                    },
+                    Likes = p.Likes.Select(pl => new Like
                     {
-                        list.Add(post);
-                    }
-                }
-            }
-
-            return list;
-        }
-
-        public async Task<List<Post>> GetUserFriendFeed(int id)
-        {
-            var friendFollowers = await context.FriendFollowers
-                .Include(ff => ff.User)
-                .ThenInclude(u => u.Picture)
-                .Include(ff => ff.User)
-                .ThenInclude(u => u.Posts)
-                .ThenInclude(p => p.Likes)
-                .Include(ff => ff.User)
-                .ThenInclude(u => u.Posts)
-                //.ThenInclude(p => p.PicturePosts)
-                //.ThenInclude(pp => pp.Picture)
-                //.Include(ff => ff.User)
-                //.ThenInclude(u => u.Posts)
-                //.ThenInclude(p => p.Comments)
-                //.ThenInclude(pc => pc.Comment)
-                //.ThenInclude(c => c.Comments)
-                .Include(ff => ff.OtherUser)
-                .ThenInclude(u => u.Picture)
-                .Include(ff => ff.OtherUser)
-                .ThenInclude(u => u.Posts)
-                .ThenInclude(p => p.Likes)
-                .Include(ff => ff.OtherUser)
-                .ThenInclude(u => u.Posts)
-                //.ThenInclude(p => p.PicturePosts)
-                //.ThenInclude(pp => pp.Picture)
-                //.Include(ff => ff.OtherUser)
-                //.ThenInclude(u => u.Posts)
-                //.ThenInclude(p => p.Comments)
-                //.ThenInclude(pc => pc.Comment)
-                //.ThenInclude(c => c.Comments)
-                .Where(ff => ff.Type == 1 && ff.UserId == id || ff.Type == 1 && ff.OtherUserId == id).ToListAsync();
-
-            var list = new List<Post>();
-            foreach (var item in friendFollowers)
-            {
-                if (item.User.UserId != id)
-                {
-                    foreach (var post in item.User.Posts)
+                        LikeId = pl.LikeId,
+                        UserId = pl.UserId,
+                        PostId = pl.PostId,
+                        CommentId = pl.CommentId,
+                        IsLiked = pl.IsLiked,
+                        IsDisliked = pl.IsDisliked,
+                        User = new User
+                        {
+                            UserId = pl.User.UserId,
+                            Username = pl.User.Username,
+                            DisplayName = pl.User.DisplayName,
+                        }
+                    }).ToList(),
+                    Comments = p.Comments.Select(pc => new Comment
                     {
-                        list.Add(post);
-                    }
-                }
-            }
+                        CommentId = pc.CommentId,
+                        UserId = pc.UserId,
+                        TimeStamp = pc.TimeStamp,
+                        Content = pc.Content,
+                        User = new User
+                        {
+                            UserId = pc.User.UserId,
+                            Username = pc.User.Username,
+                            DisplayName = pc.User.DisplayName,
+                            Picture = new Picture
+                            {
+                                PictureId = pc.User.Picture.PictureId,
+                                ImageName = pc.User.Picture.ImageName,
+                                ImageData = pc.User.Picture.ImageData,
+                            }
+                        },
+                        Likes = pc.Likes.Select(cl => new Like
+                        {
+                            LikeId = cl.LikeId,
+                            UserId = cl.UserId,
+                            PostId = cl.PostId,
+                            CommentId = cl.CommentId,
+                            IsLiked = cl.IsLiked,
+                            IsDisliked = cl.IsDisliked,
+                            User = new User
+                            {
+                                UserId = cl.User.UserId,
+                                Username = cl.User.Username,
+                                DisplayName = cl.User.DisplayName,
+                            }
+                        }).ToList(),
+                    }).ToList(),
+                }).FirstOrDefaultAsync();
 
-            return list;
-        }
-
-        public async Task<List<Post>> GetUserPosts(int id)
-        {
-            var user = await context.Users
-                .Include(u => u.Posts)
-                .ThenInclude(p => p.Likes)
-                .Include(g => g.Posts)
-                .ThenInclude(p => p.User)
-                .ThenInclude(u => u.Picture)
-                .Include(g => g.Posts)
-                //.ThenInclude(p => p.PicturePosts)
-                //.ThenInclude(pp => pp.Picture)
-                .Include(g => g.Posts)
-                //.ThenInclude(p => p.Comments)
-                //.ThenInclude(pc => pc.Comment)
-                //.ThenInclude(c => c.Comments)
-                .FirstOrDefaultAsync(u => u.UserId == id && u.Posts == null);
-
-            return user.Posts;
+            return post;
         }
 
         public async Task<Post> UpdatePost(Post post)

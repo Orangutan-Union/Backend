@@ -28,13 +28,13 @@ namespace TECHUB.Repository.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Data Source=192.168.20.33,1433; Initial Catalog=TECHub; TrustServerCertificate=True; User ID=sa; Password=Passw0rd;");
+            optionsBuilder.UseLazyLoadingProxies(false).UseSqlServer("Data Source=192.168.20.33,1433; Initial Catalog=Test; TrustServerCertificate=True; User ID=sa; Password=Passw0rd;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            
+
             modelBuilder.Entity<FriendFollower>(entity =>
             {
                 entity.HasKey(x => new { x.UserId, x.OtherUserId });
@@ -65,34 +65,20 @@ namespace TECHUB.Repository.Context
                 .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
-            //modelBuilder.Entity<Picture>(entity =>
-            //{
-            //    entity.HasKey(x => x.PictureId);
-
-            //    entity.HasMany(x => x.User)
-            //    .WithMany(u => u.Pictures);
-            //    //.HasForeignKey(p => p.UserId)
-            //    //.OnDelete(DeleteBehavior.ClientSetNull);
-            //});
-
-            modelBuilder.Entity<User>()
-            .HasOne(u => u.Picture)
-            .WithMany(p => p.User)
-            .HasForeignKey(u => u.ProfilePictureId)
-            .OnDelete(DeleteBehavior.ClientSetNull);
-
-            modelBuilder.Entity<FriendRequest>()
-                .HasKey(x => new { x.SenderId, x.ReceiverId });
-
-            modelBuilder.Entity<GroupUser>()
-                .HasKey(x => new { x.UserId, x.GroupId });
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasOne(u => u.Picture)
+                .WithMany(p => p.User)
+                .HasForeignKey(u => u.ProfilePictureId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+            });
 
             modelBuilder.Entity<Like>(entity =>
             {
-                entity.HasKey(x => new { x.UserId });
+                entity.HasKey(l => l.LikeId);
 
                 entity.HasOne(x => x.User)
-                .WithMany(x => x.Likes)                
+                .WithMany(x => x.Likes)
                 .HasForeignKey(x => x.UserId)
                 .OnDelete(DeleteBehavior.ClientSetNull);
 
@@ -108,6 +94,9 @@ namespace TECHUB.Repository.Context
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.ClientSetNull);
             });
+
+            modelBuilder.Entity<GroupUser>()
+                .HasKey(x => new { x.UserId, x.GroupId });
         }
     }
 }
