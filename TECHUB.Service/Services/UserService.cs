@@ -154,14 +154,17 @@ namespace TECHUB.Service.Services
                         ImageData = memoryStream.ToArray(),
                         ImageName = file.FileName,
                     };
-                    
 
                     // Set the uploaded picture and save it
                     user.Picture = pic;
                     await repo.UpdateUser(user);
 
                     // Delete the old picture from DB
-                    await pictureRepository.DeletePicture(pictureId);
+                    if (pictureId != 1)
+                    {
+                        await pictureRepository.DeletePicture(pictureId);
+                    }
+
                     return user;
                 }
                 else
