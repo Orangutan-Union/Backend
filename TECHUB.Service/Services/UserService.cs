@@ -53,7 +53,7 @@ namespace TECHUB.Service.Services
         {
             var users = await repo.GetUsers();
 
-            users = users.Where(x => x.DisplayName.ToLower().Contains(search.ToLower())).ToList();
+            users = users.Where(x => x.DisplayName.ToLower().Contains(search.ToLower())).OrderBy(x => x.DisplayName).ToList();
 
             return users;
         }
@@ -101,7 +101,7 @@ namespace TECHUB.Service.Services
             string newAccessToken = CreateJwtToken();
             string newRefreshToken = CreateRefreshToken();
             user.RefreshToken = newRefreshToken;
-            user.RefreshTokenExpiryTime = DateTime.Now.AddSeconds(30);
+            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(1);
             await repo.UpdateUser(user);
 
             AuthenticatedResponse auth = new AuthenticatedResponse()

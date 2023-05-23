@@ -45,7 +45,7 @@ namespace TECHUB.API.Controllers
             return Ok(user);
         }
 
-        [HttpGet("search"), Authorize]
+        [HttpGet("search/{search}"), Authorize]
         public async Task<IActionResult> GetUsersBySearch(string search)
         {
             var users = await service.GetUsersBySearch(search);
