@@ -10,8 +10,8 @@ namespace TECHUB.Service.Services
         public LikeService(ILikeRepository repo) { this.repo = repo; }
 
         public async Task<Like> AddLike(Like like)
-        {
-            Like oldLike = await repo.GetLike(like);
+        {            
+            var oldLike = await repo.GetLike(like);
 
             if (oldLike == null)
             {
@@ -23,19 +23,19 @@ namespace TECHUB.Service.Services
                 newLike.IsLiked = like.IsLiked;
                 newLike.IsDisliked = like.IsDisliked;
 
-                return await repo.AddLike(newLike);
+                return await repo.AddLike(newLike);                
+            }
+            else if (oldLike.UserId == like.UserId && oldLike.PostId == like.PostId && oldLike.CommentId == like.CommentId)
+            {
+                
+                oldLike.IsLiked = like.IsLiked;
+                oldLike.IsDisliked = like.IsDisliked;
+
+                return await repo.UpdateLike(oldLike);
             }
             else
             {
-                Like updateLike = new Like();
-                updateLike.LikeId = oldLike.LikeId;
-                updateLike.UserId = oldLike.UserId;
-                updateLike.PostId = oldLike.PostId;
-                updateLike.CommentId = oldLike.CommentId;
-                updateLike.IsLiked = like.IsLiked;
-                updateLike.IsDisliked = like.IsDisliked;
-
-                return await repo.UpdateLike(updateLike);
+                return null;
             }
         }
 

@@ -7,7 +7,6 @@ namespace TECHUB.Service.Interfaces
     {
         public Task<Post> GetPostById(int id);
         public Task<Post> AddPost(AddPostViewModel post);
-        public Task<Post> AddComment(Post post);
         public Task<Post> UpdatePost(Post post);
         public Task<Post> DeletePost(int id);
     }
