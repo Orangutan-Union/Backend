@@ -46,27 +46,20 @@ namespace TECHUB.Repository.Repositories
                     User = new User
                     {
                         UserId = p.User.UserId,
-                        Username = p.User.Username,
                         DisplayName = p.User.DisplayName,
                         Picture = new Picture
                         {
                             PictureId = p.User.Picture.PictureId,
-                            ImageName = p.User.Picture.ImageName,
-                            ImageData = p.User.Picture.ImageData,
+                            //ImageData = p.User.Picture.ImageData,
                         }
                     },
                     Likes = p.Likes.Select(pl => new Like
                     {
-                        LikeId = pl.LikeId,
-                        UserId = pl.UserId,
-                        PostId = pl.PostId,
-                        CommentId = pl.CommentId,
                         IsLiked = pl.IsLiked,
                         IsDisliked = pl.IsDisliked,
                         User = new User
                         {
                             UserId = pl.User.UserId,
-                            Username = pl.User.Username,
                             DisplayName = pl.User.DisplayName,
                         }
                     }).ToList(),
@@ -79,27 +72,20 @@ namespace TECHUB.Repository.Repositories
                         User = new User
                         {
                             UserId = pc.User.UserId,
-                            Username = pc.User.Username,
                             DisplayName = pc.User.DisplayName,
                             Picture = new Picture
                             {
                                 PictureId = pc.User.Picture.PictureId,
-                                ImageName = pc.User.Picture.ImageName,
-                                ImageData = pc.User.Picture.ImageData,
+                                //ImageData = pc.User.Picture.ImageData,
                             }
                         },
                         Likes = pc.Likes.Select(cl => new Like
                         {
-                            LikeId = cl.LikeId,
-                            UserId = cl.UserId,
-                            PostId = cl.PostId,
-                            CommentId = cl.CommentId,
                             IsLiked = cl.IsLiked,
                             IsDisliked = cl.IsDisliked,
                             User = new User
                             {
                                 UserId = cl.User.UserId,
-                                Username = cl.User.Username,
                                 DisplayName = cl.User.DisplayName,
                             }
                         }).ToList(),
