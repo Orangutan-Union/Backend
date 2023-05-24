@@ -24,11 +24,6 @@ namespace TECHUB.Service.Services
             return await repo.AddPost(newPost);
         }
 
-        public async Task<Post> AddComment(Post post)
-        {
-            return await repo.AddPost(post);
-        }
-
         public async Task<Post> DeletePost(int id)
         {
             return await repo.DeletePost(id);

@@ -570,12 +570,6 @@ namespace TECHUB.API.Controllers
             return Ok(await service.AddPost(post));
         }
 
-        [HttpPost("comment")]
-        public async Task<IActionResult> AddComment(Post post)
-        {
-            return Ok(await service.AddComment(post));
-        }
-
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeletePost(int id)
         {
