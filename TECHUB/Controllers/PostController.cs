@@ -9,7 +9,7 @@ namespace TECHUB.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PostController: ControllerBase
+    public class PostController : ControllerBase
     {
         private readonly IPostService service;
         private readonly DatabaseContext context;
@@ -39,6 +39,7 @@ namespace TECHUB.API.Controllers
                     PostId = p.PostId,
                     UserId = p.UserId,
                     GroupId = p.GroupId,
+                    TimeStamp = p.TimeStamp,
                     Content = p.Content,
                     FriendOnly = p.FriendOnly,
                     Latitude = p.Latitude,
@@ -51,10 +52,6 @@ namespace TECHUB.API.Controllers
                         Content = c.Content,
                         Likes = c.Likes.Select(cl => new
                         {
-                            LikeId = cl.LikeId,
-                            UserId = cl.UserId,
-                            PostId = cl.PostId,
-                            CommentId = cl.CommentId,
                             IsLiked = cl.IsLiked,
                             IsDisliked = cl.IsDisliked
                         }).ToList()
@@ -62,15 +59,15 @@ namespace TECHUB.API.Controllers
                     User = new
                     {
                         UserId = p.User.UserId,
-                        Username = p.User.Username,
-                        DisplayName = p.User.DisplayName
+                        DisplayName = p.User.DisplayName,
+                        Picture = new
+                        {
+                            PictureId = p.User.Picture.PictureId,
+                            //ImageData = p.User.Picture.ImageData,
+                        }
                     },
                     Likes = p.Likes.Select(pl => new
                     {
-                        LikeId = pl.LikeId,
-                        UserId = pl.UserId,
-                        PostId = pl.PostId,
-                        CommentId = pl.CommentId,
                         IsLiked = pl.IsLiked,
                         IsDisliked = pl.IsDisliked
                     }).ToList(),
@@ -81,18 +78,17 @@ namespace TECHUB.API.Controllers
                         Picture = new
                         {
                             PictureId = p.Group.Picture.PictureId,
-                            ImageName = p.Group.Picture.ImageName,
-                            ImageData = p.Group.Picture.ImageData,
+                            //ImageData = p.Group.Picture.ImageData,
                         }
                     },
                     Pictures = p.Pictures.Select(p => new
                     {
                         PictureId = p.PictureId,
-                        ImageName = p.ImageName,
-                        ImageData = p.ImageData,
+                        //ImageData = p.ImageData,
                     }).ToList()
-
-                }).ToListAsync();            
+                })
+                .OrderByDescending(p => p.TimeStamp)
+                .ToListAsync();
 
             return Ok(posts);
         }
@@ -126,22 +122,26 @@ namespace TECHUB.API.Controllers
                                 Picture = new
                                 {
                                     PictureId = p.Group.Picture.PictureId,
-                                    ImageName = p.Group.Picture.ImageName,
-                                    ImageData = p.Group.Picture.ImageData,
+                                    //ImageData = p.Group.Picture.ImageData,
+                                }
+                            },
+                            User = new
+                            {
+                                UserId = p.User.UserId,
+                                DisplayName = p.User.DisplayName,
+                                Picture = new
+                                {
+                                    PictureId = p.User.Picture.PictureId,
+                                    //ImageData = p.User.Picture.ImageData,
                                 }
                             },
                             Likes = p.Likes.Select(pl => new
                             {
-                                LikeId = pl.LikeId,
-                                UserId = pl.UserId,
-                                PostId = pl.PostId,
-                                CommentId = pl.CommentId,
                                 IsLiked = pl.IsLiked,
                                 IsDisliked = pl.IsDisliked,
                                 User = new
                                 {
                                     UserId = pl.User.UserId,
-                                    Username = pl.User.Username,
                                     DisplayName = pl.User.DisplayName,
                                 }
                             }).ToList(),
@@ -153,16 +153,11 @@ namespace TECHUB.API.Controllers
                                 Content = c.Content,
                                 Likes = c.Likes.Select(cl => new
                                 {
-                                    LikeId = cl.LikeId,
-                                    UserId = cl.UserId,
-                                    PostId = cl.PostId,
-                                    CommentId = cl.CommentId,
                                     IsLiked = cl.IsLiked,
                                     IsDisliked = cl.IsDisliked,
                                     User = new
                                     {
                                         UserId = cl.User.UserId,
-                                        Username = cl.User.Username,
                                         DisplayName = cl.User.DisplayName,
                                     }
                                 }).ToList(),
@@ -189,22 +184,26 @@ namespace TECHUB.API.Controllers
                                 Picture = new
                                 {
                                     PictureId = p.Group.Picture.PictureId,
-                                    ImageName = p.Group.Picture.ImageName,
-                                    ImageData = p.Group.Picture.ImageData,
+                                    //ImageData = p.Group.Picture.ImageData,
+                                }
+                            },
+                            User = new
+                            {
+                                UserId = p.User.UserId,
+                                DisplayName = p.User.DisplayName,
+                                Picture = new
+                                {
+                                    PictureId = p.User.Picture.PictureId,
+                                    //ImageData = p.User.Picture.ImageData,
                                 }
                             },
                             Likes = p.Likes.Select(pl => new
                             {
-                                LikeId = pl.LikeId,
-                                UserId = pl.UserId,
-                                PostId = pl.PostId,
-                                CommentId = pl.CommentId,
                                 IsLiked = pl.IsLiked,
                                 IsDisliked = pl.IsDisliked,
                                 User = new
                                 {
                                     UserId = pl.User.UserId,
-                                    Username = pl.User.Username,
                                     DisplayName = pl.User.DisplayName,
                                 }
                             }).ToList(),
@@ -216,16 +215,11 @@ namespace TECHUB.API.Controllers
                                 Content = c.Content,
                                 Likes = c.Likes.Select(cl => new
                                 {
-                                    LikeId = cl.LikeId,
-                                    UserId = cl.UserId,
-                                    PostId = cl.PostId,
-                                    CommentId = cl.CommentId,
                                     IsLiked = cl.IsLiked,
                                     IsDisliked = cl.IsDisliked,
                                     User = new
                                     {
                                         UserId = cl.User.UserId,
-                                        Username = cl.User.Username,
                                         DisplayName = cl.User.DisplayName,
                                     }
                                 }).ToList(),
@@ -285,22 +279,26 @@ namespace TECHUB.API.Controllers
                                 Picture = new
                                 {
                                     PictureId = p.Group.Picture.PictureId,
-                                    ImageName = p.Group.Picture.ImageName,
-                                    ImageData = p.Group.Picture.ImageData,
+                                    //ImageData = p.Group.Picture.ImageData,
+                                }
+                            },
+                            User = new
+                            {
+                                UserId = p.User.UserId,
+                                DisplayName = p.User.DisplayName,
+                                Picture = new
+                                {
+                                    PictureId = p.User.Picture.PictureId,
+                                    //ImageData = p.User.Picture.ImageData,
                                 }
                             },
                             Likes = p.Likes.Select(pl => new
                             {
-                                LikeId = pl.LikeId,
-                                UserId = pl.UserId,
-                                PostId = pl.PostId,
-                                CommentId = pl.CommentId,
                                 IsLiked = pl.IsLiked,
                                 IsDisliked = pl.IsDisliked,
                                 User = new
                                 {
                                     UserId = pl.User.UserId,
-                                    Username = pl.User.Username,
                                     DisplayName = pl.User.DisplayName,
                                 }
                             }).ToList(),
@@ -312,16 +310,11 @@ namespace TECHUB.API.Controllers
                                 Content = c.Content,
                                 Likes = c.Likes.Select(cl => new
                                 {
-                                    LikeId = cl.LikeId,
-                                    UserId = cl.UserId,
-                                    PostId = cl.PostId,
-                                    CommentId = cl.CommentId,
                                     IsLiked = cl.IsLiked,
                                     IsDisliked = cl.IsDisliked,
                                     User = new
                                     {
                                         UserId = cl.User.UserId,
-                                        Username = cl.User.Username,
                                         DisplayName = cl.User.DisplayName,
                                     }
                                 }).ToList(),
@@ -348,22 +341,26 @@ namespace TECHUB.API.Controllers
                                 Picture = new
                                 {
                                     PictureId = p.Group.Picture.PictureId,
-                                    ImageName = p.Group.Picture.ImageName,
-                                    ImageData = p.Group.Picture.ImageData,
+                                    //ImageData = p.Group.Picture.ImageData,
+                                }
+                            },
+                            User = new
+                            {
+                                UserId = p.User.UserId,
+                                DisplayName = p.User.DisplayName,
+                                Picture = new
+                                {
+                                    PictureId = p.User.Picture.PictureId,
+                                   //ImageData= p.User.Picture.ImageData,
                                 }
                             },
                             Likes = p.Likes.Select(pl => new
                             {
-                                LikeId = pl.LikeId,
-                                UserId = pl.UserId,
-                                PostId = pl.PostId,
-                                CommentId = pl.CommentId,
                                 IsLiked = pl.IsLiked,
                                 IsDisliked = pl.IsDisliked,
                                 User = new
                                 {
                                     UserId = pl.User.UserId,
-                                    Username = pl.User.Username,
                                     DisplayName = pl.User.DisplayName,
                                 }
                             }).ToList(),
@@ -375,16 +372,11 @@ namespace TECHUB.API.Controllers
                                 Content = c.Content,
                                 Likes = c.Likes.Select(cl => new
                                 {
-                                    LikeId = cl.LikeId,
-                                    UserId = cl.UserId,
-                                    PostId = cl.PostId,
-                                    CommentId = cl.CommentId,
                                     IsLiked = cl.IsLiked,
                                     IsDisliked = cl.IsDisliked,
                                     User = new
                                     {
                                         UserId = cl.User.UserId,
-                                        Username = cl.User.Username,
                                         DisplayName = cl.User.DisplayName,
                                     }
                                 }).ToList(),
@@ -444,22 +436,26 @@ namespace TECHUB.API.Controllers
                                 Picture = new
                                 {
                                     PictureId = p.Group.Picture.PictureId,
-                                    ImageName = p.Group.Picture.ImageName,
-                                    ImageData = p.Group.Picture.ImageData,
+                                   //ImageData= p.Group.Picture.ImageData,
+                                }
+                            },
+                            User = new
+                            {
+                                UserId = p.User.UserId,
+                                DisplayName = p.User.DisplayName,
+                                Picture = new
+                                {
+                                    PictureId = p.User.Picture.PictureId,
+                                   //ImageData= p.User.Picture.ImageData,
                                 }
                             },
                             Likes = p.Likes.Select(pl => new
                             {
-                                LikeId = pl.LikeId,
-                                UserId = pl.UserId,
-                                PostId = pl.PostId,
-                                CommentId = pl.CommentId,
                                 IsLiked = pl.IsLiked,
                                 IsDisliked = pl.IsDisliked,
                                 User = new
                                 {
                                     UserId = pl.User.UserId,
-                                    Username = pl.User.Username,
                                     DisplayName = pl.User.DisplayName,
                                 }
                             }).ToList(),
@@ -471,16 +467,11 @@ namespace TECHUB.API.Controllers
                                 Content = c.Content,
                                 Likes = c.Likes.Select(cl => new
                                 {
-                                    LikeId = cl.LikeId,
-                                    UserId = cl.UserId,
-                                    PostId = cl.PostId,
-                                    CommentId = cl.CommentId,
                                     IsLiked = cl.IsLiked,
                                     IsDisliked = cl.IsDisliked,
                                     User = new
                                     {
                                         UserId = cl.User.UserId,
-                                        Username = cl.User.Username,
                                         DisplayName = cl.User.DisplayName,
                                     }
                                 }).ToList(),
@@ -507,22 +498,26 @@ namespace TECHUB.API.Controllers
                                 Picture = new
                                 {
                                     PictureId = p.Group.Picture.PictureId,
-                                    ImageName = p.Group.Picture.ImageName,
-                                    ImageData = p.Group.Picture.ImageData,
+                                   //ImageData= p.Group.Picture.ImageData,
+                                }
+                            },
+                            User = new
+                            {
+                                UserId = p.User.UserId,
+                                DisplayName = p.User.DisplayName,
+                                Picture = new
+                                {
+                                    PictureId = p.User.Picture.PictureId,
+                                   //ImageData= p.User.Picture.ImageData,
                                 }
                             },
                             Likes = p.Likes.Select(pl => new
                             {
-                                LikeId = pl.LikeId,
-                                UserId = pl.UserId,
-                                PostId = pl.PostId,
-                                CommentId = pl.CommentId,
                                 IsLiked = pl.IsLiked,
                                 IsDisliked = pl.IsDisliked,
                                 User = new
                                 {
                                     UserId = pl.User.UserId,
-                                    Username = pl.User.Username,
                                     DisplayName = pl.User.DisplayName,
                                 }
                             }).ToList(),
@@ -534,16 +529,11 @@ namespace TECHUB.API.Controllers
                                 Content = c.Content,
                                 Likes = c.Likes.Select(cl => new
                                 {
-                                    LikeId = cl.LikeId,
-                                    UserId = cl.UserId,
-                                    PostId = cl.PostId,
-                                    CommentId = cl.CommentId,
                                     IsLiked = cl.IsLiked,
                                     IsDisliked = cl.IsDisliked,
                                     User = new
                                     {
                                         UserId = cl.User.UserId,
-                                        Username = cl.User.Username,
                                         DisplayName = cl.User.DisplayName,
                                     }
                                 }).ToList(),
