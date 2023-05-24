@@ -27,7 +27,7 @@ namespace TECHUB.Repository.Repositories
         {
             var like = await context.Likes.FindAsync(id);
 
-            if(like != null)
+            if (like != null)
             {
                 context.Likes.Remove(like);
                 await context.SaveChangesAsync();
@@ -38,8 +38,8 @@ namespace TECHUB.Repository.Repositories
 
         public async Task<Like> GetLike(Like like)
         {
-            return await context.Likes.FirstOrDefaultAsync(l => l.UserId == like.UserId && l.PostId == like.PostId 
-            || l.UserId == like.UserId && l.CommentId == like.CommentId);
+            return await context.Likes
+                .FirstOrDefaultAsync(l => l.UserId == like.UserId && l.PostId == like.PostId && l.CommentId == like.CommentId);
         }
 
         public async Task<Like> UpdateLike(Like like)
