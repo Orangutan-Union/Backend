@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using TECHUB.Repository.Context;
+using TECHUB.Repository.Interfaces;
 using TECHUB.Repository.Models;
 using TECHUB.Service.Interfaces;
 using TECHUB.Service.ViewModels;
@@ -20,6 +21,7 @@ namespace TECHUB.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService service;
+        private readonly IPhotoService photoService;
 
         public UsersController(IUserService service)
         {
@@ -109,11 +111,16 @@ namespace TECHUB.API.Controllers
         public async Task<IActionResult> UploadProfileImage(int id)
         {
             var file = Request.Form.Files[0];
+            if (file.Length > 2097152)
+            {
+                return BadRequest("You done gone uploaded a file that's too diggity damn big!");
+            }
+
             var user = await service.UploadProfileImage(file, id);
 
             if (user is null)
             {
-                return BadRequest($"Could not find user with ID = {id}");
+                return BadRequest($"Something went wrong when trying to upload the image for user with ID = {id}");
             }
 
             return Ok();

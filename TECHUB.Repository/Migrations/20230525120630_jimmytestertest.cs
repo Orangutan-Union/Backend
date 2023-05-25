@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TECHUB.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class jimmytestertest : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -31,8 +31,9 @@ namespace TECHUB.Repository.Migrations
                 {
                     PictureId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ImageName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageData = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
+                    PublicId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -45,9 +46,9 @@ namespace TECHUB.Repository.Migrations
                 {
                     GroupId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PictureId = table.Column<int>(type: "int", nullable: false),
-                    GroupName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TimeCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    PictureId = table.Column<int>(type: "int", nullable: true),
+                    GroupName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TimeCreated = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -56,8 +57,7 @@ namespace TECHUB.Repository.Migrations
                         name: "FK_Groups_Pictures_PictureId",
                         column: x => x.PictureId,
                         principalTable: "Pictures",
-                        principalColumn: "PictureId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "PictureId");
                 });
 
             migrationBuilder.CreateTable(
@@ -66,7 +66,7 @@ namespace TECHUB.Repository.Migrations
                 {
                     UserId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProfilePictureId = table.Column<int>(type: "int", nullable: false),
+                    ProfilePictureId = table.Column<int>(type: "int", nullable: true),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PasswordHash = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
@@ -353,7 +353,8 @@ namespace TECHUB.Repository.Migrations
                 name: "IX_Groups_PictureId",
                 table: "Groups",
                 column: "PictureId",
-                unique: true);
+                unique: true,
+                filter: "[PictureId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GroupUsers_GroupId",

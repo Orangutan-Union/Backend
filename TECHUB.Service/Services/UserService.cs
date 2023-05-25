@@ -19,13 +19,15 @@ namespace TECHUB.Service.Services
         private readonly IPictureRepository pictureRepository;
         private readonly IConfiguration configuration;
         private readonly DatabaseContext context;
+        private readonly IPhotoService photoService;
 
-        public UserService(IUserRepository repo, IPictureRepository pictureRepository, IConfiguration configuration, DatabaseContext context)
+        public UserService(IUserRepository repo, IPictureRepository pictureRepository, IConfiguration configuration, DatabaseContext context, IPhotoService photoService)
         {
             this.repo = repo;
             this.pictureRepository = pictureRepository;
             this.configuration = configuration;
             this.context = context;
+            this.photoService = photoService;
         }
 
         public async Task<List<User>> GetUsers()
@@ -70,9 +72,21 @@ namespace TECHUB.Service.Services
             newUser.Email = userRequest.Email;
             newUser.DisplayName = userRequest.DisplayName;
 
-            // Get Default pic from DB and set it as profile pic.
-            var pic = await pictureRepository.GetPictureById(1);
-            newUser.Picture = pic;
+            //// Get Default pic from DB and set it as profile pic.
+            var existingPic = await pictureRepository.GetPictureById(1);
+            if (existingPic is null)
+            {
+                var newPic = new Picture()
+                {
+                    ImageName = "default",
+                    ImageUrl = "https://res.cloudinary.com/dm52kqhd4/image/upload/v1685013104/gjemhamzrvs8kxgj113l.png",
+                };
+                newUser.Picture = newPic;
+            }
+            else
+            {
+                newUser.Picture = existingPic;
+            }
 
 
             return await repo.AddUser(newUser);
@@ -133,46 +147,78 @@ namespace TECHUB.Service.Services
         public async Task<User> UploadProfileImage(IFormFile file, int id)
         {
             var user = await repo.GetUserById(id);
-            int? pictureId = 0;
-            if (user is null)
+            if (user is null || user.Picture is null)
             {
-                return null;
-            }
-            else if (user.Picture is not null)
-            {
-                pictureId = user.Picture.PictureId;
+                return null!;
             }
 
-            using (var memoryStream = new MemoryStream())
+            var result = await photoService.UploadPhotoAsync(file, user.Picture.PublicId!);
+            if (result.Error is not null)
             {
-                await file.CopyToAsync(memoryStream);
-
-                if (memoryStream.Length < 2097152)
-                {
-                    var pic = new Picture()
-                    {
-                        ImageData = memoryStream.ToArray(),
-                        ImageName = file.FileName,
-                    };
-
-                    // Set the uploaded picture and save it
-                    user.Picture = pic;
-                    await repo.UpdateUser(user);
-
-                    // Delete the old picture from DB
-                    if (pictureId != 1)
-                    {
-                        await pictureRepository.DeletePicture((int)pictureId);
-                    }
-
-                    return user;
-                }
-                else
-                {
-                    return null;
-                }
+                return null!;
             }
+
+            if (user.Picture.PublicId != string.Empty && user.Picture.PictureId != 1)
+            {
+                await photoService.DeletePhotoAsync(user.Picture.PublicId!);
+                await pictureRepository.DeletePicture((int)user.Picture.PictureId!);
+            }
+
+            var pic = new Picture()
+            {
+                ImageName = file.Name,
+                ImageUrl = result.SecureUrl.AbsoluteUri,
+                PublicId = result.PublicId,
+            };
+
+            user.Picture = pic;
+            await repo.UpdateUser(user);
+
+            return user;
         }
+        //public async Task<User> UploadProfileImage(IFormFile file, int id)
+        //{
+        //    var user = await repo.GetUserById(id);
+        //    int? pictureId = 0;
+        //    if (user is null)
+        //    {
+        //        return null;
+        //    }
+        //    else if (user.Picture is not null)
+        //    {
+        //        pictureId = user.Picture.PictureId;
+        //    }
+
+        //    using (var memoryStream = new MemoryStream())
+        //    {
+        //        await file.CopyToAsync(memoryStream);
+
+        //        if (memoryStream.Length < 2097152)
+        //        {
+        //            var pic = new Picture()
+        //            {
+        //                //ImageData = memoryStream.ToArray(),
+        //                ImageName = file.FileName,
+        //            };
+
+        //            // Set the uploaded picture and save it
+        //            user.Picture = pic;
+        //            await repo.UpdateUser(user);
+
+        //            // Delete the old picture from DB
+        //            if (pictureId != 1)
+        //            {
+        //                await pictureRepository.DeletePicture((int)pictureId);
+        //            }
+
+        //            return user;
+        //        }
+        //        else
+        //        {
+        //            return null;
+        //        }
+        //    }
+        //}
 
         public async Task<bool> ChangePassword(ChangePasswordViewModel viewModel)
         {
