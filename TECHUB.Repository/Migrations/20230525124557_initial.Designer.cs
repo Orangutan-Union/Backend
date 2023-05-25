@@ -12,8 +12,8 @@ using TECHUB.Repository.Context;
 namespace TECHUB.Repository.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230525120630_jimmytestertest")]
-    partial class jimmytestertest
+    [Migration("20230525124557_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
