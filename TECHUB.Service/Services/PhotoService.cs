@@ -42,9 +42,6 @@ namespace TECHUB.Service.Services
                 uploadResult = await cloudinary.UploadAsync(uploadParams);
             }
 
-            //var result = await DeletePhotoAsync(publicId);
-
-
             return uploadResult;
         }
     }
