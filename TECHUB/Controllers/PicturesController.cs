@@ -47,7 +47,7 @@ namespace TECHUB.API.Controllers
 
                 if (ms.Length < 2097152)
                 {
-                    pic.ImageData = ms.ToArray();
+                    //pic.ImageData = ms.ToArray();
                     pic.ImageName = file.FileName;
                 }
                 else
