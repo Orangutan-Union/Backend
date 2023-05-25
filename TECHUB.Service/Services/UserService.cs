@@ -176,49 +176,6 @@ namespace TECHUB.Service.Services
 
             return user;
         }
-        //public async Task<User> UploadProfileImage(IFormFile file, int id)
-        //{
-        //    var user = await repo.GetUserById(id);
-        //    int? pictureId = 0;
-        //    if (user is null)
-        //    {
-        //        return null;
-        //    }
-        //    else if (user.Picture is not null)
-        //    {
-        //        pictureId = user.Picture.PictureId;
-        //    }
-
-        //    using (var memoryStream = new MemoryStream())
-        //    {
-        //        await file.CopyToAsync(memoryStream);
-
-        //        if (memoryStream.Length < 2097152)
-        //        {
-        //            var pic = new Picture()
-        //            {
-        //                //ImageData = memoryStream.ToArray(),
-        //                ImageName = file.FileName,
-        //            };
-
-        //            // Set the uploaded picture and save it
-        //            user.Picture = pic;
-        //            await repo.UpdateUser(user);
-
-        //            // Delete the old picture from DB
-        //            if (pictureId != 1)
-        //            {
-        //                await pictureRepository.DeletePicture((int)pictureId);
-        //            }
-
-        //            return user;
-        //        }
-        //        else
-        //        {
-        //            return null;
-        //        }
-        //    }
-        //}
 
         public async Task<bool> ChangePassword(ChangePasswordViewModel viewModel)
         {
