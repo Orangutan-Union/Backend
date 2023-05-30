@@ -12,8 +12,8 @@ using TECHUB.Repository.Context;
 namespace TECHUB.Repository.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230522084711_Initial")]
-    partial class Initial
+    [Migration("20230525124557_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -146,26 +146,26 @@ namespace TECHUB.Repository.Migrations
 
             modelBuilder.Entity("TECHUB.Repository.Models.Group", b =>
                 {
-                    b.Property<int>("GroupId")
+                    b.Property<int?>("GroupId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GroupId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("GroupId"));
 
                     b.Property<string>("GroupName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PictureId")
+                    b.Property<int?>("PictureId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("TimeCreated")
+                    b.Property<DateTime?>("TimeCreated")
                         .HasColumnType("datetime2");
 
                     b.HasKey("GroupId");
 
                     b.HasIndex("PictureId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[PictureId] IS NOT NULL");
 
                     b.ToTable("Groups");
                 });
@@ -260,18 +260,19 @@ namespace TECHUB.Repository.Migrations
 
             modelBuilder.Entity("TECHUB.Repository.Models.Picture", b =>
                 {
-                    b.Property<int>("PictureId")
+                    b.Property<int?>("PictureId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PictureId"));
-
-                    b.Property<byte[]>("ImageData")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("PictureId"));
 
                     b.Property<string>("ImageName")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PublicId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PictureId");
@@ -342,7 +343,7 @@ namespace TECHUB.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
-                    b.Property<int>("ProfilePictureId")
+                    b.Property<int?>("ProfilePictureId")
                         .HasColumnType("int");
 
                     b.Property<string>("RefreshToken")
@@ -447,9 +448,7 @@ namespace TECHUB.Repository.Migrations
                 {
                     b.HasOne("TECHUB.Repository.Models.Picture", "Picture")
                         .WithOne("Group")
-                        .HasForeignKey("TECHUB.Repository.Models.Group", "PictureId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TECHUB.Repository.Models.Group", "PictureId");
 
                     b.Navigation("Picture");
                 });
@@ -535,8 +534,7 @@ namespace TECHUB.Repository.Migrations
                 {
                     b.HasOne("TECHUB.Repository.Models.Picture", "Picture")
                         .WithMany("User")
-                        .HasForeignKey("ProfilePictureId")
-                        .IsRequired();
+                        .HasForeignKey("ProfilePictureId");
 
                     b.Navigation("Picture");
                 });
