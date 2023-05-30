@@ -19,12 +19,76 @@ namespace TECHUB.API.Controllers
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetPostById(int id)
         {
-            var post = await service.GetPostById(id);
-
-            if (post == null)
-            {
-                return NotFound($"Could not find the post with ID = {id}");
-            }
+            var post = await context.Posts
+                .Select(p => new
+                {
+                    PostId = p.PostId,
+                    UserId = p.UserId,
+                    GroupId = p.GroupId,
+                    TimeStamp = p.TimeStamp,
+                    Content = p.Content,
+                    FriendOnly = p.FriendOnly,
+                    Latitude = p.Latitude,
+                    Longitude = p.Longitude,
+                    User = new
+                    {
+                        UserId = p.User.UserId,
+                        DisplayName = p.User.DisplayName,
+                        Picture = new
+                        {
+                            PictureId = p.User.Picture.PictureId,
+                            //ImageData = p.User.Picture.ImageData,
+                        }
+                    },
+                    Group = new
+                    {
+                        GroupId = p.Group.GroupId,
+                        GroupName = p.Group.GroupName
+                    },
+                    Likes = p.Likes.Select(pl => new
+                    {
+                        LikeId = pl.LikeId,
+                        UserId = pl.UserId,
+                        PostId = pl.PostId,
+                        IsLiked = pl.IsLiked,
+                        IsDisliked = pl.IsDisliked,
+                        User = new
+                        {
+                            UserId = pl.User.UserId,
+                            DisplayName = pl.User.DisplayName,
+                        }
+                    }).ToList(),
+                    Comments = p.Comments.Select(pc => new
+                    {
+                        CommentId = pc.CommentId,
+                        UserId = pc.UserId,
+                        TimeStamp = pc.TimeStamp,
+                        Content = pc.Content,
+                        User = new
+                        {
+                            UserId = pc.User.UserId,
+                            DisplayName = pc.User.DisplayName,
+                            Picture = new
+                            {
+                                PictureId = pc.User.Picture.PictureId,
+                                //ImageData = pc.User.Picture.ImageData,
+                            }
+                        },
+                        Likes = pc.Likes.Select(cl => new
+                        {
+                            LikeId = cl.LikeId,
+                            UserId = cl.UserId,
+                            CommentId = cl.CommentId,
+                            IsLiked = cl.IsLiked,
+                            IsDisliked = cl.IsDisliked,
+                            User = new
+                            {
+                                UserId = cl.User.UserId,
+                                DisplayName = cl.User.DisplayName,
+                            }
+                        }).ToList(),
+                    }).ToList(),
+                }).FirstOrDefaultAsync(p => p.PostId == id);
 
             return Ok(post);
         }
@@ -68,6 +132,8 @@ namespace TECHUB.API.Controllers
                     },
                     Likes = p.Likes.Select(pl => new
                     {
+                        UserId = pl.UserId,
+                        PostId = pl.PostId,
                         IsLiked = pl.IsLiked,
                         IsDisliked = pl.IsDisliked
                     }).ToList(),
@@ -137,6 +203,8 @@ namespace TECHUB.API.Controllers
                             },
                             Likes = p.Likes.Select(pl => new
                             {
+                                UserId = pl.UserId,
+                                PostId = pl.PostId,
                                 IsLiked = pl.IsLiked,
                                 IsDisliked = pl.IsDisliked,
                                 User = new
@@ -199,6 +267,8 @@ namespace TECHUB.API.Controllers
                             },
                             Likes = p.Likes.Select(pl => new
                             {
+                                UserId = pl.UserId,
+                                PostId = pl.PostId,
                                 IsLiked = pl.IsLiked,
                                 IsDisliked = pl.IsDisliked,
                                 User = new
@@ -294,6 +364,8 @@ namespace TECHUB.API.Controllers
                             },
                             Likes = p.Likes.Select(pl => new
                             {
+                                UserId = pl.UserId,
+                                PostId = pl.PostId,
                                 IsLiked = pl.IsLiked,
                                 IsDisliked = pl.IsDisliked,
                                 User = new
@@ -356,6 +428,8 @@ namespace TECHUB.API.Controllers
                             },
                             Likes = p.Likes.Select(pl => new
                             {
+                                UserId = pl.UserId,
+                                PostId = pl.PostId,
                                 IsLiked = pl.IsLiked,
                                 IsDisliked = pl.IsDisliked,
                                 User = new
@@ -451,6 +525,8 @@ namespace TECHUB.API.Controllers
                             },
                             Likes = p.Likes.Select(pl => new
                             {
+                                UserId = pl.UserId,
+                                PostId = pl.PostId,
                                 IsLiked = pl.IsLiked,
                                 IsDisliked = pl.IsDisliked,
                                 User = new
@@ -513,6 +589,8 @@ namespace TECHUB.API.Controllers
                             },
                             Likes = p.Likes.Select(pl => new
                             {
+                                UserId = pl.UserId,
+                                PostId = pl.PostId,
                                 IsLiked = pl.IsLiked,
                                 IsDisliked = pl.IsDisliked,
                                 User = new
