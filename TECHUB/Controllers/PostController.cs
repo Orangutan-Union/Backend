@@ -37,7 +37,7 @@ namespace TECHUB.API.Controllers
                         Picture = new
                         {
                             PictureId = p.User.Picture.PictureId,
-                            //ImageData = p.User.Picture.ImageData,
+                            ImageUrl = p.User.Picture.ImageUrl,
                         }
                     },
                     Group = new
@@ -71,7 +71,7 @@ namespace TECHUB.API.Controllers
                             Picture = new
                             {
                                 PictureId = pc.User.Picture.PictureId,
-                                //ImageData = pc.User.Picture.ImageData,
+                                ImageUrl = pc.User.Picture.ImageUrl,
                             }
                         },
                         Likes = pc.Likes.Select(cl => new
@@ -127,7 +127,7 @@ namespace TECHUB.API.Controllers
                         Picture = new
                         {
                             PictureId = p.User.Picture.PictureId,
-                            //ImageData = p.User.Picture.ImageData,
+                            ImageUrl = p.User.Picture.ImageUrl,
                         }
                     },
                     Likes = p.Likes.Select(pl => new
@@ -144,13 +144,13 @@ namespace TECHUB.API.Controllers
                         Picture = new
                         {
                             PictureId = p.Group.Picture.PictureId,
-                            //ImageData = p.Group.Picture.ImageData,
+                            ImageUrl = p.Group.Picture.ImageUrl,
                         }
                     },
                     Pictures = p.Pictures.Select(p => new
                     {
                         PictureId = p.PictureId,
-                        //ImageData = p.ImageData,
+                        ImageUrl = p.ImageUrl,
                     }).ToList()
                 })
                 .OrderByDescending(p => p.TimeStamp)
