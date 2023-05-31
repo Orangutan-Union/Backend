@@ -1,6 +1,7 @@
 ﻿using TECHUB.Repository.Interfaces;
 using TECHUB.Repository.Models;
 using TECHUB.Service.Interfaces;
+using TECHUB.Service.ViewModels;
 
 namespace TECHUB.Service.Services
 {
@@ -23,15 +24,27 @@ namespace TECHUB.Service.Services
             return await repo.GetSentRequests(id);
         }
 
-        public async Task<FriendRequest> SendFriendRequest(FriendRequest request)
+        public async Task<FriendRequest> SendFriendRequest(FriendRequestViewModel viewmodel)
         {
-            request.DateSent = DateTime.Now;
-            return await repo.SendFriendRequest(request);
+            var friendRequest = new FriendRequest()
+            {
+                SenderId = viewmodel.SenderId,
+                ReceiverId = viewmodel.ReceiverId,
+                DateSent = DateTime.Now,
+            };
+            return await repo.SendFriendRequest(friendRequest);
         }
 
-        public async Task<bool> DeleteFriendRequest(FriendRequest request)
+        public async Task<bool> DeleteFriendRequest(FriendRequestViewModel viewmodel)
         {
-            return await repo.DeleteFriendRequest(request);
+            var friendRequest = await repo.GetRequestById(viewmodel.SenderId, viewmodel.ReceiverId);
+
+            if (friendRequest is null)
+            {
+                return false;
+            }
+
+            return await repo.DeleteFriendRequest(friendRequest);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using TECHUB.Repository.Models;
+using TECHUB.Service.ViewModels;
 
 namespace TECHUB.Service.Interfaces
 {
@@ -6,7 +7,7 @@ namespace TECHUB.Service.Interfaces
     {
         Task<List<FriendRequest>> GetReceivedRequests(int id);
         Task<List<FriendRequest>> GetSentRequests(int id);
-        Task<FriendRequest> SendFriendRequest(FriendRequest request);
-        Task<bool> DeleteFriendRequest(FriendRequest request);
+        Task<FriendRequest> SendFriendRequest(FriendRequestViewModel request);
+        Task<bool> DeleteFriendRequest(FriendRequestViewModel request);
     }
 }

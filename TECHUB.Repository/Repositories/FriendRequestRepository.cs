@@ -30,6 +30,11 @@ namespace TECHUB.Repository.Repositories
                 .Where(x => x.SenderId == id).OrderByDescending(x => x.DateSent).ToListAsync();
         }
 
+        public async Task<FriendRequest> GetRequestById(int senderId, int receiverId)
+        {
+            return await context.FriendRequests.FirstOrDefaultAsync(x => x.SenderId == senderId && x.ReceiverId == receiverId);
+        }
+
         public async Task<FriendRequest> SendFriendRequest(FriendRequest request)
         {
             context.FriendRequests.Add(request);

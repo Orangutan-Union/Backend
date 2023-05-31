@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TECHUB.Repository.Models;
 using TECHUB.Service.Interfaces;
+using TECHUB.Service.ViewModels;
 
 namespace TECHUB.API.Controllers
 {
@@ -29,15 +30,15 @@ namespace TECHUB.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SendFriendRequest(FriendRequest request)
+        public async Task<IActionResult> SendFriendRequest(FriendRequestViewModel viewmodel)
         {
-            return Ok(await service.SendFriendRequest(request));
+            return Ok(await service.SendFriendRequest(viewmodel));
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteFriendRequest(FriendRequest request)
+        public async Task<IActionResult> DeleteFriendRequest(FriendRequestViewModel viewmodel)
         {
-            var result = await service.DeleteFriendRequest(request);
+            var result = await service.DeleteFriendRequest(viewmodel);
 
             if (!result)
             {
