@@ -15,6 +15,7 @@ namespace TECHUB.Repository.Context
         }
 
         public DbSet<Chat> Chats { get; set; }
+        public DbSet<Comment> Comments { get; set; }
         public DbSet<FriendFollower> FriendFollowers { get; set; }
         public DbSet<FriendRequest> FriendRequests { get; set; }
         public DbSet<Group> Groups { get; set; }
