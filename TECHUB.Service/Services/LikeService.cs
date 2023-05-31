@@ -14,16 +14,8 @@ namespace TECHUB.Service.Services
             var oldLike = await repo.GetLike(like);
 
             if (oldLike == null)
-            {
-                Like newLike = new Like();
-                newLike.LikeId = like.LikeId;
-                newLike.UserId = like.UserId;
-                newLike.PostId = like.PostId;
-                newLike.CommentId = like.CommentId;
-                newLike.IsLiked = like.IsLiked;
-                newLike.IsDisliked = like.IsDisliked;
-
-                return await repo.AddLike(newLike);                
+            { 
+                return await repo.AddLike(like);                
             }
             else if (oldLike.UserId == like.UserId && oldLike.PostId == like.PostId && oldLike.CommentId == like.CommentId)
             {

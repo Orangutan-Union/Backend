@@ -9,7 +9,7 @@ namespace TECHUB.Repository.Repositories
     {
         private readonly DatabaseContext context;
         public PostRepository(DatabaseContext context) { this.context = context; }
-        public async Task<Post> AddPost(Post post)
+        public async Task<Post> CreatePost(Post post)
         {
             context.Posts.Add(post);
             await context.SaveChangesAsync();

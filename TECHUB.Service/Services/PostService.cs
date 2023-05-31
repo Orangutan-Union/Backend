@@ -21,7 +21,7 @@ namespace TECHUB.Service.Services
             newPost.Latitude = post.Latitude;
             newPost.Longitude = post.Longitude;
 
-            return await repo.AddPost(newPost);
+            return await repo.CreatePost(newPost);
         }
 
         public async Task<Post> DeletePost(int id)
