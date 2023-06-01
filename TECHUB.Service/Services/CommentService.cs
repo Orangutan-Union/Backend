@@ -24,6 +24,11 @@ namespace TECHUB.Service.Services
             return await repo.DeleteComment(id);
         }
 
+        public async Task<Comment> GetCommentById(int id)
+        {
+            return await repo.GetCommentById(id);
+        }
+
         public async Task<Comment> UpdateComment(Comment comment)
         {
             return await repo.UpdateComment(comment);
