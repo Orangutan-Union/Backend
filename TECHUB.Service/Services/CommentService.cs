@@ -16,6 +16,11 @@ namespace TECHUB.Service.Services
 
         public async Task<Comment> CreateComment(Comment comment)
         {
+            Comment newComment = new Comment();
+            newComment.UserId = comment.UserId;
+            newComment.PostId = comment.PostId;
+            newComment.Content = comment.Content;
+            newComment.TimeStamp = DateTime.Now;
             return await repo.CreateComment(comment);
         }
 
