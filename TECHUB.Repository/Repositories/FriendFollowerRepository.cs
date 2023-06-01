@@ -148,6 +148,11 @@ namespace TECHUB.Repository.Repositories
             return friends;
         }
 
+        public async Task<List<FriendFollower>> GetUserFriendsFollowers(int id)
+        {
+            return await context.FriendFollowers.Where(f => f.UserId == id || f.OtherUserId == id).ToListAsync();
+        }
+
         public async Task<FriendFollower> AddFriendFollower(FriendFollower ff)
         {
             context.FriendFollowers.Add(ff);
@@ -160,6 +165,25 @@ namespace TECHUB.Repository.Repositories
             context.Entry(ff).State = EntityState.Modified;
             await context.SaveChangesAsync();
             return ff;
+        }
+
+        public async Task<bool> DeleteFriendFollower(FriendFollower ff)
+        {
+            context.FriendFollowers.Remove(ff);
+            await context.SaveChangesAsync();
+            return true;
+
+        }
+
+        public async Task<bool> FindUsers(int userid, int targetid)
+        {
+            bool userCheck = await context.Users.AnyAsync(x => x.UserId == userid);
+            bool targetuserCheck = await context.Users.AnyAsync(x => x.UserId == targetid);
+            if (userCheck && targetuserCheck)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
