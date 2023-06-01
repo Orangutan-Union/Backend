@@ -23,6 +23,12 @@ namespace TECHUB.API.Controllers
             return Ok(await service.DeleteComment(id));
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> GetCommentById(int id)
+        {
+            return Ok(await service.GetCommentById(id));
+        }
+
         [HttpPut]
         public async Task<IActionResult> UpdateComment(Comment comment)
         {
