@@ -34,17 +34,5 @@ namespace TECHUB.API.Controllers
         {
             return Ok(await service.SendFriendRequest(viewmodel));
         }
-
-        [HttpDelete]
-        public async Task<IActionResult> DeleteFriendRequest(FriendRequestViewModel viewmodel)
-        {
-            var result = await service.DeleteFriendRequest(viewmodel);
-
-            if (!result)
-            {
-                return BadRequest("Unable to remove friend request.");
-            }
-            return NoContent();
-        }
     }
 }
