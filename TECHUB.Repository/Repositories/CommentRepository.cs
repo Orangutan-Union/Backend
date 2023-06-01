@@ -5,13 +5,13 @@ using TECHUB.Repository.Models;
 
 namespace TECHUB.Repository.Repositories
 {
-    internal class CommentRepository : ICommentRepository
+    public class CommentRepository : ICommentRepository
     {
         private readonly DatabaseContext context;
         public CommentRepository(DatabaseContext context) { this.context = context; }
         public async Task<Comment> CreateComment(Comment comment)
         {
-            context.Comments.Add(comment);
+            context.Comment.Add(comment);
             await context.SaveChangesAsync();
 
             return comment;
@@ -19,11 +19,11 @@ namespace TECHUB.Repository.Repositories
 
         public async Task<Comment> DeleteComment(int id)
         {
-            var comment = await context.Comments.FindAsync(id);
+            var comment = await context.Comment.FindAsync(id);
 
             if (comment != null)
             {
-                context.Comments.Remove(comment);
+                context.Comment.Remove(comment);
                 await context.SaveChangesAsync();
             }
 
