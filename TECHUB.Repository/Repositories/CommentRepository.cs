@@ -9,6 +9,12 @@ namespace TECHUB.Repository.Repositories
     {
         private readonly DatabaseContext context;
         public CommentRepository(DatabaseContext context) { this.context = context; }
+        public async Task<Comment> GetCommentById(int id)
+        {
+            return await context.Comment
+                .Include(c => c.User).ThenInclude(u => u.Picture)
+                .FirstOrDefaultAsync(c => c.CommentId == id);
+        }
         public async Task<Comment> CreateComment(Comment comment)
         {
             context.Comment.Add(comment);
