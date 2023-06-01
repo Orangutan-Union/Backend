@@ -1,15 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json.Linq;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using TECHUB.Repository.Context;
-using TECHUB.Repository.Interfaces;
 using TECHUB.Repository.Models;
 using TECHUB.Service.Interfaces;
 using TECHUB.Service.ViewModels;
@@ -21,7 +11,6 @@ namespace TECHUB.API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService service;
-        private readonly IPhotoService photoService;
 
         public UsersController(IUserService service)
         {
