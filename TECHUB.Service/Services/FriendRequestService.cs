@@ -8,10 +8,12 @@ namespace TECHUB.Service.Services
     public class FriendRequestService : IFriendRequestService
     {
         private readonly IFriendRequestRepository repo;
+        private readonly IFriendFollowerService ffService;
 
-        public FriendRequestService(IFriendRequestRepository repo)
+        public FriendRequestService(IFriendRequestRepository repo, IFriendFollowerService ffService)
         {
             this.repo = repo;
+            this.ffService = ffService;
         }
 
         public async Task<List<FriendRequest>> GetReceivedRequests(int id)
@@ -35,16 +37,20 @@ namespace TECHUB.Service.Services
             return await repo.SendFriendRequest(friendRequest);
         }
 
-        public async Task<bool> DeleteFriendRequest(FriendRequestViewModel viewmodel)
+        public async Task<FriendFollower> AcceptFriendRequest(FriendRequestViewModel viewmodel)
         {
-            var friendRequest = await repo.GetRequestById(viewmodel.SenderId, viewmodel.ReceiverId);
-
-            if (friendRequest is null)
+            var res = await repo.DeleteFriendRequest(viewmodel.SenderId, viewmodel.ReceiverId);
+            if (!res)
             {
-                return false;
+                return null;
             }
+            return await ffService.AddFriend(viewmodel);            
+        }
 
-            return await repo.DeleteFriendRequest(friendRequest);
+        public async Task<bool> DeclineFriendRequest(FriendRequestViewModel viewmodel)
+        {
+            var res = await repo.DeleteFriendRequest(viewmodel.SenderId, viewmodel.ReceiverId);
+            return res;
         }
     }
 }

@@ -8,6 +8,7 @@ namespace TECHUB.Service.Interfaces
         Task<List<FriendRequest>> GetReceivedRequests(int id);
         Task<List<FriendRequest>> GetSentRequests(int id);
         Task<FriendRequest> SendFriendRequest(FriendRequestViewModel request);
-        Task<bool> DeleteFriendRequest(FriendRequestViewModel request);
+        Task<FriendFollower> AcceptFriendRequest(FriendRequestViewModel viewmodel);
+        Task<bool> DeclineFriendRequest(FriendRequestViewModel viewmodel);
     }
 }
