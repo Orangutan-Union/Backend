@@ -15,7 +15,7 @@ namespace TECHUB.Repository.Context
         }
 
         public DbSet<Chat> Chats { get; set; }
-        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Comment> Comment { get; set; }
         public DbSet<FriendFollower> FriendFollowers { get; set; }
         public DbSet<FriendRequest> FriendRequests { get; set; }
         public DbSet<Group> Groups { get; set; }
@@ -29,7 +29,7 @@ namespace TECHUB.Repository.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseLazyLoadingProxies(false).UseSqlServer("Data Source=192.168.20.33,1433; Initial Catalog=TECHub; TrustServerCertificate=True; User ID=sa; Password=Passw0rd;");
+            optionsBuilder.UseLazyLoadingProxies(false).UseSqlServer("Data Source=192.168.20.33,1433; Initial Catalog=TecHub; TrustServerCertificate=True; User ID=sa; Password=Passw0rd;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
