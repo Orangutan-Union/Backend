@@ -57,6 +57,25 @@ namespace TECHUB.Service.Services
             return await repo.AddFriendFollower(friendFollower);
         }
 
+        public async Task<bool> RemoveFriend(int userid, int targetuserid)
+        {
+            if (!await repo.FindUsers(userid, targetuserid))
+            {
+                return false;
+            }
+
+            //Error here because of something regarding pictures
+            var friendList = await repo.GetUserFriendsFollowers(userid);
+
+            var ff = friendList.FirstOrDefault(x => x.UserId == userid && x.OtherUserId == targetuserid && x.Type == 1 || x.UserId == targetuserid && x.OtherUserId == userid && x.Type == 1);
+
+            if (ff is null)
+            {
+                return false;
+            }
+            return await repo.DeleteFriendFollower(ff);
+        }
+
         public async Task<FriendFollower> FollowUser(int userid, int targetuserid)
         {
             var friendList = await repo.GetUserFriends(userid);

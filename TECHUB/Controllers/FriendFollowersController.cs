@@ -69,5 +69,16 @@ namespace TECHUB.API.Controllers
             }
             return Ok(res);
         }
+
+        [HttpDelete("{userid:int}/unfriend/{targetuserid:int}")]
+        public async Task<IActionResult> RemoveFriend(int userid, int targetuserid)
+        {
+            var res = await service.RemoveFriend(userid, targetuserid);
+            if (!res)
+            {
+                return BadRequest("The pizza is aggressive");
+            }
+            return Ok(res);
+        }
     }
 }

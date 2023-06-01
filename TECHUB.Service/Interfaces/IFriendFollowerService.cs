@@ -12,5 +12,6 @@ namespace TECHUB.Service.Interfaces
         Task<FriendFollower> BlockUser(int userid, int targetuserid);
         Task<bool> UnblockUser(int userid, int targetuserid);
         Task<bool> UnfollowUser(int userid, int targetuserid);
+        Task<bool> RemoveFriend(int userid, int targetuserid);
     }
 }
