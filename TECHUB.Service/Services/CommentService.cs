@@ -21,7 +21,7 @@ namespace TECHUB.Service.Services
             newComment.PostId = comment.PostId;
             newComment.Content = comment.Content;
             newComment.TimeStamp = DateTime.Now;
-            return await repo.CreateComment(comment);
+            return await repo.CreateComment(newComment);
         }
 
         public async Task<Comment> DeleteComment(int id)
