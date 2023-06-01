@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using TECHUB.Repository.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using TECHUB.Service.Interfaces;
 using TECHUB.Service.ViewModels;
 
@@ -32,6 +30,10 @@ namespace TECHUB.API.Controllers
         [HttpPost]
         public async Task<IActionResult> SendFriendRequest(FriendRequestViewModel viewmodel)
         {
+            if (viewmodel.ReceiverId == 0 || viewmodel.SenderId == 0)
+            {
+                return BadRequest($"Invalid ID - SenderId: {viewmodel.SenderId} | ReceiverId: {viewmodel.ReceiverId}");
+            }
             return Ok(await service.SendFriendRequest(viewmodel));
         }
     }
