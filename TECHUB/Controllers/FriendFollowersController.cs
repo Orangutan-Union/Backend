@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using TECHUB.Repository.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using TECHUB.Service.Interfaces;
 
 namespace TECHUB.API.Controllers
@@ -19,7 +17,6 @@ namespace TECHUB.API.Controllers
         [HttpGet("{id:int}/friends")]
         public async Task<IActionResult> GetUserFriends(int id)
         {
-            var tt = await service.GetUserFriends(id);
             return Ok(await service.GetUserFriends(id));
         }
 

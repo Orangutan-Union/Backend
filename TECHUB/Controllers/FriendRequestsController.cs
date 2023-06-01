@@ -36,5 +36,29 @@ namespace TECHUB.API.Controllers
             }
             return Ok(await service.SendFriendRequest(viewmodel));
         }
+
+        [HttpPost("accept")]
+        public async Task<IActionResult> AcceptFriendRequest(FriendRequestViewModel friendRequest)
+        {
+            var res = await service.AcceptFriendRequest(friendRequest);
+
+            if (res is null)
+            {
+                return BadRequest("An error occurred while trying to accept the friend request.");
+            }
+            return Ok(res);
+        }
+
+        [HttpPost("decline")]
+        public async Task<IActionResult> DeclineFriendRequest(FriendRequestViewModel friendRequest)
+        {
+            var res = await service.DeclineFriendRequest(friendRequest);
+
+            if (!res)
+            {
+                return BadRequest("An error occurred when trying to decline the friend request.");
+            }
+            return Ok(res);
+        }
     }
 }

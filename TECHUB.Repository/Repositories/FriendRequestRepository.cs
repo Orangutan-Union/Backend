@@ -42,9 +42,9 @@ namespace TECHUB.Repository.Repositories
             return request;
         }
 
-        public async Task<bool> DeleteFriendRequest(FriendRequest request)
+        public async Task<bool> DeleteFriendRequest(int senderId, int receiverId)
         {
-            var fr = await context.FriendRequests.FindAsync(request.SenderId, request.ReceiverId);
+            var fr = await context.FriendRequests.FindAsync(senderId, receiverId);
             if (fr is null)
             {
                 return false;

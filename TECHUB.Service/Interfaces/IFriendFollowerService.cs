@@ -1,4 +1,5 @@
 ﻿using TECHUB.Repository.Models;
+using TECHUB.Service.ViewModels;
 
 namespace TECHUB.Service.Interfaces
 {
@@ -6,5 +7,6 @@ namespace TECHUB.Service.Interfaces
     {
         Task<List<FriendFollower>> GetUserFriends(int id);
         Task<List<FriendFollower>> GetUserFollowers(int id);
+        Task<FriendFollower> AddFriend(FriendRequestViewModel request);
     }
 }
