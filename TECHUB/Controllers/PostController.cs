@@ -27,7 +27,6 @@ namespace TECHUB.API.Controllers
                     GroupId = p.GroupId,
                     TimeStamp = p.TimeStamp,
                     Content = p.Content,
-                    FriendOnly = p.FriendOnly,
                     Latitude = p.Latitude,
                     Longitude = p.Longitude,
                     User = new
@@ -105,7 +104,6 @@ namespace TECHUB.API.Controllers
                     GroupId = p.GroupId,
                     TimeStamp = p.TimeStamp,
                     Content = p.Content,
-                    FriendOnly = p.FriendOnly,
                     Latitude = p.Latitude,
                     Longitude = p.Longitude,
                     Comments = p.Comments.Select(c => new
@@ -178,7 +176,6 @@ namespace TECHUB.API.Controllers
                             GroupId = p.GroupId,
                             TimeStamp = p.TimeStamp,
                             Content = p.Content,
-                            FriendOnly = p.FriendOnly,
                             Latitude = p.Latitude,
                             Longitude = p.Longitude,
                             Group = new
@@ -242,7 +239,6 @@ namespace TECHUB.API.Controllers
                             GroupId = p.GroupId,
                             TimeStamp = p.TimeStamp,
                             Content = p.Content,
-                            FriendOnly = p.FriendOnly,
                             Latitude = p.Latitude,
                             Longitude = p.Longitude,
                             Group = new
@@ -339,7 +335,6 @@ namespace TECHUB.API.Controllers
                             GroupId = p.GroupId,
                             TimeStamp = p.TimeStamp,
                             Content = p.Content,
-                            FriendOnly = p.FriendOnly,
                             Latitude = p.Latitude,
                             Longitude = p.Longitude,
                             Group = new
@@ -403,7 +398,6 @@ namespace TECHUB.API.Controllers
                             GroupId = p.GroupId,
                             TimeStamp = p.TimeStamp,
                             Content = p.Content,
-                            FriendOnly = p.FriendOnly,
                             Latitude = p.Latitude,
                             Longitude = p.Longitude,
                             Group = new
@@ -500,7 +494,6 @@ namespace TECHUB.API.Controllers
                             GroupId = p.GroupId,
                             TimeStamp = p.TimeStamp,
                             Content = p.Content,
-                            FriendOnly = p.FriendOnly,
                             Latitude = p.Latitude,
                             Longitude = p.Longitude,
                             Group = new
@@ -564,7 +557,6 @@ namespace TECHUB.API.Controllers
                             GroupId = p.GroupId,
                             TimeStamp = p.TimeStamp,
                             Content = p.Content,
-                            FriendOnly = p.FriendOnly,
                             Latitude = p.Latitude,
                             Longitude = p.Longitude,
                             Group = new
