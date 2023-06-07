@@ -18,19 +18,6 @@ namespace TECHUB.Repository.Repositories
             return chat;
         }
 
-        public async Task<Chat> DeleteChat(int id)
-        {
-            var chat = await context.Chats.FindAsync(id);
-
-            if (chat != null)
-            {
-                context.Chats.Remove(chat);
-                await context.SaveChangesAsync();
-            }
-
-            return chat;
-        }
-
         public async Task<Chat> GetChatById(int id)
         {
             return await context.Chats.Include(c => c.Users).FirstOrDefaultAsync(c => c.ChatId == id);
