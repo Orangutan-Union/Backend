@@ -9,7 +9,6 @@ namespace TECHUB.Repository.Interfaces
         Task<Chat> AddChat(Chat chat);
         Task<Chat> UpdateChat(Chat chat);
         Task<Chat> LeaveChat(int chatId, int userId);
-        Task<Chat> DeleteChat(int id);
         
     }
 }
