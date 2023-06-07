@@ -48,8 +48,11 @@ builder.Services.AddSwaggerGen(options =>
 
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
+
+
 builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddScoped<IChatRepository, ChatRepository>();
+builder.Services.AddScoped<IChatService, ChatService>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 builder.Services.AddScoped<IGroupRepository, GroupRepository>();

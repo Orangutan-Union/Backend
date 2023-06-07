@@ -6,7 +6,7 @@ namespace TECHUB.Service.Interfaces
     {
         Task<List<Chat>> GetUserChats(int id);
         Task<Chat> CreateChat(Chat chat, int id);
-        Task<Chat> AddUserToChat(Chat chat, int id);
+        Task<Chat> AddUserToChat(int userId, int chatId);
         Task<Chat> LeaveChat(int userId, int chatId);
         Task<Chat> UpdateChat(Chat chat);
     }
