@@ -9,9 +9,9 @@ namespace TECHUB.Service.Interfaces
 {
     public interface IChatService
     {
-        Task<Chat> GetUserChats(int id);
+        Task<List<Chat>> GetUserChats(int id);
         Task<Chat> CreateChat(Chat chat);
         Task<Chat> UpdateChat(Chat chat);
-        Task<Chat> LeaveChat(int id);
+        Task<Chat> LeaveChat(int userId, int chatId);
     }
 }
