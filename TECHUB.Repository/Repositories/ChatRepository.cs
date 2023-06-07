@@ -39,9 +39,9 @@ namespace TECHUB.Repository.Repositories
         public async Task<List<Chat>> GetUserChats(int id)
         {
             var user = await context.Users.Include(u => u.Chats).ThenInclude(c => c.Messages).FirstOrDefaultAsync(u => u.UserId == id);
-            var chats = user.Chats.OrderByDescending(c => c.Messages.Max(m => m.TimeStamp)).ToList();
+            //var chats = user.Chats.OrderByDescending(c => c.Messages.Max(m => m.TimeStamp)).ToList();
 
-            return chats;
+            return user.Chats;
         }
 
         public async Task<Chat> LeaveChat(int chatId, int userId)

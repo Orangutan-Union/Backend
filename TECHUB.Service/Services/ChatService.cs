@@ -22,6 +22,14 @@ namespace TECHUB.Service.Services
             return await repo.GetUserChats(id);
         }
 
+        public async Task<Chat> AddUserToChat(int userId, int chatId)
+        {
+            var chat = await repo.GetChatById(chatId);
+            chat.Users.Add(await userRepo.GetUserById(userId));
+
+            return await repo.UpdateChat(chat);
+        }
+
         public async Task<Chat> LeaveChat(int userId, int chatId)
         {
             return await repo.LeaveChat(userId, chatId);
