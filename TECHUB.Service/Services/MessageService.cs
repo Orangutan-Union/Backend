@@ -6,11 +6,19 @@ namespace TECHUB.Service.Services
 {
     public class MessageService : IMessageService
     {
+        private readonly IChatRepository chatRepo;
         private readonly IMessageRepository repo;
-        public MessageService(IMessageRepository repo) { this.repo = repo; }
+        public MessageService(IMessageRepository repo, IChatRepository chatRepo) { this.repo = repo; this.chatRepo = chatRepo; }
         public async Task<Message> CreateMessage(Message message)
         {
+            var chat = await chatRepo.GetChatById(message.ChatId);
+            if (chat.Users.Any(u => u.UserId != message.UserId))
+            {
+                return null;
+            }
             message.TimeStamp = DateTime.Now;
+
+
             return await repo.AddMessage(message);
         }
 
