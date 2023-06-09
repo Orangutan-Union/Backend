@@ -27,6 +27,10 @@ namespace TECHUB.Service.Services
         public async Task<Chat> AddUserToChat(int userId, int chatId)
         {
             var chat = await repo.GetChatById(chatId);
+            if (chat.Users.Any(c => c.UserId == userId))
+            {
+                return null;
+            }
             chat.Users.Add(await userRepo.GetUserById(userId));
 
             return await repo.UpdateChat(chat);
