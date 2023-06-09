@@ -13,6 +13,7 @@ namespace TECHUB.Service.Services
         {
             var chat = await chatRepo.GetChatById(message.ChatId);           
             if (!chat.Users.Any(u => u.UserId == message.UserId))
+
             {
                 return null;
             }
