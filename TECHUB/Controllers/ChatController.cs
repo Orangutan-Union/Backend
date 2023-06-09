@@ -40,5 +40,5 @@ namespace TECHUB.API.Controllers
         {
             return Ok(await service.UpdateChat(chat));
         }
-}
+    }
 }
