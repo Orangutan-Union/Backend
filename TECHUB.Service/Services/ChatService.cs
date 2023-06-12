@@ -22,7 +22,7 @@ namespace TECHUB.Service.Services
         public async Task<Chat> AddUserToChat(int userId, int chatId)
         {
             var chat = await repo.GetChatById(chatId);
-            chat.Users.Add(await userRepo.GetUserById(userId));
+            chat.Users.Add(await userRepo.GetUserById(userId));r
 
             return await repo.UpdateChat(chat);
         }
