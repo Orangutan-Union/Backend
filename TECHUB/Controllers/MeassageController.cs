@@ -14,32 +14,6 @@ namespace TECHUB.API.Controllers
         private readonly DatabaseContext context;
         public MeassageController(IMessageService service, DatabaseContext context) { this.service = service; this.context = context; }
 
-        [HttpGet("{id:int}")]
-        public async Task<IActionResult> GetChatMessages(int id)
-        {
-            var messages = await context.Messages
-                .Where(m => m.ChatId == id)
-                .Select(m => new
-                {
-                    MessageId = m.MessageId,
-                    ChatId = m.ChatId,
-                    UserId = m.UserId,
-                    TimeStamp = m.TimeStamp,
-                    Content = m.Content,
-                    User = new
-                    {
-                        UserId = m.User.UserId,
-                        DisplayName = m.User.DisplayName,
-                        Picture = new
-                        {
-                            PictureId = m.User.Picture.PictureId,
-                            ImageUrl = m.User.Picture.ImageUrl,
-                        }
-                    }
-                }).OrderByDescending(m => m.TimeStamp).ToListAsync();
-
-            return Ok(messages);
-        }
 
         [HttpPost]
         public async Task<IActionResult> CreateMessage(Message message)

@@ -23,14 +23,6 @@ namespace TECHUB.Repository.Repositories
             return await context.Chats.Include(c => c.Users).FirstOrDefaultAsync(c => c.ChatId == id);
         }
 
-        public async Task<List<Chat>> GetUserChats(int id)
-        {
-            var user = await context.Users.Include(u => u.Chats).ThenInclude(c => c.Messages).FirstOrDefaultAsync(u => u.UserId == id);
-            //var chats = user.Chats.OrderByDescending(c => c.Messages.Max(m => m.TimeStamp)).ToList();
-
-            return user.Chats;
-        }
-
         public async Task<Chat> LeaveChat(int chatId, int userId)
         {
             var chat = await context.Chats.Include(c => c.Users).FirstOrDefaultAsync(c => c.ChatId == chatId);
