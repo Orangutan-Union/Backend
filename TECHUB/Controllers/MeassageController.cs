@@ -14,6 +14,7 @@ namespace TECHUB.API.Controllers
         private readonly DatabaseContext context;
         public MeassageController(IMessageService service, DatabaseContext context) { this.service = service; this.context = context; }
 
+
         [HttpPost]
         public async Task<IActionResult> CreateMessage(Message message)
         {
