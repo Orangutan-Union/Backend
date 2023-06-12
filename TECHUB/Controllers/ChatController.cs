@@ -40,12 +40,12 @@ namespace TECHUB.API.Controllers
                                 ImageUrl = m.User.Picture.ImageUrl,
                             }
                         }
-                    }).OrderByDescending(m => m.TimeStamp).ToList(),
+                    }).ToList(),
                     Users = c.Users.Select(u => new
                     {
                         UserId = u.UserId,
                         DisplayName = u.DisplayName,
-                        Pictures = new
+                        Picture = new
                         {
                             PictureId = u.Picture.PictureId,
                             ImageUrl = u.Picture.ImageUrl,
