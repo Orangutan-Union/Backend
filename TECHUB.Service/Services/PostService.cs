@@ -17,7 +17,6 @@ namespace TECHUB.Service.Services
             newPost.GroupId = post.GroupId;
             newPost.TimeStamp = DateTime.Now;
             newPost.Content = post.Content;
-            newPost.FriendOnly = post.FriendOnly;
             newPost.Latitude = post.Latitude;
             newPost.Longitude = post.Longitude;
 

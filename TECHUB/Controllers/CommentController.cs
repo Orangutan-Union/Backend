@@ -17,7 +17,7 @@ namespace TECHUB.API.Controllers
             return Ok(await service.CreateComment(comment));
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteComment(int id)
         {
             return Ok(await service.DeleteComment(id));

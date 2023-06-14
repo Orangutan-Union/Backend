@@ -7,7 +7,6 @@
         public int? GroupId { get; set; }
         public DateTime TimeStamp { get; set; }
         public string Content { get; set; } = string.Empty;
-        public bool FriendOnly { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
 
