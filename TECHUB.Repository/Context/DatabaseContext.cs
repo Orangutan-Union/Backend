@@ -29,7 +29,7 @@ namespace TECHUB.Repository.Context
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseLazyLoadingProxies(false).UseSqlServer("Data Source=192.168.20.33,1433; Initial Catalog=Test; TrustServerCertificate=True; User ID=sa; Password=Passw0rd;");
+            optionsBuilder.UseLazyLoadingProxies(false).UseSqlServer("Data Source=192.168.20.33,1433; Initial Catalog=TecHub; TrustServerCertificate=True; User ID=sa; Password=Passw0rd;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -12,7 +12,7 @@ using TECHUB.Repository.Context;
 namespace TECHUB.Repository.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230602064951_initial")]
+    [Migration("20230614082257_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -231,12 +231,6 @@ namespace TECHUB.Repository.Migrations
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("Latitude")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Longtitude")
-                        .HasColumnType("float");
 
                     b.Property<DateTime>("TimeStamp")
                         .HasColumnType("datetime2");

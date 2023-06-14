@@ -229,12 +229,6 @@ namespace TECHUB.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Latitude")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Longtitude")
-                        .HasColumnType("float");
-
                     b.Property<DateTime>("TimeStamp")
                         .HasColumnType("datetime2");
 
