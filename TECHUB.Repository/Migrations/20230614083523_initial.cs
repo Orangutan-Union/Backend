@@ -198,14 +198,12 @@ namespace TECHUB.Repository.Migrations
                         name: "FK_Messages_Chats_ChatId",
                         column: x => x.ChatId,
                         principalTable: "Chats",
-                        principalColumn: "ChatId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ChatId");
                     table.ForeignKey(
                         name: "FK_Messages_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.SetNull);
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateTable(
@@ -233,8 +231,7 @@ namespace TECHUB.Repository.Migrations
                         name: "FK_Posts_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "UserId");
                 });
 
             migrationBuilder.CreateTable(
@@ -255,8 +252,7 @@ namespace TECHUB.Repository.Migrations
                         name: "FK_Comment_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
-                        principalColumn: "PostId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "PostId");
                     table.ForeignKey(
                         name: "FK_Comment_Users_UserId",
                         column: x => x.UserId,
@@ -292,8 +288,7 @@ namespace TECHUB.Repository.Migrations
                 name: "Likes",
                 columns: table => new
                 {
-                    LikeId = table.Column<int>(type: "int", nullable: false)
-                    .Annotation("SqlServer:Identity", "1, 1"),
+                    LikeId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     PostId = table.Column<int>(type: "int", nullable: true),
                     CommentId = table.Column<int>(type: "int", nullable: true),
@@ -312,8 +307,7 @@ namespace TECHUB.Repository.Migrations
                         name: "FK_Likes_Posts_PostId",
                         column: x => x.PostId,
                         principalTable: "Posts",
-                        principalColumn: "PostId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "PostId");
                     table.ForeignKey(
                         name: "FK_Likes_Users_LikeId",
                         column: x => x.LikeId,
