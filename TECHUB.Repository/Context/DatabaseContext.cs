@@ -41,7 +41,7 @@ namespace TECHUB.Repository.Context
                 entity.HasMany(c => c.Messages)
                 .WithOne(m => m.Chat)
                 .HasForeignKey(m => m.ChatId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<Comment>(entity =>
@@ -49,12 +49,12 @@ namespace TECHUB.Repository.Context
                 entity.HasOne(c => c.Post)
                 .WithMany(p => p.Comments)
                 .HasForeignKey(c => c.CommentId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasMany(p => p.Likes)
                 .WithOne(l => l.Comment)
                 .HasForeignKey(l => l.CommentId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<FriendFollower>(entity =>
@@ -64,12 +64,12 @@ namespace TECHUB.Repository.Context
                 entity.HasOne(x => x.User)
                 .WithMany(u => u.UserFriendFollowers)
                 .HasForeignKey(u => u.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasOne(x => x.OtherUser)
                 .WithMany(ou => ou.OtherUserFriendFollowers)
                 .HasForeignKey(ou => ou.OtherUserId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<FriendRequest>(entity =>
@@ -97,19 +97,19 @@ namespace TECHUB.Repository.Context
                 entity.HasOne(x => x.User)
                 .WithMany(x => x.Likes)
                 .HasForeignKey(x => x.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasOne(x => x.Post)
                 .WithMany(x => x.Likes)
                 .HasForeignKey(x => x.PostId)
                 .IsRequired(false)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasOne(x => x.Comment)
                 .WithMany(x => x.Likes)
                 .HasForeignKey(x => x.CommentId)
                 .IsRequired(false)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<Post>(entity =>
@@ -117,17 +117,17 @@ namespace TECHUB.Repository.Context
                 entity.HasOne(p => p.User)
                 .WithMany(u => u.Posts)
                 .HasForeignKey(u => u.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasMany(p => p.Comments)
                 .WithOne(c => c.Post)
                 .HasForeignKey(c => c.PostId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasMany(p => p.Likes)
                 .WithOne(l => l.Post)
                 .HasForeignKey(l => l.PostId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
             modelBuilder.Entity<User>(entity =>
@@ -135,47 +135,47 @@ namespace TECHUB.Repository.Context
                 entity.HasOne(u => u.Picture)
                 .WithMany(p => p.User)
                 .HasForeignKey(u => u.ProfilePictureId)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasMany(u => u.Comments)
                 .WithOne(c => c.User)
                 .HasForeignKey(c => c.UserId)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasMany(u => u.UserFriendFollowers)
                 .WithOne(ff => ff.User)
                 .HasForeignKey(ff => ff.UserId)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasMany(u => u.OtherUserFriendFollowers)
                 .WithOne(ff => ff.OtherUser)
                 .HasForeignKey(ff => ff.OtherUserId)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasMany(u => u.SentFriendRequests)
                 .WithOne(fr => fr.Sender)
                 .HasForeignKey(fr => fr.SenderId)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasMany(u => u.ReceivedFriendRequests)
                 .WithOne(fr => fr.Receiver)
                 .HasForeignKey(fr => fr.ReceiverId)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasMany(u => u.GroupUsers)
                 .WithOne(gu => gu.User)
                 .HasForeignKey(gu => gu.UserId)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasMany(u => u.Likes)
                 .WithOne(l => l.User)
                 .HasForeignKey(l => l.LikeId)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.ClientSetNull);
 
                 entity.HasMany(u => u.Messages)
                 .WithOne(m => m.User)
                 .HasForeignKey(m => m.UserId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.ClientSetNull);
             });
         }
     }
