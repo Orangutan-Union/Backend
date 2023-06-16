@@ -12,7 +12,7 @@ using TECHUB.Repository.Context;
 namespace TECHUB.Repository.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230614101255_initial")]
+    [Migration("20230616083758_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -78,10 +78,7 @@ namespace TECHUB.Repository.Migrations
             modelBuilder.Entity("TECHUB.Repository.Models.Comment", b =>
                 {
                     b.Property<int>("CommentId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentId"));
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -97,8 +94,6 @@ namespace TECHUB.Repository.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CommentId");
-
-                    b.HasIndex("PostId");
 
                     b.HasIndex("UserId");
 
@@ -191,7 +186,10 @@ namespace TECHUB.Repository.Migrations
             modelBuilder.Entity("TECHUB.Repository.Models.Like", b =>
                 {
                     b.Property<int>("LikeId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LikeId"));
 
                     b.Property<int?>("CommentId")
                         .HasColumnType("int");
@@ -213,6 +211,8 @@ namespace TECHUB.Repository.Migrations
                     b.HasIndex("CommentId");
 
                     b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Likes");
                 });
@@ -383,12 +383,13 @@ namespace TECHUB.Repository.Migrations
                 {
                     b.HasOne("TECHUB.Repository.Models.Post", "Post")
                         .WithMany("Comments")
-                        .HasForeignKey("PostId")
+                        .HasForeignKey("CommentId")
                         .IsRequired();
 
                     b.HasOne("TECHUB.Repository.Models.User", "User")
                         .WithMany("Comments")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Post");
@@ -450,6 +451,7 @@ namespace TECHUB.Repository.Migrations
                     b.HasOne("TECHUB.Repository.Models.User", "User")
                         .WithMany("GroupUsers")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Group");
@@ -463,14 +465,15 @@ namespace TECHUB.Repository.Migrations
                         .WithMany("Likes")
                         .HasForeignKey("CommentId");
 
-                    b.HasOne("TECHUB.Repository.Models.User", "User")
-                        .WithMany("Likes")
-                        .HasForeignKey("LikeId")
-                        .IsRequired();
-
                     b.HasOne("TECHUB.Repository.Models.Post", "Post")
                         .WithMany("Likes")
                         .HasForeignKey("PostId");
+
+                    b.HasOne("TECHUB.Repository.Models.User", "User")
+                        .WithMany("Likes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Comment");
 
@@ -484,6 +487,7 @@ namespace TECHUB.Repository.Migrations
                     b.HasOne("TECHUB.Repository.Models.Chat", "Chat")
                         .WithMany("Messages")
                         .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TECHUB.Repository.Models.User", "User")
