@@ -35,15 +35,7 @@ namespace TECHUB.Repository.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-
             
-            modelBuilder.Entity<Comment>(entity =>
-            {
-                entity.HasOne(c => c.Post)
-                .WithMany(p => p.Comments)
-                .HasForeignKey(c => c.CommentId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-            });
 
             modelBuilder.Entity<FriendFollower>(entity =>
             {
