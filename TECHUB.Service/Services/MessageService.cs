@@ -17,6 +17,9 @@ namespace TECHUB.Service.Services
                 return null;
             }
             message.TimeStamp = DateTime.Now;
+            chat.TimeCreated = message.TimeStamp;
+
+            await chatRepo.UpdateChat(chat);
 
             return await repo.AddMessage(message);
         }
