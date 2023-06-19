@@ -28,6 +28,14 @@ namespace TECHUB.Service.Services
 
         public async Task<FriendRequest> SendFriendRequest(FriendRequestViewModel viewmodel)
         {
+            var friendList = await ffService.GetUserFriends(viewmodel.SenderId);
+            var ff = friendList.Any(x => x.OtherUserId == viewmodel.ReceiverId);
+
+            if (ff)
+            {
+                return null;
+            }
+
             var friendRequest = new FriendRequest()
             {
                 SenderId = viewmodel.SenderId,
