@@ -76,22 +76,24 @@ namespace TECHUB.Service.Services
             return await repo.DeleteFriendFollower(ff);
         }
 
-        public async Task<FriendFollower> FollowUser(int userid, int targetuserid)
+        public async Task<FriendFollower> FollowUser(FriendFollower ff)
         {
-            var friendList = await repo.GetUserFriends(userid);
-            if (friendList.Any(x => x.OtherUserId == targetuserid))
+            var friendList = await repo.GetUserFriends(ff.UserId);
+            if (friendList.Any(x => x.OtherUserId == ff.OtherUserId))
             {
                 return null;
             }
-            var friendFollower = new FriendFollower()
-            {
-                UserId = userid,
-                OtherUserId = targetuserid,
-                Date = DateTime.Now,
-                Type = 2
-            };
+            //var friendFollower = new FriendFollower()
+            //{
+            //    UserId = userid,
+            //    OtherUserId = targetuserid,
+            //    Date = DateTime.Now,
+            //    Type = 2
+            //};
+            ff.Type = 2;
+            ff.Date = DateTime.Now;
 
-            return await repo.AddFriendFollower(friendFollower);
+            return await repo.AddFriendFollower(ff);
         }
 
         public async Task<FriendFollower> BlockUser(int userid, int targetuserid)

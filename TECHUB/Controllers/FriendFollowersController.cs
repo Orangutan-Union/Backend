@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TECHUB.Repository.Models;
 using TECHUB.Service.Interfaces;
 
 namespace TECHUB.API.Controllers
@@ -26,10 +27,10 @@ namespace TECHUB.API.Controllers
             return Ok(await service.GetUserFollowers(id));
         }
 
-        [HttpPost("{userid:int}/follow/{targetuserid:int}")]
-        public async Task<IActionResult> FollowUser(int userid, int targetuserid)
+        [HttpPost("follow")]
+        public async Task<IActionResult> FollowUser(FriendFollower ff)
         {
-            var res = await service.FollowUser(userid, targetuserid);
+            var res = await service.FollowUser(ff);
             if (res is null)
             {
                 return BadRequest("Something done gone went wrong when you tried stalking that person");
