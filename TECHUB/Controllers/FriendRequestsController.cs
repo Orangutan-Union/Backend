@@ -34,7 +34,14 @@ namespace TECHUB.API.Controllers
             {
                 return BadRequest($"Invalid ID - SenderId: {viewmodel.SenderId} | ReceiverId: {viewmodel.ReceiverId}");
             }
-            return Ok(await service.SendFriendRequest(viewmodel));
+
+            var tt = await service.SendFriendRequest(viewmodel);
+
+            if (tt is null)
+            {
+                return BadRequest("User is already a friend.");
+            }
+            return Ok(tt);
         }
 
         [HttpPost("accept")]
