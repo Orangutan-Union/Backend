@@ -27,6 +27,12 @@ namespace TECHUB.API.Controllers
             return Ok(await service.GetUserFollowers(id));
         }
 
+        [HttpGet("{id:int}/blocked")]
+        public async Task<IActionResult> GetBlockedUsers(int id)
+        {
+            return Ok(await service.GetBlockedUsers(id));
+        }
+
         [HttpPost("follow")]
         public async Task<IActionResult> FollowUser(FriendFollower ff)
         {
@@ -44,7 +50,7 @@ namespace TECHUB.API.Controllers
             var res = await service.UnfollowUser(userid, targetuserid);
             if (!res)
             {
-                return BadRequest("Unable to unblock, sorry not sorry");
+                return BadRequest("Unable to unfollow, sorry not sorry");
             }
             return Ok(res);
         }
