@@ -24,6 +24,11 @@ namespace TECHUB.Service.Services
             return await repo.GetUserFollowers(id);
         }
 
+        public async Task<List<FriendFollower>> GetBlockedUsers(int id)
+        {
+            return await repo.GetBlockedUsers(id);
+        }
+
         public async Task<FriendFollower> AddFriend(FriendRequestViewModel request)
         {
             if (request is null)
@@ -64,7 +69,6 @@ namespace TECHUB.Service.Services
                 return false;
             }
 
-            //Error here because of something regarding pictures
             var friendList = await repo.GetUserFriendsFollowers(userid);
 
             var ff = friendList.FirstOrDefault(x => x.UserId == userid && x.OtherUserId == targetuserid && x.Type == 1 || x.UserId == targetuserid && x.OtherUserId == userid && x.Type == 1);
@@ -76,22 +80,18 @@ namespace TECHUB.Service.Services
             return await repo.DeleteFriendFollower(ff);
         }
 
-        public async Task<FriendFollower> FollowUser(int userid, int targetuserid)
+        public async Task<FriendFollower> FollowUser(FriendFollower ff)
         {
-            var friendList = await repo.GetUserFriends(userid);
-            if (friendList.Any(x => x.OtherUserId == targetuserid))
+            var friendList = await repo.GetUserFriends(ff.UserId);
+            if (friendList.Any(x => x.OtherUserId == ff.OtherUserId))
             {
                 return null;
             }
-            var friendFollower = new FriendFollower()
-            {
-                UserId = userid,
-                OtherUserId = targetuserid,
-                Date = DateTime.Now,
-                Type = 2
-            };
 
-            return await repo.AddFriendFollower(friendFollower);
+            ff.Type = 2;
+            ff.Date = DateTime.Now;
+
+            return await repo.AddFriendFollower(ff);
         }
 
         public async Task<FriendFollower> BlockUser(int userid, int targetuserid)
