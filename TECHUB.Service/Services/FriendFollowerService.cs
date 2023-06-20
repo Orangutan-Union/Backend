@@ -8,10 +8,12 @@ namespace TECHUB.Service.Services
     public class FriendFollowerService : IFriendFollowerService
     {
         private readonly IFriendFollowerRepository repo;
+        private readonly IFriendRequestRepository requestRepository;
 
-        public FriendFollowerService(IFriendFollowerRepository repo)
+        public FriendFollowerService(IFriendFollowerRepository repo, IFriendRequestRepository requestRepository)
         {
             this.repo = repo;
+            this.requestRepository = requestRepository;
         }
 
         public async Task<List<FriendFollower>> GetUserFriends(int id)
@@ -102,6 +104,15 @@ namespace TECHUB.Service.Services
             {
                 return null;
             }
+
+            // Delete FriendRequest between the 2 users if there is one.
+            var tt = await requestRepository.GetReceivedAndSentRequests(userid);
+            var friendRequest = tt.FirstOrDefault(x => x.SenderId == targetuserid || x.ReceiverId == targetuserid);
+            if (friendRequest is not null)
+            {
+                await requestRepository.DeleteFriendRequest(friendRequest.SenderId, friendRequest.ReceiverId);
+            }
+
             // Check if there's an existing relation between the 2 users, if not then create one.
             if (!friendsFollowers.Any(x => x.UserId == userid && x.OtherUserId == targetuserid || x.UserId == targetuserid && x.OtherUserId == userid))
             {

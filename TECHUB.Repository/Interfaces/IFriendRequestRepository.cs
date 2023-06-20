@@ -4,6 +4,7 @@ namespace TECHUB.Repository.Interfaces
 {
     public interface IFriendRequestRepository
     {
+        Task<List<FriendRequest>> GetReceivedAndSentRequests(int id);
         Task<List<FriendRequest>> GetReceivedRequests(int id);
         Task<List<FriendRequest>> GetSentRequests(int id);
         Task<FriendRequest> GetRequestById(int senderId, int receiverId);
