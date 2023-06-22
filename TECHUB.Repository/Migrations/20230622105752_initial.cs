@@ -18,7 +18,8 @@ namespace TECHUB.Repository.Migrations
                     ChatId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ChatName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TimeCreated = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    LastMessageSent = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsPrivate = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

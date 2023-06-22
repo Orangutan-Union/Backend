@@ -64,7 +64,10 @@ namespace TECHUB.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("TimeCreated")
+                    b.Property<bool>("IsPrivate")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastMessageSent")
                         .HasColumnType("datetime2");
 
                     b.HasKey("ChatId");

@@ -12,7 +12,9 @@ using TECHUB.Repository.Context;
 namespace TECHUB.Repository.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230616085523_initial")]
+
+    [Migration("20230622105752_initial")]
+
     partial class initial
     {
         /// <inheritdoc />
@@ -67,7 +69,10 @@ namespace TECHUB.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("TimeCreated")
+                    b.Property<bool>("IsPrivate")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastMessageSent")
                         .HasColumnType("datetime2");
 
                     b.HasKey("ChatId");

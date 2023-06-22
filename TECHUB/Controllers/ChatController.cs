@@ -23,6 +23,7 @@ namespace TECHUB.API.Controllers
                 {
                     ChatId = c.ChatId,
                     ChatName = c.ChatName,
+                    IsPrivate = c.IsPrivate,
                     Messages = c.Messages.Select(m => new
                     {
                         MessageId = m.MessageId,
@@ -67,18 +68,25 @@ namespace TECHUB.API.Controllers
                     {
                         ChatId = c.ChatId,
                         ChatName = c.ChatName,
-                        TimeCreated = c.TimeCreated,
-                    }).OrderByDescending(c => c.TimeCreated)
+                        LastMessageSent = c.LastMessageSent,
+                        IsPrivate = c.IsPrivate,
+                    }).OrderByDescending(c => c.LastMessageSent)
                     .ToList(),
                 }).FirstOrDefaultAsync(u => u.UserId == id);
 
             return Ok(user.Chats);
         }
 
-        [HttpPost("{id:int}")]
-        public async Task<IActionResult> CreateChat(int id, Chat chat)
+        [HttpPost("Group")]
+        public async Task<IActionResult> CreateChat(Chat chat)
         {
-            return Ok(await service.CreateChat(chat, id));
+            return Ok(await service.CreateChat(chat));
+        }
+
+        [HttpPost("Private")]
+        public async Task<IActionResult> CreatePrivateChat(int senderId, int reciverId)
+        {
+            return Ok(await service.CreatePrivateChat(senderId, reciverId));
         }
 
         [HttpPut("AddUser/{userId:int}/{chatId:int}")]
