@@ -35,6 +35,7 @@ namespace TECHUB.Repository.Context
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            
 
             modelBuilder.Entity<FriendFollower>(entity =>
             {
@@ -66,22 +67,16 @@ namespace TECHUB.Repository.Context
                 .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
-            modelBuilder.Entity<User>(entity =>
-            {
-                entity.HasOne(u => u.Picture)
-                .WithMany(p => p.User)
-                .HasForeignKey(u => u.ProfilePictureId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
-            });
+            modelBuilder.Entity<GroupUser>()
+                .HasKey(x => new { x.UserId, x.GroupId });
 
             modelBuilder.Entity<Like>(entity =>
             {
                 entity.HasKey(l => l.LikeId);
 
-                entity.HasOne(x => x.User)
-                .WithMany(x => x.Likes)
-                .HasForeignKey(x => x.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                entity.HasOne(l => l.User)
+                .WithMany(u => u.Likes)
+                .HasForeignKey(u => u.UserId);
 
                 entity.HasOne(x => x.Post)
                 .WithMany(x => x.Likes)
@@ -96,8 +91,21 @@ namespace TECHUB.Repository.Context
                 .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
-            modelBuilder.Entity<GroupUser>()
-                .HasKey(x => new { x.UserId, x.GroupId });
+            modelBuilder.Entity<Post>(entity =>
+            {
+                entity.HasOne(p => p.User)
+                .WithMany(u => u.Posts)
+                .HasForeignKey(u => u.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+            });
+
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasOne(u => u.Picture)
+                .WithMany(p => p.User)
+                .HasForeignKey(u => u.ProfilePictureId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+            });
         }
     }
 }

@@ -14,6 +14,14 @@ namespace TECHUB.Repository.Repositories
             this.context = context;
         }
 
+        public async Task<List<FriendRequest>> GetReceivedAndSentRequests(int id)
+        {
+            return await context.FriendRequests
+                .Include(x => x.Sender)
+                .ThenInclude(s => s!.Picture)
+                .Where(x => x.ReceiverId == id || x.SenderId == id).OrderByDescending(x => x.DateSent).ToListAsync();
+        }
+
         public async Task<List<FriendRequest>> GetReceivedRequests(int id)
         {
             return await context.FriendRequests

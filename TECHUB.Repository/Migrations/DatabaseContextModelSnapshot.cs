@@ -87,7 +87,7 @@ namespace TECHUB.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("PostId")
+                    b.Property<int>("PostId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("TimeStamp")
@@ -237,16 +237,10 @@ namespace TECHUB.Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Latitude")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Longtitude")
-                        .HasColumnType("float");
-
                     b.Property<DateTime>("TimeStamp")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("MessageId");
@@ -291,9 +285,6 @@ namespace TECHUB.Repository.Migrations
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("FriendOnly")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("GroupId")
                         .HasColumnType("int");
@@ -397,7 +388,9 @@ namespace TECHUB.Repository.Migrations
                 {
                     b.HasOne("TECHUB.Repository.Models.Post", "Post")
                         .WithMany("Comments")
-                        .HasForeignKey("PostId");
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("TECHUB.Repository.Models.User", "User")
                         .WithMany("Comments")
@@ -485,6 +478,7 @@ namespace TECHUB.Repository.Migrations
                     b.HasOne("TECHUB.Repository.Models.User", "User")
                         .WithMany("Likes")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Comment");
@@ -504,9 +498,7 @@ namespace TECHUB.Repository.Migrations
 
                     b.HasOne("TECHUB.Repository.Models.User", "User")
                         .WithMany("Messages")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Chat");
 
@@ -522,7 +514,6 @@ namespace TECHUB.Repository.Migrations
                     b.HasOne("TECHUB.Repository.Models.User", "User")
                         .WithMany("Posts")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Group");

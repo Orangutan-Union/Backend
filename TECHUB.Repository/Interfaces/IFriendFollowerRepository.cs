@@ -6,6 +6,7 @@ namespace TECHUB.Repository.Interfaces
     {
         Task<List<FriendFollower>> GetUserFriends(int id);
         Task<List<FriendFollower>> GetUserFollowers(int id);
+        Task<List<FriendFollower>> GetBlockedUsers(int id);
         Task<List<FriendFollower>> GetUserFriendsFollowers(int id);
         Task<FriendFollower> AddFriendFollower(FriendFollower ff);
         Task<FriendFollower> UpdateFriendFollower(FriendFollower ff);

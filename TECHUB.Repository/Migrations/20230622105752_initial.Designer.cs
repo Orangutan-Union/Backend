@@ -12,7 +12,11 @@ using TECHUB.Repository.Context;
 namespace TECHUB.Repository.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
+<<<<<<<< HEAD:TECHUB.Repository/Migrations/20230622105752_initial.Designer.cs
     [Migration("20230622105752_initial")]
+========
+    [Migration("20230616085523_initial")]
+>>>>>>>> master:TECHUB.Repository/Migrations/20230616085523_initial.Designer.cs
     partial class initial
     {
         /// <inheritdoc />

@@ -8,11 +8,11 @@ namespace TECHUB.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MeassageController: ControllerBase
+    public class MessageController: ControllerBase
     {
         private readonly IMessageService service;
         private readonly DatabaseContext context;
-        public MeassageController(IMessageService service, DatabaseContext context) { this.service = service; this.context = context; }
+        public MessageController(IMessageService service, DatabaseContext context) { this.service = service; this.context = context; }
 
 
         [HttpPost]
