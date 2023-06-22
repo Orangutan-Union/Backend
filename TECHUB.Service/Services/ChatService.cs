@@ -9,14 +9,11 @@ namespace TECHUB.Service.Services
         private readonly IChatRepository repo;
         private readonly IUserRepository userRepo;
         public ChatService(IChatRepository repo, IUserRepository userRepo) { this.repo = repo; this.userRepo = userRepo; }
-        public async Task<Chat> CreateChat(Chat chat, int id)
+        public async Task<Chat> CreateChat(Chat chat)
         {
-            Chat newChat = new Chat();
-            newChat = chat;
-            newChat.TimeCreated = DateTime.Now;
-            newChat.Users.Add(await userRepo.GetUserById(id));
+            chat.LastMessageSent = DateTime.Now;
 
-            return await repo.AddChat(newChat);
+            return await repo.AddChat(chat);
         }
 
         public async Task<Chat> AddUserToChat(int userId, int chatId)
