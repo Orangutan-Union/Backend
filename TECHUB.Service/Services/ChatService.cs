@@ -12,6 +12,21 @@ namespace TECHUB.Service.Services
         public async Task<Chat> CreateChat(Chat chat)
         {
             chat.LastMessageSent = DateTime.Now;
+            chat.IsPrivate = false;
+
+            return await repo.AddChat(chat);
+        }
+
+        public async Task<Chat> CreatePrivateChat(int senderId, int receiverId)
+        {
+            Chat chat = new Chat();
+            User sender = await userRepo.GetUserById(senderId);
+            User receiver = await userRepo.GetUserById(receiverId);
+
+            chat.ChatName = sender.DisplayName + " & " + receiver.DisplayName;
+            chat.IsPrivate = true;
+            chat.Users.Add(sender);
+            chat.Users.Add(receiver);
 
             return await repo.AddChat(chat);
         }

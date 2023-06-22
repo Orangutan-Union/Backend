@@ -7,11 +7,13 @@ namespace TECHUB.Service.Services
 {
     public class FriendFollowerService : IFriendFollowerService
     {
+        private readonly IChatService chatService;
         private readonly IFriendFollowerRepository repo;
         private readonly IFriendRequestRepository requestRepository;
 
-        public FriendFollowerService(IFriendFollowerRepository repo, IFriendRequestRepository requestRepository)
+        public FriendFollowerService(IFriendFollowerRepository repo, IFriendRequestRepository requestRepository, IChatService chatService)
         {
+            this.chatService = chatService;
             this.repo = repo;
             this.requestRepository = requestRepository;
         }
@@ -59,7 +61,9 @@ namespace TECHUB.Service.Services
                 OtherUserId = request.ReceiverId,
                 Date = DateTime.Now,
                 Type = 1
-            };
+            };            
+
+            await chatService.CreatePrivateChat(request.SenderId, request.ReceiverId);
 
             return await repo.AddFriendFollower(friendFollower);
         }
