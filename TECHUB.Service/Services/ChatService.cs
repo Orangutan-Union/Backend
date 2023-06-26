@@ -17,6 +17,7 @@ namespace TECHUB.Service.Services
             return await repo.AddChat(chat);
         }
 
+
         public async Task<Chat> CreatePrivateChat(int senderId, int receiverId)
         {
             Chat chat = new Chat();
