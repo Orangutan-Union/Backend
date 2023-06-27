@@ -95,7 +95,7 @@ namespace TECHUB.API.Controllers
             return Ok(await service.LeaveChat(userId, chatId));
         }
 
-        [HttpPut("Update/{id:int}")]
+        [HttpPut("Update")]
         public async Task<IActionResult> UpdateChat(Chat chat)
         {
             return Ok(await service.UpdateChat(chat));
