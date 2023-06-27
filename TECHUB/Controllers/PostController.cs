@@ -161,7 +161,7 @@ namespace TECHUB.API.Controllers
         public async Task<IActionResult> GetUserFeed(int id)
         {
             var friendFollower = await context.FriendFollowers
-                .Where(ff => ff.Type != 3 && ff.UserId == id || ff.Type != 3 && ff.OtherUserId == id)
+                .Where(ff => ff.Type != 3 && ff.UserId == id || ff.Type == 1 && ff.OtherUserId == id)
                 .Select(ff => new
                 {
                     UserId = ff.UserId,
@@ -247,7 +247,7 @@ namespace TECHUB.API.Controllers
         public async Task<IActionResult> GetUserFollowerFeed(int id)
         {
             var friendFollower = await context.FriendFollowers
-                .Where(ff => ff.Type == 2 && ff.UserId == id || ff.Type == 2 && ff.OtherUserId == id)
+                .Where(ff => ff.Type == 2 && ff.UserId == id)
                 .Select(ff => new
                 {
                     UserId = ff.UserId,
