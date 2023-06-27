@@ -4,7 +4,7 @@ namespace TECHUB.Service.Interfaces
 {
     public interface IChatService
     {
-        Task<Chat> CreateChat(Chat chat);
+        Task<Chat> CreateChat(Chat chat, int id);
         Task<Chat> CreatePrivateChat(int senderId, int receiverId);
         Task<Chat> AddUserToChat(int userId, int chatId);
         Task<Chat> LeaveChat(int userId, int chatId);
