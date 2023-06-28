@@ -416,9 +416,17 @@ namespace TECHUB.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddPost(AddPostViewModel post)
+        public async Task<IActionResult> AddPost()
         {
-            return Ok(await service.AddPost(post));
+            if (Request.Form is null)
+            {
+                return BadRequest("FormData is null, how did you manage that??");
+            }
+            var formData = Request.Form;
+
+            var gew = await service.AddPost(formData);
+            return Ok(gew);
+            //return Ok(await service.AddPost(post));
         }
 
         [HttpDelete("{id:int}")]

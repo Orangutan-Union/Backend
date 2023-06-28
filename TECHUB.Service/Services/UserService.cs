@@ -152,7 +152,7 @@ namespace TECHUB.Service.Services
                 return null!;
             }
 
-            var result = await photoService.UploadPhotoAsync(file, user.Picture.PublicId!);
+            var result = await photoService.UploadPhotoAsync(file);
             if (result.Error is not null)
             {
                 return null!;
