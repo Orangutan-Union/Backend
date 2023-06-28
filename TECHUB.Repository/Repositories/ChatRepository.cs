@@ -27,7 +27,11 @@ namespace TECHUB.Repository.Repositories
         {
             var chat = await context.Chats.Include(c => c.Users).FirstOrDefaultAsync(c => c.ChatId == chatId);
             var user = chat.Users.FirstOrDefault(x => x.UserId == userId);
-            if (chat.Users.Count == 1)
+            if (chat.IsPrivate == true)
+            {
+                return null;
+            }
+            else if (chat.Users.Count == 1)
             {
                 context.Chats.Remove(chat);
             }
