@@ -12,7 +12,7 @@ namespace TECHUB.Repository.Repositories
         public ChatRepository(DatabaseContext context) { this.context = context; }
         public async Task<Chat> AddChat(Chat chat)
         {
-            context.Chats.Add(chat);            
+            context.Chats.Add(chat);
             await context.SaveChangesAsync();
 
             return chat;
@@ -23,25 +23,30 @@ namespace TECHUB.Repository.Repositories
             return await context.Chats.Include(c => c.Users).FirstOrDefaultAsync(c => c.ChatId == id);
         }
 
-        public async Task<Chat> LeaveChat(int chatId, int userId)
+        public async Task<Chat> LeaveChat(int userId, int chatId)
         {
             var chat = await context.Chats.Include(c => c.Users).FirstOrDefaultAsync(c => c.ChatId == chatId);
-            if (chat.Users.Count == 1)
+            var user = chat.Users.FirstOrDefault(x => x.UserId == userId);
+            if (chat.IsPrivate == true)
+            {
+                return null;
+            }
+            else if (chat.Users.Count == 1)
             {
                 context.Chats.Remove(chat);
             }
             else if (chat.Users.Count > 1)
             {
-               foreach(var user in chat.Users)
+                if (user is null)
                 {
-                    if(user.UserId == userId)
-                    {
-                        chat.Users.Remove(user);
-                        context.Entry(chat).State = EntityState.Modified;
-                    }
+                    return null;
                 }
+
+                chat.Users.Remove(user);
+
+                context.Entry(chat).State = EntityState.Modified;
             }
-            
+
             await context.SaveChangesAsync();
             return chat;
         }
