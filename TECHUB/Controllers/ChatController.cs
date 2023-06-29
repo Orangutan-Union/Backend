@@ -83,10 +83,10 @@ namespace TECHUB.API.Controllers
             return Ok(await service.CreateChat(chat, userId));
         }
 
-        [HttpPut("AddUser/{userId:int}/{chatId:int}")]
-        public async Task<IActionResult> AddUserToChat(int userId, int chatId)
+        [HttpPut("AddUser")]
+        public async Task<IActionResult> AddUserToChat(Chat chat)
         {
-            return Ok(await service.AddUserToChat(userId, chatId));
+            return Ok(await service.AddUserToChat(chat));
         }
 
         [HttpPut("Leave/{userId:int}/{chatId:int}")]
