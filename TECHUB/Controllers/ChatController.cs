@@ -86,6 +86,8 @@ namespace TECHUB.API.Controllers
         [HttpPut("AddUser")]
         public async Task<IActionResult> AddUserToChat(Chat chat)
         {
+            chat.LastMessageSent = DateTime.Now;
+
             return Ok(await service.AddUserToChat(chat));
         }
 
@@ -98,6 +100,8 @@ namespace TECHUB.API.Controllers
         [HttpPut("Update")]
         public async Task<IActionResult> UpdateChat(Chat chat)
         {
+            chat.LastMessageSent = DateTime.Now;
+
             return Ok(await service.UpdateChat(chat));
         }
     }
