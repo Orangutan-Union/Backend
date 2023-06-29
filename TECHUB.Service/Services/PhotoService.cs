@@ -29,7 +29,7 @@ namespace TECHUB.Service.Services
             return result;
         }
 
-        public async Task<ImageUploadResult> UploadPhotoAsync(IFormFile photo, string publicId)
+        public async Task<ImageUploadResult> UploadPhotoAsync(IFormFile photo)
         {
             var uploadResult = new ImageUploadResult();
             if (photo.Length > 0)

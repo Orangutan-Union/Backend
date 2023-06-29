@@ -55,7 +55,14 @@ namespace TECHUB.API.Controllers
                         {
                             UserId = pl.User.UserId,
                             DisplayName = pl.User.DisplayName,
-                        }
+                        },
+                    }).ToList(),
+                    Pictures = p.Pictures.Select(pic => new
+                    {
+                        PictureId = pic.PictureId,
+                        PublicId = pic.PublicId,
+                        ImageName = pic.ImageName,
+                        ImageUrl = pic.ImageUrl,
                     }).ToList(),
                     Comments = p.Comments.Select(pc => new
                     {
@@ -149,6 +156,8 @@ namespace TECHUB.API.Controllers
                     {
                         PictureId = p.PictureId,
                         ImageUrl = p.ImageUrl,
+                        PublicId = p.PublicId,
+                        ImageName = p.ImageName,
                     }).ToList()
                 })
                 .OrderByDescending(p => p.TimeStamp)
@@ -161,7 +170,7 @@ namespace TECHUB.API.Controllers
         public async Task<IActionResult> GetUserFeed(int id)
         {
             var friendFollower = await context.FriendFollowers
-                .Where(ff => ff.Type != 3 && ff.UserId == id || ff.Type != 3 && ff.OtherUserId == id)
+                .Where(ff => ff.Type != 3 && ff.UserId == id || ff.Type == 1 && ff.OtherUserId == id)
                 .Select(ff => new
                 {
                     UserId = ff.UserId,
@@ -232,6 +241,13 @@ namespace TECHUB.API.Controllers
                             UserId = pl.User.UserId,
                             DisplayName = pl.User.DisplayName,
                         }
+                    }).ToList(),
+                    Pictures = p.Pictures.Select(pic => new
+                    {
+                        PictureId = pic.PictureId,
+                        PublicId = pic.PublicId,
+                        ImageName = pic.ImageName,
+                        ImageUrl = pic.ImageUrl,
                     }).ToList(),
                     Comments = p.Comments.Select(c => new
                     {
@@ -247,7 +263,7 @@ namespace TECHUB.API.Controllers
         public async Task<IActionResult> GetUserFollowerFeed(int id)
         {
             var friendFollower = await context.FriendFollowers
-                .Where(ff => ff.Type == 2 && ff.UserId == id || ff.Type == 2 && ff.OtherUserId == id)
+                .Where(ff => ff.Type == 2 && ff.UserId == id)
                 .Select(ff => new
                 {
                     UserId = ff.UserId,
@@ -318,6 +334,13 @@ namespace TECHUB.API.Controllers
                             UserId = pl.User.UserId,
                             DisplayName = pl.User.DisplayName,
                         }
+                    }).ToList(),
+                    Pictures = p.Pictures.Select(pic => new
+                    {
+                        PictureId = pic.PictureId,
+                        PublicId = pic.PublicId,
+                        ImageName = pic.ImageName,
+                        ImageUrl = pic.ImageUrl,
                     }).ToList(),
                     Comments = p.Comments.Select(c => new
                     {
@@ -405,6 +428,13 @@ namespace TECHUB.API.Controllers
                             DisplayName = pl.User.DisplayName,
                         }
                     }).ToList(),
+                    Pictures = p.Pictures.Select(pic => new
+                    {
+                        PictureId = pic.PictureId,
+                        PublicId = pic.PublicId,
+                        ImageName = pic.ImageName,
+                        ImageUrl = pic.ImageUrl,
+                    }).ToList(),
                     Comments = p.Comments.Select(c => new
                     {
                         CommentId = c.CommentId,
@@ -416,9 +446,20 @@ namespace TECHUB.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddPost(AddPostViewModel post)
+        public async Task<IActionResult> AddPost()
         {
-            return Ok(await service.AddPost(post));
+            if (Request.Form is null)
+            {
+                return BadRequest("FormData is null, how did you manage that??");
+            }
+            var formData = Request.Form;
+
+            var gew = await service.AddPost(formData);
+            if (gew is null)
+            {
+                return BadRequest("Something terrible has happened and I don't know why");
+            }
+            return Ok(gew);
         }
 
         [HttpDelete("{id:int}")]

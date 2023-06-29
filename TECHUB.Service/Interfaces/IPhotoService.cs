@@ -6,6 +6,6 @@ namespace TECHUB.Service.Interfaces
     public interface IPhotoService
     {
         Task<DeletionResult> DeletePhotoAsync(string publicId);
-        Task<ImageUploadResult> UploadPhotoAsync(IFormFile photo, string publicId);
+        Task<ImageUploadResult> UploadPhotoAsync(IFormFile photo);
     }
 }
