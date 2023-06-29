@@ -96,6 +96,7 @@ namespace TECHUB.Service.Services
 
             ff.Type = 2;
             ff.Date = DateTime.Now;
+            ff.User = null;
 
             return await repo.AddFriendFollower(ff);
         }
