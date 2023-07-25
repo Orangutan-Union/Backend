@@ -112,7 +112,7 @@ namespace TECHUB.API.Controllers
                 return BadRequest($"Something went wrong when trying to upload the image for user with ID = {id}");
             }
 
-            return Ok();
+            return Ok(user);
         }
 
         [HttpPut("changepassword"), Authorize]
