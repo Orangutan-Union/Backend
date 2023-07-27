@@ -5,6 +5,7 @@ namespace TECHUB.Service.Interfaces
 {
     public interface IFriendRequestService
     {
+        Task<List<FriendRequest>> GetAllRequests(int id);
         Task<List<FriendRequest>> GetReceivedRequests(int id);
         Task<List<FriendRequest>> GetSentRequests(int id);
         Task<FriendRequest> SendFriendRequest(FriendRequestViewModel request);

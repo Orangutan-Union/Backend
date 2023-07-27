@@ -14,7 +14,7 @@ namespace TECHUB.Repository.Repositories
             this.context = context;
         }
 
-        public async Task<List<FriendRequest>> GetReceivedAndSentRequests(int id)
+        public async Task<List<FriendRequest>> GetAllRequests(int id)
         {
             return await context.FriendRequests
                 .Include(x => x.Sender)

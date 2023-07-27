@@ -16,6 +16,11 @@ namespace TECHUB.Service.Services
             this.ffService = ffService;
         }
 
+        public async Task<List<FriendRequest>> GetAllRequests(int id)
+        {
+            return await repo.GetAllRequests(id);
+        }
+
         public async Task<List<FriendRequest>> GetReceivedRequests(int id)
         {
             return await repo.GetReceivedRequests(id);

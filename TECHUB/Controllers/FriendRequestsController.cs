@@ -27,6 +27,12 @@ namespace TECHUB.API.Controllers
             return Ok(await service.GetSentRequests(id));
         }
 
+        [HttpGet("all/{id:int}")]
+        public async Task<IActionResult> GetAllRequests(int id)
+        {
+            return Ok(await service.GetAllRequests(id));
+        }
+
         [HttpPost]
         public async Task<IActionResult> SendFriendRequest(FriendRequestViewModel viewmodel)
         {
