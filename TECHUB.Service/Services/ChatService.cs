@@ -37,7 +37,7 @@ namespace TECHUB.Service.Services
 
         public async Task<Chat> AddUserToChat(Chat chat)
         {
-            return await repo.UpdateChat(chat);
+            return await repo.AddUserToChat(chat);
         }
 
         public async Task<Chat> LeaveChat(int userId, int chatId)

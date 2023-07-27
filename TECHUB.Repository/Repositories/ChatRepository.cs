@@ -23,6 +23,22 @@ namespace TECHUB.Repository.Repositories
             return await context.Chats.Include(c => c.Users).FirstOrDefaultAsync(c => c.ChatId == id);
         }
 
+        public async Task<Chat> AddUserToChat(Chat chat)
+        {
+            var oldChat = await context.Chats.Include(c => c.Users).FirstOrDefaultAsync(c => c.ChatId == chat.ChatId);
+            foreach (var user in chat.Users)
+            {
+                if (!oldChat.Users.Any(x => x.UserId == user.UserId))
+                {
+                    var finduser = await context.Users.FirstOrDefaultAsync(x => x.UserId == user.UserId);
+                    oldChat.Users.Add(finduser);
+                }
+            }
+            //context.Entry(oldChat).State = EntityState.Modified;
+            await context.SaveChangesAsync();
+            return chat;
+        }
+
         public async Task<Chat> LeaveChat(int userId, int chatId)
         {
             var chat = await context.Chats.Include(c => c.Users).FirstOrDefaultAsync(c => c.ChatId == chatId);
@@ -52,7 +68,7 @@ namespace TECHUB.Repository.Repositories
         }
 
         public async Task<Chat> UpdateChat(Chat chat)
-        {
+        {            
             context.Entry(chat).State = EntityState.Modified;
             await context.SaveChangesAsync();
             return chat;
