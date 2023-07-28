@@ -18,6 +18,8 @@ namespace TECHUB.Repository.Repositories
         {
             return await context.FriendRequests
                 .Include(x => x.Sender)
+                .ThenInclude(x => x!.Picture)
+                .Include(x => x.Receiver)
                 .ThenInclude(s => s!.Picture)
                 .Where(x => x.ReceiverId == id || x.SenderId == id).OrderByDescending(x => x.DateSent).ToListAsync();
         }
