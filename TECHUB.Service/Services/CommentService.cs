@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TECHUB.Repository.Interfaces;
+﻿using TECHUB.Repository.Interfaces;
 using TECHUB.Repository.Models;
 using TECHUB.Service.Interfaces;
 
