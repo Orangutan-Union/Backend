@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using TECHUB.Repository.Context;
 using TECHUB.Repository.Models;
 using TECHUB.Service.Interfaces;
-using TECHUB.Service.ViewModels;
 
 namespace TECHUB.API.Controllers
 {
