@@ -14,7 +14,6 @@ namespace TECHUB.API.Controllers
         private readonly DatabaseContext context;
         public ChatController(IChatService service, DatabaseContext context) { this.service = service; this.context = context; }
 
-
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetChatMessages(int id)
         {
