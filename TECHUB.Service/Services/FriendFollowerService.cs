@@ -111,7 +111,7 @@ namespace TECHUB.Service.Services
             }
 
             // Delete FriendRequest between the 2 users if there is one.
-            var tt = await requestRepository.GetReceivedAndSentRequests(userid);
+            var tt = await requestRepository.GetAllRequests(userid);
             var friendRequest = tt.FirstOrDefault(x => x.SenderId == targetuserid || x.ReceiverId == targetuserid);
             if (friendRequest is not null)
             {
