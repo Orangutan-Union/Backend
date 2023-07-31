@@ -1,8 +1,8 @@
 ﻿using TECHUB.Repository.Models;
 
-namespace TECHUB.Repository.Interfaces
+namespace TECHUB.Service.Interfaces
 {
-    public interface IGroupUserRepository
+    public interface IGroupUserService
     {
         public Task<GroupUser> AddGroupUser(GroupUser groupUser);
         public Task<GroupUser> UpdateGroupUser(GroupUser groupUser);
