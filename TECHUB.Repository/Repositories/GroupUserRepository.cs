@@ -12,6 +12,7 @@ namespace TECHUB.Repository.Repositories
 
         public async Task<GroupUser> AddGroupUser(GroupUser groupUser)
         {
+            groupUser.Type = 3;
             context.GroupUsers.Add(groupUser);
             await context.SaveChangesAsync();
 
