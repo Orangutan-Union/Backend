@@ -12,6 +12,7 @@ namespace TECHUB.Repository.Repositories
 
         public async Task<GroupUser> AddGroupUser(GroupUser groupUser)
         {
+            groupUser.Type = 3;
             context.GroupUsers.Add(groupUser);
             await context.SaveChangesAsync();
 
@@ -30,6 +31,11 @@ namespace TECHUB.Repository.Repositories
             }
 
             return groupUser;
+        }
+
+        public async Task<GroupUser> GetGroupUser(int userId, int groupId)
+        {
+            return await context.GroupUsers.FirstOrDefaultAsync(gu => gu.UserId == userId & gu.GroupId == groupId);
         }
 
         public async Task<GroupUser> UpdateGroupUser(GroupUser groupUser)

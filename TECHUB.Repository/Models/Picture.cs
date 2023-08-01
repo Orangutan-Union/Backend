@@ -8,7 +8,7 @@
         public string? ImageUrl { get; set; } = string.Empty;
 
         public virtual List<User> User { get; set; } = new List<User>();
-        public virtual Group? Group { get; set; }
+        public virtual List<Group> Group { get; set; } = new List<Group>();
         public virtual List<Post> Posts { get; set; } = new List<Post>();
     }
 }

@@ -20,6 +20,7 @@ namespace TECHUB.Repository.Context
         public DbSet<FriendRequest> FriendRequests { get; set; }
         public DbSet<Group> Groups { get; set; }
         public DbSet<GroupUser> GroupUsers { get; set; }
+        public DbSet<GroupRequest> GroupRequests { get; set; }
         public DbSet<Like> Likes { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Picture> Pictures { get; set; }
@@ -67,8 +68,15 @@ namespace TECHUB.Repository.Context
                 .OnDelete(DeleteBehavior.ClientSetNull);
             });
 
-            modelBuilder.Entity<GroupUser>()
-                .HasKey(x => new { x.UserId, x.GroupId });
+            modelBuilder.Entity<GroupRequest>(entity =>
+            {
+                entity.HasKey(x => new { x.UserId, x.GroupId });
+            });
+
+            modelBuilder.Entity<GroupUser>(entity =>
+            {
+                entity.HasKey(x => new { x.UserId, x.GroupId });
+            });                
 
             modelBuilder.Entity<Like>(entity =>
             {

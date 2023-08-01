@@ -9,6 +9,7 @@
         public byte[] PasswordSalt { get; set; } = new byte[32];
         public string Email { get; set; } = string.Empty;
         public string DisplayName { get; set; } = string.Empty;
+        public string BannerUrl { get; set; } = string.Empty;
         public string? RefreshToken { get; set; }
         public DateTime RefreshTokenExpiryTime { get; set; }
 
@@ -22,6 +23,7 @@
         public virtual List<FriendRequest> ReceivedFriendRequests { get; set; } = new List<FriendRequest>();
         public virtual List<FriendFollower> UserFriendFollowers { get; set; } = new List<FriendFollower>();
         public virtual List<FriendFollower> OtherUserFriendFollowers { get; set; } = new List<FriendFollower>();
+        public virtual List<GroupRequest> GroupsRequests { get; set; } = new List<GroupRequest>();
         public virtual List<GroupUser> GroupUsers { get; set; } = new List<GroupUser>();
         public virtual List<Chat> Chats { get; set; } = new List<Chat>();
         public virtual List<Message> Messages { get; set; } = new List<Message>();

@@ -10,32 +10,46 @@ namespace TECHUB.Repository.Repositories
         private readonly DatabaseContext context;
         public GroupRequestRepository(DatabaseContext context) { this.context = context; }
 
-        public async Task<List<GroupUser>> GetGroupsRequests(int id)
+        public async Task<GroupRequest> GetGroupJoinRequest(GroupRequest groupRequest)
         {
-            return await context.GroupUsers.Where(gu => gu.GroupId == id).Include(gu => gu.Group).ToListAsync();
+            var oldGroupRequest = await context.GroupRequests
+                .FirstOrDefaultAsync(gr => gr.GroupId == groupRequest.GroupId & gr.UserId == groupRequest.UserId);
+
+            return oldGroupRequest;
         }
 
-        public async Task<List<GroupUser>> GetUsersRequest(int id)
+        public async Task<List<GroupRequest>> GetGroupsJoinRequests(int id, int type)
         {
-            return await context.GroupUsers.Where(gu => gu.UserId == id).Include(gu => gu.User).ToListAsync();
+            return await context.GroupRequests
+                .Where(gr => gr.GroupId == id & gr.Type == type)
+                .Include(gr => gr.User).ToListAsync();
         }
 
-        public async Task<GroupUser> AddGroupInvitation(GroupUser groupUser)
+        public async Task<List<GroupRequest>> GetUsersJoinRequests(int id, int type)
         {
-            context.Add(groupUser);
+            return await context.GroupRequests
+                .Where(gr => gr.UserId == id & gr.Type == type)
+                .Include(gr => gr.Group).ToListAsync();
+        }
+
+        public async Task<GroupRequest> AddGroupRequest(GroupRequest groupRequest)
+        {
+            context.GroupRequests.Add(groupRequest);
             await context.SaveChangesAsync();
 
-            return groupUser;
+            return groupRequest;
         }
 
-        public Task<List<GroupRequest>> GetGroupsJoinRequests(int groupId, int type)
+        public async Task<GroupRequest> DeleteGroupRequest(GroupRequest group)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<List<GroupRequest>> GetUsersJoinRequests(int userId, int type)
-        {
-            throw new NotImplementedException();
+            var groupRequest = await context.GroupRequests.FirstOrDefaultAsync(gr => gr.GroupId == group.GroupId && gr.UserId == group.UserId);
+            
+            if (groupRequest != null)
+            {
+                context.GroupRequests.Remove(group);
+                await context.SaveChangesAsync();
+            }
+            return groupRequest;
         }
     }
 }
