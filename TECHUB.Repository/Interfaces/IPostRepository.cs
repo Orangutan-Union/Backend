@@ -4,8 +4,8 @@ namespace TECHUB.Repository.Interfaces
 {
     public interface IPostRepository
     {
-        public Task<Post> CreatePost(Post post);
-        public Task<Post> UpdatePost(Post post);
-        public Task<Post> DeletePost(int id);
+        Task<Post> CreatePost(Post post);
+        Task<Post> UpdatePost(Post post);
+        Task<Post> DeletePost(int id);
     }
 }

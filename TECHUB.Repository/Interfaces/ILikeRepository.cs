@@ -9,9 +9,9 @@ namespace TECHUB.Repository.Interfaces
 {
     public interface ILikeRepository
     {
-        public Task<Like> GetLike(Like like);
-        public Task<Like> AddLike(Like like);
-        public Task<Like> UpdateLike(Like like);
-        public Task<Like> DeleteLike(int id);
+        Task<Like> GetLike(Like like);
+        Task<Like> AddLike(Like like);
+        Task<Like> UpdateLike(Like like);
+        Task<Like> DeleteLike(int id);
     }
 }

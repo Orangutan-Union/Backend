@@ -4,9 +4,9 @@ namespace TECHUB.Repository.Interfaces
 {
     public interface IGroupUserRepository
     {
-        public Task<GroupUser> GetGroupUser(int userId, int groupId);
-        public Task<GroupUser> AddGroupUser(GroupUser groupUser);
-        public Task<GroupUser> UpdateGroupUser(GroupUser groupUser);
-        public Task<GroupUser> DeleteGroupUser(int id);
+        Task<GroupUser> GetGroupUser(int userId, int groupId);
+        Task<GroupUser> AddGroupUser(GroupUser groupUser);
+        Task<GroupUser> UpdateGroupUser(GroupUser groupUser);
+        Task<GroupUser> DeleteGroupUser(int id);
     }
 }

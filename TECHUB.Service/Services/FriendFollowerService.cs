@@ -39,7 +39,7 @@ namespace TECHUB.Service.Services
             {
                 return null;
             }
-                        
+
             var friendsFollowers = await repo.GetUserFriendsFollowers(request.SenderId);
 
             // Adds FriendFollower object(s) to a list for deletion if the 2 users are following each other or either of them follows the other.
@@ -61,9 +61,13 @@ namespace TECHUB.Service.Services
                 OtherUserId = request.ReceiverId,
                 Date = DateTime.Now,
                 Type = 1
-            };            
+            };
 
-            await chatService.CreatePrivateChat(request.SenderId, request.ReceiverId);
+            var oldChat = await chatService.GetChatByUsers(request.SenderId, request.ReceiverId);
+            if (oldChat == null)
+            {
+                await chatService.CreatePrivateChat(request.SenderId, request.ReceiverId);
+            }
 
             return await repo.AddFriendFollower(friendFollower);
         }
@@ -125,7 +129,7 @@ namespace TECHUB.Service.Services
                 {
                     UserId = userid,
                     OtherUserId = targetuserid,
-                    Date= DateTime.Now,
+                    Date = DateTime.Now,
                     Type = 3
                 };
 
