@@ -49,6 +49,7 @@ namespace TECHUB.Repository.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     PictureId = table.Column<int>(type: "int", nullable: true),
                     GroupName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BannerUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TimeCreated = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -73,6 +74,7 @@ namespace TECHUB.Repository.Migrations
                     PasswordSalt = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DisplayName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BannerUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -155,6 +157,31 @@ namespace TECHUB.Repository.Migrations
                         column: x => x.SenderId,
                         principalTable: "Users",
                         principalColumn: "UserId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "GroupRequests",
+                columns: table => new
+                {
+                    GroupId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GroupRequests", x => new { x.UserId, x.GroupId });
+                    table.ForeignKey(
+                        name: "FK_GroupRequests_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "GroupId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GroupRequests_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -348,11 +375,14 @@ namespace TECHUB.Repository.Migrations
                 column: "ReceiverId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_GroupRequests_GroupId",
+                table: "GroupRequests",
+                column: "GroupId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Groups_PictureId",
                 table: "Groups",
-                column: "PictureId",
-                unique: true,
-                filter: "[PictureId] IS NOT NULL");
+                column: "PictureId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GroupUsers_GroupId",
@@ -416,6 +446,9 @@ namespace TECHUB.Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "FriendRequests");
+
+            migrationBuilder.DropTable(
+                name: "GroupRequests");
 
             migrationBuilder.DropTable(
                 name: "GroupUsers");

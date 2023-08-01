@@ -19,6 +19,11 @@ namespace TECHUB.Service.Services
             return await repo.DeleteGroupUser(id);
         }
 
+        public async Task<GroupUser> GetGroupUser(int userId, int groupId)
+        {
+            return await repo.GetGroupUser(userId, groupId);
+        }
+
         public async Task<GroupUser> UpdateGroupUser(GroupUser groupUser)
         {
             return await repo.UpdateGroupUser(groupUser);

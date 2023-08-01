@@ -8,7 +8,8 @@ namespace TECHUB.Service.Services
     {
         private readonly IGroupRequestRepository repo;
         private readonly IGroupUserService groupUserService;
-        public GroupRequestService(IGroupRequestRepository repo) { this.repo = repo; }
+        public GroupRequestService(IGroupRequestRepository repo, IGroupUserService groupUserService)
+        { this.repo = repo; this.groupUserService = groupUserService; }
 
         public async Task<GroupRequest> AcceptGroupRequest(GroupRequest groupRequest)
         {
@@ -32,16 +33,24 @@ namespace TECHUB.Service.Services
 
         public async Task<GroupRequest> AddGroupRequest(GroupRequest groupRequest)
         {
+            var groupUser = await groupUserService.GetGroupUser(groupRequest.UserId, groupRequest.GroupId);
             var oldGroupRequest = await repo.GetGroupJoinRequest(groupRequest);
 
-            if (oldGroupRequest == null)
+            if (groupUser == null)
             {
-                return await repo.AddGroupRequest(groupRequest);
-            }
-            else if (groupRequest.UserId == oldGroupRequest.UserId & groupRequest.GroupId == oldGroupRequest.GroupId &
-                groupRequest.Type != groupRequest.Type)
-            {
-                return await AcceptGroupRequest(oldGroupRequest);
+                if (oldGroupRequest == null)
+                {
+                    return await repo.AddGroupRequest(groupRequest);
+                }
+                else if (groupRequest.UserId == oldGroupRequest.UserId & groupRequest.GroupId == oldGroupRequest.GroupId &
+                    groupRequest.Type != oldGroupRequest.Type)
+                {
+                    return await AcceptGroupRequest(oldGroupRequest);
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {

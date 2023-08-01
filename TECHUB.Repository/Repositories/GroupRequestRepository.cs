@@ -12,8 +12,10 @@ namespace TECHUB.Repository.Repositories
 
         public async Task<GroupRequest> GetGroupJoinRequest(GroupRequest groupRequest)
         {
-            return await context.GroupRequests
+            var oldGroupRequest = await context.GroupRequests
                 .FirstOrDefaultAsync(gr => gr.GroupId == groupRequest.GroupId & gr.UserId == groupRequest.UserId);
+
+            return oldGroupRequest;
         }
 
         public async Task<List<GroupRequest>> GetGroupsJoinRequests(int id, int type)
@@ -42,11 +44,11 @@ namespace TECHUB.Repository.Repositories
         {
             var groupRequest = await context.GroupRequests.FirstOrDefaultAsync(gr => gr.GroupId == group.GroupId && gr.UserId == group.UserId);
             
-            if (groupRequest == null)
+            if (groupRequest != null)
             {
                 context.GroupRequests.Remove(group);
                 await context.SaveChangesAsync();
-    }
+            }
             return groupRequest;
         }
     }

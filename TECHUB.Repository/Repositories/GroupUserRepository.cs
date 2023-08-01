@@ -33,6 +33,11 @@ namespace TECHUB.Repository.Repositories
             return groupUser;
         }
 
+        public async Task<GroupUser> GetGroupUser(int userId, int groupId)
+        {
+            return await context.GroupUsers.FirstOrDefaultAsync(gu => gu.UserId == userId & gu.GroupId == groupId);
+        }
+
         public async Task<GroupUser> UpdateGroupUser(GroupUser groupUser)
         {
             context.Entry(groupUser).State = EntityState.Modified;
