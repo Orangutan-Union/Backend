@@ -40,8 +40,8 @@ namespace TECHUB.Repository.Repositories
                         DisplayName = f.OtherUser.DisplayName,
                         Picture = new
                         {
-                            PictureId = f.User.Picture!.PictureId,
-                            ImageUrl = f.User.Picture.ImageUrl,
+                            PictureId = f.OtherUser.Picture!.PictureId,
+                            ImageUrl = f.OtherUser.Picture.ImageUrl,
                         }
                     },
                 })
@@ -81,7 +81,7 @@ namespace TECHUB.Repository.Repositories
             return friends;
         }
 
-        public async Task<List<FriendFollower>> GetUserFollowers(int id)
+        public async Task<List<FriendFollower>> GetUserFollowing(int id)
         {
             var result = await context.FriendFollowers
                 .Where(x => x.UserId == id && x.Type == 2 && x.OtherUserId != id)
@@ -107,8 +107,8 @@ namespace TECHUB.Repository.Repositories
                         DisplayName = f.OtherUser.DisplayName,
                         Picture = new
                         {
-                            PictureId = f.User.Picture!.PictureId,
-                            ImageUrl = f.User.Picture.ImageUrl,
+                            PictureId = f.OtherUser.Picture!.PictureId,
+                            ImageUrl = f.OtherUser.Picture.ImageUrl,
                         }
                     },
                 })
@@ -174,8 +174,8 @@ namespace TECHUB.Repository.Repositories
                         DisplayName = f.OtherUser.DisplayName,
                         Picture = new
                         {
-                            PictureId = f.User.Picture!.PictureId,
-                            ImageUrl = f.User.Picture.ImageUrl,
+                            PictureId = f.OtherUser.Picture!.PictureId,
+                            ImageUrl = f.OtherUser.Picture.ImageUrl,
                         }
                     },
                 })
