@@ -22,13 +22,22 @@ namespace TECHUB.Service.Services
         {
             return await repo.GetUserFriends(id);
         }
+        public async Task<List<FriendFollower>> GetUserFollower(int id)
+        {
+            return await repo.GetUserFollowing(id);
+        }
 
-        public async Task<List<FriendFollower>> GetUserFollowers(int id)
+        public async Task<List<FriendFollower>> GetUserFollowing(int id)
         {
             return await repo.GetUserFollowing(id);
         }
 
         public async Task<List<FriendFollower>> GetBlockedUsers(int id)
+        {
+            return await repo.GetBlockedUsers(id);
+        }
+
+        public async Task<List<FriendFollower>> GetBlockingUsers(int id)
         {
             return await repo.GetBlockedUsers(id);
         }

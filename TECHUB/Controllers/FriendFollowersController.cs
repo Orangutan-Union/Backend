@@ -24,13 +24,25 @@ namespace TECHUB.API.Controllers
         [HttpGet("{id:int}/followers")]
         public async Task<IActionResult> GetUserFollowers(int id)
         {
-            return Ok(await service.GetUserFollowers(id));
+            return Ok(await service.GetUserFollower(id));
+        }
+
+        [HttpGet("{id:int}/following")]
+        public async Task<IActionResult> GetUserFollowing(int id)
+        {
+            return Ok(await service.GetUserFollowing(id));
         }
 
         [HttpGet("{id:int}/blocked")]
         public async Task<IActionResult> GetBlockedUsers(int id)
         {
             return Ok(await service.GetBlockedUsers(id));
+        }
+
+        [HttpGet("{id:int}/blocking")]
+        public async Task<IActionResult> GetBlockingUsers(int id)
+        {
+            return Ok(await service.GetBlockingUsers(id));
         }
 
         [HttpPost("follow")]
