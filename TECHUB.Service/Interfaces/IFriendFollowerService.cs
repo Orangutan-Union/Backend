@@ -6,7 +6,7 @@ namespace TECHUB.Service.Interfaces
     public interface IFriendFollowerService
     {
         Task<List<FriendFollower>> GetUserFriends(int id);
-        Task<List<FriendFollower>> GetUserFollower(int id);
+        Task<List<FriendFollower>> GetUserFollowers(int id);
         Task<List<FriendFollower>> GetUserFollowing(int id);
         Task<List<FriendFollower>> GetBlockedUsers(int id);
         Task<List<FriendFollower>> GetBlockingUsers(int id);

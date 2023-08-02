@@ -24,7 +24,7 @@ namespace TECHUB.API.Controllers
         [HttpGet("{id:int}/followers")]
         public async Task<IActionResult> GetUserFollowers(int id)
         {
-            return Ok(await service.GetUserFollower(id));
+            return Ok(await service.GetUserFollowers(id));
         }
 
         [HttpGet("{id:int}/following")]
