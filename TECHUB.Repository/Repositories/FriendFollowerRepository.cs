@@ -15,7 +15,7 @@ namespace TECHUB.Repository.Repositories
         }
 
         public async Task<List<FriendFollower>> GetUserFriends(int id)
-        {          
+        {
             var result = await context.FriendFollowers
                 .Where(x => x.UserId == id && x.Type == 1 || x.OtherUserId == id && x.Type == 1)
                 .Select(f => new
@@ -59,11 +59,11 @@ namespace TECHUB.Repository.Repositories
                     User = new User()
                     {
                         UserId = item.User.UserId,
-                        DisplayName= item.User.DisplayName,
+                        DisplayName = item.User.DisplayName,
                         Picture = new Picture()
                         {
                             PictureId = item.User.Picture!.PictureId,
-                            ImageUrl= item.User.Picture.ImageUrl,
+                            ImageUrl = item.User.Picture.ImageUrl,
                         }
                     },
                     OtherUser = new User()
@@ -348,6 +348,71 @@ namespace TECHUB.Repository.Repositories
                 });
             }
             return blockedUsers;
+        }
+
+        public async Task<FriendFollower> GetBlockedUserChat(int userId, int otherUserId)
+        {
+            var result = await context.FriendFollowers.Select(f => new
+            {
+                UserId = f.UserId,
+                OtherUserId = f.OtherUserId,
+                Type = f.Type,
+                Date = f.Date,
+                User = new
+                {
+                    UserId = f.User!.UserId,
+                    DisplayName = f.User.DisplayName,
+                    Picture = new
+                    {
+                        PictureId = f.User.Picture!.PictureId,
+                        ImageUrl = f.User.Picture.ImageUrl,
+                    }
+                },
+                OtherUser = new
+                {
+                    UserId = f.OtherUser!.UserId,
+                    DisplayName = f.OtherUser.DisplayName,
+                    Picture = new
+                    {
+                        PictureId = f.OtherUser.Picture!.PictureId,
+                        ImageUrl = f.OtherUser.Picture.ImageUrl,
+                    }
+                },
+            }).FirstOrDefaultAsync(x => x.UserId == userId && x.Type == 3 && x.OtherUserId == otherUserId ||
+            x.UserId == otherUserId && x.Type == 3 && x.OtherUserId == userId);
+            if (result == null)
+            {
+                return null;
+            }
+            else
+            {
+                var blockedUsers = new FriendFollower();
+                blockedUsers.UserId = result.UserId;
+                blockedUsers.OtherUserId = result.OtherUserId;
+                blockedUsers.Type = result.Type;
+                blockedUsers.Date = result.Date;
+                blockedUsers.User = new User()
+                {
+                    UserId = result.User.UserId,
+                    DisplayName = result.User.DisplayName,
+                    Picture = new Picture()
+                    {
+                        PictureId = result.User.Picture!.PictureId,
+                        ImageUrl = result.User.Picture.ImageUrl,
+                    }
+                };
+                blockedUsers.OtherUser = new User()
+                {
+                    UserId = result.OtherUser.UserId,
+                    DisplayName = result.OtherUser.DisplayName,
+                    Picture = new Picture()
+                    {
+                        PictureId = result.OtherUser.Picture!.PictureId,
+                        ImageUrl = result.OtherUser.Picture.ImageUrl,
+                    }
+                };
+                return blockedUsers;
+            }
         }
 
         public async Task<List<FriendFollower>> GetUserFriendsFollowers(int id)

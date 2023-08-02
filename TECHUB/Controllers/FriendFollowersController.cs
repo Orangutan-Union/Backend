@@ -45,6 +45,12 @@ namespace TECHUB.API.Controllers
             return Ok(await service.GetBlockingUsers(id));
         }
 
+        [HttpGet("{userId:int}/{otherUserId:int}/blockedUserChat")]
+        public async Task<IActionResult> GetBlockedUsersChat(int userId, int otherUserId)
+        {
+            return Ok(await service.GetBlockedUserChat(userId, otherUserId));
+        }
+
         [HttpPost("follow")]
         public async Task<IActionResult> FollowUser(FriendFollower ff)
         {
