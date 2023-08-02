@@ -7,7 +7,10 @@ namespace TECHUB.Service.Interfaces
     {
         Task<List<FriendFollower>> GetUserFriends(int id);
         Task<List<FriendFollower>> GetUserFollowers(int id);
+        Task<List<FriendFollower>> GetUserFollowing(int id);
         Task<List<FriendFollower>> GetBlockedUsers(int id);
+        Task<List<FriendFollower>> GetBlockingUsers(int id);
+        Task<FriendFollower> GetBlockedUserChat(int userId, int otherUserId);
         Task<FriendFollower> AddFriend(FriendRequestViewModel request);
         Task<FriendFollower> FollowUser(FriendFollower ff);
         Task<FriendFollower> BlockUser(int userid, int targetuserid);
