@@ -69,6 +69,12 @@ namespace TECHUB.API.Controllers
                         ChatName = c.ChatName,
                         LastMessageSent = c.LastMessageSent,
                         IsPrivate = c.IsPrivate,
+                        Users = c.Users.Select(u => new
+                        {
+                            u.UserId,
+                            u.DisplayName,
+                            u.Picture
+                        }).ToList(),
                     }).OrderByDescending(c => c.LastMessageSent)
                     .ToList(),
                 }).FirstOrDefaultAsync(u => u.UserId == id);
