@@ -30,6 +30,12 @@ namespace TECHUB.API.Controllers
             return Ok(pic);
         }
 
+        [HttpGet("user/{id:int}")]
+        public async Task<IActionResult> GetUserPostsPictures(int id)
+        {
+            return Ok(await service.GetUserPostsPictures(id));
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> AddPicture()
