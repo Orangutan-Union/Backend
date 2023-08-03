@@ -18,6 +18,19 @@ namespace TECHUB.Service.Services
             return await repo.GetPictureById(id);
         }
 
+        public async Task<List<Picture>> GetUserPostsPictures(int id)
+        {
+            var posts = await repo.GetUserPostsPictures(id);
+            var files = new List<Picture>();
+
+            foreach (var post in posts)
+            {
+                files.Add(post.Pictures[0]);
+            }
+
+            return files;
+        }
+
         public async Task<Picture> AddPicture(Picture picture)
         {
             var pic = await repo.Add(picture);
