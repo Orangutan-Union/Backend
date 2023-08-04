@@ -28,82 +28,7 @@ namespace TECHUB.API.Controllers
                     {
                         PictureId = g.Picture.PictureId,
                         ImageUrl = g.Picture.ImageUrl,
-                    },
-                    Posts = g.Posts.Select(p => new
-                    {
-                        PostId = p.PostId,
-                        UserId = p.UserId,
-                        GroupId = p.GroupId,
-                        TimeStamp = p.TimeStamp,
-                        Content = p.Content,
-                        Latitude = p.Latitude,
-                        Longitude = p.Longitude,
-                        User = new
-                        {
-                            UserId = p.User.UserId,
-                            DisplayName = p.User.DisplayName,
-                            Picture = new
-                            {
-                                PictureId = p.User.Picture.PictureId,
-                                ImageUrl = p.User.Picture.ImageUrl,
-                            }
-                        },
-                        Group = new
-                        {
-                            GroupId = p.Group.GroupId,
-                            GroupName = p.Group.GroupName,
-                        },
-                        Likes = p.Likes.Select(pl => new
-                        {
-                            LikeId = pl.LikeId,
-                            UserId = pl.UserId,
-                            PostId = pl.PostId,
-                            IsLiked = pl.IsLiked,
-                            IsDisliked = pl.IsDisliked,
-                            User = new
-                            {
-                                UserId = pl.User.UserId,
-                                DisplayName = pl.User.DisplayName,
-                            },
-                        }).ToList(),
-                        Pictures = p.Pictures.Select(p => new
-                        {
-                            PictureId = p.PictureId,
-                            PublicId = p.PublicId,
-                            ImageName = p.ImageName,
-                            ImageUrl = p.ImageUrl,
-                        }).ToList(),
-                        Comments = p.Comments.Select(pc => new
-                        {
-                            CommentId = pc.CommentId,
-                            UserId = pc.UserId,
-                            TimeStamp = pc.TimeStamp,
-                            Content = pc.Content,
-                            User = new
-                            {
-                                UserId = pc.User.UserId,
-                                DisplayName = pc.User.DisplayName,
-                                Picture = new
-                                {
-                                    PictureId = pc.User.Picture.PictureId,
-                                    ImageUrl = pc.User.Picture.ImageUrl,
-                                }
-                            },
-                            Likes = pc.Likes.Select(cl => new
-                            {
-                                LikeId = cl.LikeId,
-                                UserId = cl.UserId,
-                                CommentId = cl.CommentId,
-                                IsLiked = cl.IsLiked,
-                                IsDisliked = cl.IsDisliked,
-                                User = new
-                                {
-                                    UserId = cl.User.UserId,
-                                    DisplayName = cl.User.DisplayName,
-                                }
-                            }).ToList(),
-                        }).ToList(),
-                    }).OrderByDescending(p => p.TimeStamp).ToList(),
+                    },                    
                     GroupUser = g.GroupUsers.Select(gu => new
                     {
                         GroupId = gu.GroupId,
@@ -189,15 +114,15 @@ namespace TECHUB.API.Controllers
             return Ok(user);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AddGroup(Group group)
+        [HttpPost("{id:int}")]
+        public async Task<IActionResult> AddGroup(int id, Group group)
         {
             if (group == null)
             {
                 return BadRequest("Group is null");
             }
 
-            return Ok(await service.AddGroup(group));
+            return Ok(await service.AddGroup(group, id));
         }
 
         [HttpDelete("{id:int}")]
