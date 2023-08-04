@@ -32,14 +32,21 @@ namespace TECHUB.Service.Services
         public async Task<ImageUploadResult> UploadPhotoAsync(IFormFile photo)
         {
             var uploadResult = new ImageUploadResult();
-            if (photo.Length > 0)
+            if (photo.Length > 0 && photo.Length < 2097152)
             {
                 using var stream = photo.OpenReadStream();
-                var uploadParams = new ImageUploadParams
+                var uploadParams = new AutoUploadParams
                 {
-                    File = new FileDescription(photo.FileName, stream)
+                    File = new FileDescription(photo.FileName, stream)                    
                 };
                 uploadResult = await cloudinary.UploadAsync(uploadParams);
+            }
+            else
+            {
+                uploadResult = new ImageUploadResult()
+                {
+                    Error = new Error(),
+                };
             }
 
             return uploadResult;

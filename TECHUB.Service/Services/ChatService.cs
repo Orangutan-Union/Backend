@@ -49,5 +49,10 @@ namespace TECHUB.Service.Services
         {
             return await repo.UpdateChat(chat);
         }
+
+        public async Task<Chat> GetChatByUsers(int userId, int otherUserId)
+        {
+            return await repo.GetChatByUsers(userId, otherUserId);
+        }
     }
 }

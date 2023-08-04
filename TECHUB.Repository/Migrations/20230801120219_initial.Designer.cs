@@ -12,9 +12,7 @@ using TECHUB.Repository.Context;
 namespace TECHUB.Repository.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-
-    [Migration("20230622105752_initial")]
-
+    [Migration("20230801120219_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -157,6 +155,10 @@ namespace TECHUB.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("GroupId"));
 
+                    b.Property<string>("BannerUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("GroupName")
                         .HasColumnType("nvarchar(max)");
 
@@ -168,11 +170,27 @@ namespace TECHUB.Repository.Migrations
 
                     b.HasKey("GroupId");
 
-                    b.HasIndex("PictureId")
-                        .IsUnique()
-                        .HasFilter("[PictureId] IS NOT NULL");
+                    b.HasIndex("PictureId");
 
                     b.ToTable("Groups");
+                });
+
+            modelBuilder.Entity("TECHUB.Repository.Models.GroupRequest", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("GroupId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "GroupId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("GroupRequests");
                 });
 
             modelBuilder.Entity("TECHUB.Repository.Models.GroupUser", b =>
@@ -323,6 +341,10 @@ namespace TECHUB.Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
 
+                    b.Property<string>("BannerUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DisplayName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -445,10 +467,29 @@ namespace TECHUB.Repository.Migrations
             modelBuilder.Entity("TECHUB.Repository.Models.Group", b =>
                 {
                     b.HasOne("TECHUB.Repository.Models.Picture", "Picture")
-                        .WithOne("Group")
-                        .HasForeignKey("TECHUB.Repository.Models.Group", "PictureId");
+                        .WithMany("Group")
+                        .HasForeignKey("PictureId");
 
                     b.Navigation("Picture");
+                });
+
+            modelBuilder.Entity("TECHUB.Repository.Models.GroupRequest", b =>
+                {
+                    b.HasOne("TECHUB.Repository.Models.Group", "Group")
+                        .WithMany("GroupsRequests")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("TECHUB.Repository.Models.User", "User")
+                        .WithMany("GroupsRequests")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TECHUB.Repository.Models.GroupUser", b =>
@@ -549,6 +590,8 @@ namespace TECHUB.Repository.Migrations
                 {
                     b.Navigation("GroupUsers");
 
+                    b.Navigation("GroupsRequests");
+
                     b.Navigation("Posts");
                 });
 
@@ -571,6 +614,8 @@ namespace TECHUB.Repository.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("GroupUsers");
+
+                    b.Navigation("GroupsRequests");
 
                     b.Navigation("Likes");
 
