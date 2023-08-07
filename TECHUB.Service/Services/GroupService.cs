@@ -35,7 +35,7 @@ namespace TECHUB.Service.Services
 
             GroupUser groupUser = new GroupUser();
             groupUser.UserId = id;
-            groupUser.GroupId = id;
+            groupUser.GroupId = newGroup.GroupId;
             groupUser.Type = 1;
 
             await groupUserRepo.AddGroupUser(groupUser);
@@ -46,6 +46,16 @@ namespace TECHUB.Service.Services
         public async Task<Group> DeleteGroup(int Id)
         {
             return await repo.DeleteGroup(Id);
+        }
+
+        public async Task<List<User>> GetGroupUsers(int id)
+        {
+            return await repo.GetGroupUsers(id);
+        }
+
+        public async Task<List<Group>> GetUserGroups(int id)
+        {
+            return await repo.GetUserGroups(id);
         }
 
         public async Task<Group> UpdateGroup(Group group)
