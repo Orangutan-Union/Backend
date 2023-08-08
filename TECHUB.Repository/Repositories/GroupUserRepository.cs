@@ -20,9 +20,9 @@ namespace TECHUB.Repository.Repositories
 
         }
 
-        public async Task<GroupUser> DeleteGroupUser(int id)
+        public async Task<GroupUser> DeleteGroupUser(int userId, int groupId)
         {
-            var groupUser = await context.GroupUsers.FindAsync(id);
+            var groupUser = await context.GroupUsers.FirstOrDefaultAsync(gu => gu.UserId == userId && gu.GroupId == groupId);
 
             if (groupUser != null)
             {

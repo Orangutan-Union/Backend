@@ -14,7 +14,7 @@ namespace TECHUB.API.Controllers
         private readonly DatabaseContext context;
 
         public PostController(IPostService service, DatabaseContext context) { this.service = service; this.context = context; }
-
+         
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetPostById(int id)
         {
@@ -98,11 +98,78 @@ namespace TECHUB.API.Controllers
             return Ok(post);
         }
 
+        [HttpGet("groupPosts{id:int}")]
+        public async Task<IActionResult> GetGroupPosts(int id)
+        {
+            var posts = await context.Posts
+                .Where(p => p.GroupId == id)
+                .Select(p => new
+                {
+                    PostId = p.PostId,
+                    UserId = p.UserId,
+                    GroupId = p.GroupId,
+                    TimeStamp = p.TimeStamp,
+                    Content = p.Content,
+                    Latitude = p.Latitude,
+                    Longitude = p.Longitude,
+                    Comments = p.Comments.Select(c => new
+                    {
+                        CommentId = c.CommentId,
+                        UserId = c.UserId,
+                        TimeStamp = c.TimeStamp,
+                        Content = c.Content,
+                        Likes = c.Likes.Select(cl => new
+                        {
+                            IsLiked = cl.IsLiked,
+                            IsDisliked = cl.IsDisliked
+                        }).ToList()
+                    }).ToList(),
+                    User = new
+                    {
+                        UserId = p.User.UserId,
+                        DisplayName = p.User.DisplayName,
+                        Picture = new
+                        {
+                            PictureId = p.User.Picture.PictureId,
+                            ImageUrl = p.User.Picture.ImageUrl,
+                        }
+                    },
+                    Likes = p.Likes.Select(pl => new
+                    {
+                        UserId = pl.UserId,
+                        PostId = pl.PostId,
+                        IsLiked = pl.IsLiked,
+                        IsDisliked = pl.IsDisliked
+                    }).ToList(),
+                    Group = new
+                    {
+                        GroupId = p.Group.GroupId,
+                        GroupName = p.Group.GroupName,
+                        Picture = new
+                        {
+                            PictureId = p.Group.Picture.PictureId,
+                            ImageUrl = p.Group.Picture.ImageUrl,
+                        }
+                    },
+                    Pictures = p.Pictures.Select(p => new
+                    {
+                        PictureId = p.PictureId,
+                        ImageUrl = p.ImageUrl,
+                        PublicId = p.PublicId,
+                        ImageName = p.ImageName,
+                    }).ToList()
+                })
+                .OrderByDescending(p => p.TimeStamp)
+                .ToListAsync();
+
+            return Ok(posts);
+        }
+
         [HttpGet("user/{id:int}")]
         public async Task<IActionResult> GetUserPosts(int id)
         {
             var posts = await context.Posts
-                .Where(u => u.UserId == id)
+                .Where(p => p.UserId == id)
                 .Select(p => new
                 {
                     PostId = p.PostId,

@@ -7,6 +7,6 @@ namespace TECHUB.Service.Interfaces
         public Task<GroupUser> GetGroupUser(int userId, int groupId);
         public Task<GroupUser> AddGroupUser(GroupUser groupUser);
         public Task<GroupUser> UpdateGroupUser(GroupUser groupUser);
-        public Task<GroupUser> DeleteGroupUser(int id);
+        public Task<GroupUser> DeleteGroupUser(int userId, int groupId);
     }
 }

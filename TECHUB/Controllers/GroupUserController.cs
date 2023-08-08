@@ -11,10 +11,10 @@ namespace TECHUB.API.Controllers
         private readonly IGroupUserService service;
         public GroupUserController(IGroupUserService service) { this.service = service; }
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteGroupUser(int id)
+        [HttpDelete("{userId:int}/{groupId:int}")]
+        public async Task<IActionResult> DeleteGroupUser(int userId, int groupId)
         {
-            return Ok(await service.DeleteGroupUser(id));
+            return Ok(await service.DeleteGroupUser(userId, groupId));
         }
     }
 }

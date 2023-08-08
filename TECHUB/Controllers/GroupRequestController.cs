@@ -11,10 +11,10 @@ namespace TECHUB.API.Controllers
         private readonly IGroupRequestService service;
         public GroupRequestController(IGroupRequestService service) { this.service = service; }
 
-        [HttpGet]
-        public async Task<IActionResult> GetGroupJoinRequest(GroupRequest groupRequest)
+        [HttpGet("{userId:int}/{groupId:int}")]
+        public async Task<IActionResult> GetGroupJoinRequest(int userId, int groupId)
         {
-            return Ok(await service.GetGroupJoinRequest(groupRequest));
+            return Ok(await service.GetGroupJoinRequest(userId, groupId));
         }
 
         [HttpGet("getgroupsjoinrequests/{groupId:int}/{type:int}")]
@@ -35,16 +35,16 @@ namespace TECHUB.API.Controllers
             return Ok(await service.AddGroupRequest(groupRequest));
         }
 
-        [HttpDelete("accept")]
+        [HttpPost("accept")]
         public async Task<IActionResult> AcceptGroupRequest(GroupRequest groupRequest)
         { 
             return Ok(await service.AcceptGroupRequest(groupRequest));
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteGroupRequest(GroupRequest groupRequest)
+        public async Task<IActionResult> DeleteGroupRequest(int userId, int groupId)
         {
-            return Ok(await service.DeleteGroupRequest(groupRequest));
+            return Ok(await service.DeleteGroupRequest(userId, groupId));
         }
     }
 }

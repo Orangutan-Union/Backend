@@ -10,10 +10,10 @@ namespace TECHUB.Repository.Repositories
         private readonly DatabaseContext context;
         public GroupRequestRepository(DatabaseContext context) { this.context = context; }
 
-        public async Task<GroupRequest> GetGroupJoinRequest(GroupRequest groupRequest)
+        public async Task<GroupRequest> GetGroupJoinRequest(int userId, int groupId)
         {
             var oldGroupRequest = await context.GroupRequests
-                .FirstOrDefaultAsync(gr => gr.GroupId == groupRequest.GroupId & gr.UserId == groupRequest.UserId);
+                .FirstOrDefaultAsync(gr => gr.GroupId == groupId & gr.UserId == userId);
 
             return oldGroupRequest;
         }
@@ -40,13 +40,13 @@ namespace TECHUB.Repository.Repositories
             return groupRequest;
         }
 
-        public async Task<GroupRequest> DeleteGroupRequest(GroupRequest group)
+        public async Task<GroupRequest> DeleteGroupRequest(int userId, int groupId)
         {
-            var groupRequest = await context.GroupRequests.FirstOrDefaultAsync(gr => gr.GroupId == group.GroupId && gr.UserId == group.UserId);
+            var groupRequest = await context.GroupRequests.FirstOrDefaultAsync(gr => gr.GroupId == groupId && gr.UserId == userId);
             
             if (groupRequest != null)
             {
-                context.GroupRequests.Remove(group);
+                context.GroupRequests.Remove(groupRequest);
                 await context.SaveChangesAsync();
             }
             return groupRequest;

@@ -13,7 +13,7 @@ namespace TECHUB.Service.Services
 
         public async Task<GroupRequest> AcceptGroupRequest(GroupRequest groupRequest)
         {
-            var oldGroupRequest = await repo.GetGroupJoinRequest(groupRequest);
+            var oldGroupRequest = await repo.GetGroupJoinRequest(groupRequest.UserId, groupRequest.GroupId);
 
             if (oldGroupRequest == null)
             {
@@ -27,14 +27,14 @@ namespace TECHUB.Service.Services
                 groupUser.Type = groupRequest.Type;
 
                 await groupUserService.AddGroupUser(groupUser);
-                return await repo.DeleteGroupRequest(groupRequest);
+                return await repo.DeleteGroupRequest(groupRequest.UserId, groupRequest.GroupId);
             }
         }
 
         public async Task<GroupRequest> AddGroupRequest(GroupRequest groupRequest)
         {
             var groupUser = await groupUserService.GetGroupUser(groupRequest.UserId, groupRequest.GroupId);
-            var oldGroupRequest = await repo.GetGroupJoinRequest(groupRequest);
+            var oldGroupRequest = await repo.GetGroupJoinRequest(groupRequest.UserId, groupRequest.GroupId);
 
             if (groupUser == null)
             {
@@ -58,14 +58,14 @@ namespace TECHUB.Service.Services
             }
         }
 
-        public async Task<GroupRequest> DeleteGroupRequest(GroupRequest groupRequest)
+        public async Task<GroupRequest> DeleteGroupRequest(int userId, int groupId)
         {
-            return await repo.DeleteGroupRequest(groupRequest);
+            return await repo.DeleteGroupRequest(userId, groupId);
         }
 
-        public async Task<GroupRequest> GetGroupJoinRequest(GroupRequest groupRequest)
+        public async Task<GroupRequest> GetGroupJoinRequest(int userId, int groupId)
         {
-            return await repo.GetGroupJoinRequest(groupRequest);
+            return await repo.GetGroupJoinRequest(userId, groupId);
         }
 
         public async Task<List<GroupRequest>> GetGroupsJoinRequests(int groupId, int type)
