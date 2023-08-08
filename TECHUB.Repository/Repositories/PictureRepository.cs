@@ -19,6 +19,11 @@ namespace TECHUB.Repository.Repositories
             return await context.Pictures.FirstOrDefaultAsync(x => x.PictureId == id);
         }
 
+        public async Task<List<Post>> GetUserPostsPictures(int id)
+        {
+            return await context.Posts.Include(x => x.Pictures).Where(x => x.UserId == id && x.Pictures.Count() > 0).OrderByDescending(x => x.TimeStamp).ToListAsync();
+        }
+
         public async Task<Picture> Add(Picture picture)
         {
             context.Pictures.Add(picture);
